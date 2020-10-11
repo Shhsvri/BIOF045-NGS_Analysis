@@ -13,8 +13,6 @@ date: "October 2020"
   - automating tasks
 - What is it good for?
 
-
-
 ## Setting up
 
 We will spend most of our time learning about the basics of the shell by exploring experimental data.
@@ -43,52 +41,39 @@ You will receive a prompt for your password, and you should type in your associa
 
 A warning might pop up the first time you try to connect to a remote machine, type "Yes" or "Y". 
 
-#### Copying example data folder
-
 Once logged in, you should see:
 
 ```bash
 USERNAME@internal_ip_address$ 
 ```
 
-The command prompt will have some characters before it, something like `[rc_training01@login01 ~]`, this is telling you what the name of the computer you are working on is.
-
-The first command we will type on the command prompt will be to start a so-called "interactive session" on O2.
-
-```bash
-$ srun --pty -p interactive -t 0-12:00 --mem 1G --reservation=HBC /bin/bash
-```
-
-Press enter after you type in that command. You will get a couple of messages, but in a few seconds you should get back the command prompt `$`; the string of characters before the command prompt, however, have changed. They should say something like `[rc_training01@compute-a-16-73 ~]`. *We will be explaining what this means in more detail later when we talk about HPC and O2.* 
-
-Make sure that your command prompt is now preceded by a character string that contains the word "compute".
-
-> NOTE: When you run the `srun` command after this workshop with your own account please use the following command (without the `--reservation` option):
-> 
-> `srun --pty -p interactive -t 0-12:00 --mem 1G /bin/bash`
-> 
-> The "reservation" is only active for the training accounts, and only for the duration of this workshop.
-
-
-Copy our example data folder to your home directory using the following command:
-
-```bash
-$ cp -r /n/groups/hbctraining/unix_lesson/ .
-```
-
->'cp' is the command for copy. This command required you to specify the location of the item you want to copy (/groups/hbctraining/unix_lesson/) and the location of the destination (.); please note the space between the 2 in the command. The "-r" is an option that modifies the copy command to do something slightly different than usual. The "." means "here", i.e. the destination location is where you currently are.
+The command prompt will have some characters before it, something like `shahin@172-1-263-6 $`, this is telling what your username and the internal address of the cloud instance you are working on is.
 
 ## Starting with the shell
 
-We have each created our own copy of the example data folder into our home directory, **unix_lesson**. Let's go into the data folder and explore the data using the shell.
+Let's create a directory (folder)
 
 ```bash
-$ cd unix_lesson
+mkdir Day1
+```
+> mkdir stands for make directory. The people who create these unix commands decided to give these command names and they're should be the same one all Linux machines.
+
+Next, we will move into that directory
+
+```bash
+$ cd Day1
 ```
 
 > 'cd' stands for 'change directory'
 
-Let's see what is in here. Type:
+Copy the example data folder to your home directory using the following command:
+
+```bash
+$ cp -r /home/unix_lesson .
+```
+> 'cp' is the command for copy. This command required you to specify the location of the item you want to copy (/groups/hbctraining/unix_lesson/) and the location of the destination (.); please note the space between the 2 in the command. The "-r" is an option that modifies the copy command to do something slightly different than usual. The "." means "here", i.e. the destination location is where you currently are.
+
+Let's see what we copied in here. Type:
 
 ```bash
 $ ls
@@ -163,7 +148,7 @@ Commands that are run from the shell can get extremely complicated. To see an ex
 
 ## The Unix directory file structure (a.k.a. where am I?)
  
-As you've already just seen, you can move around in different directories or folders at the command line. Why would you want to do this, rather than just navigating around the normal way using a GUI (GUI = Graphical User Interface, pronounced like "gooey").
+As you've already just seen, you can move around in different directories or folders at the command line. Why would you want to do this, rather than just navigating around the normal way using a GUI (GUI = Graphical User Interface, pronounced like "gooey")?
 
 #### Moving around the file system
 
@@ -179,7 +164,7 @@ Like on any computer you have used before the file structure within unix is hier
 
 That root (/) is often also called the 'top' level.
 
-When you log in to a remote computer you are on one of the branches of that tree, your home directory (e.g. /home/username)
+When you log in to a remote computer you are on one of the branches of that tree, your home directory (e.g. /home/USERNAME)
 
 > On mac OS, which is a UNIX-based OS, the root level is also "/". On a windows OS, it is drive specific; generally "C:\" is considered root, but it changes to "D:/", if you are on that drive.
 
@@ -188,12 +173,13 @@ Now let's go do that same navigation at the command line.
 Type:
 
 ```bash
-$ cd
+$ cd ~
 ```
 
 > This puts you in your home directory. No matter where you are in the directory system, `cd` will always bring you back to your home directory.
 
 
+**Exercise 1**
 Now using `cd` and `ls`, go in to the `unix_lesson` directory and list its contents. Now go into the `raw_fastq` directory, and list its contents.
 
 Let's also check to see where we are. Sometimes when we're wandering around in the file system, it's easy to lose track of where we are. The command that tells you this is:
@@ -233,7 +219,7 @@ By default, the `ls` commands lists the contents of the working directory (i.e. 
 Type:
 
 ```bash
-$ cd
+$ cd ~/Day1
 ```
 
 Then enter the command:
@@ -258,7 +244,7 @@ You should now be in `raw_fastq` and you got there without having to go through 
 
 ****
 
-**Exercise**
+**Exercise 2**
 
 List the `Mov10_oe_1.subset.fq` file from your home directory without changing directories
 
@@ -281,17 +267,17 @@ which is the full path for your home directory. This tells you that you are in a
 Now enter the following command:
 
 ```bash
-$ cd /home/username/unix_lesson/raw_fastq/
+$ cd /home/username/Day1/unix_lesson/raw_fastq/
 ```
 
-This jumps to `raw_fastq`. Now go back to the home directory (`cd`). We saw
+This jumps to `raw_fastq`. Now go back to the home directory (`cd ~`). We saw
 earlier that the command:
 
 ```bash
-$ cd unix_lesson/raw_fastq/
+$ cd Day1/unix_lesson/raw_fastq/
 ```
 
-had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/unix_lesson/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
+had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/Day1/unix_lesson/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
 
 **A full path always starts with a `/`, a relative path does not.**
 
@@ -305,7 +291,7 @@ Over time, it will become easier for you to keep a mental note of the structure 
 
 **Exercise**
 
-Change directories to `/home/username/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
+Change directories to `/home/username/Day1/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
 
 ***
 
@@ -316,7 +302,7 @@ Change directories to `/home/username/unix_lesson/raw_fastq/`, and list the cont
 Navigate to the home directory. Typing out directory names can waste a lot of time. When you start typing out the name of a directory, then hit the tab key, the shell will try to fill in the rest of the directory name. For example, type `cd` to get back to your home directly, then enter:
 
 ```bash
-$ cd uni<tab>
+$ cd Day<tab>/uni<tab>
 ```
 
 The shell will fill in the rest of the directory name for `unix_lesson`. Now go to `unix_lesson/raw_fastq` and 
@@ -333,7 +319,7 @@ Tab completion can also fill in the names of commands. For example, enter `e<tab
 
 #### Wild cards
 
-Navigate to the `~/unix_lesson/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
+Navigate to the `~/Day1/unix_lesson/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
 
 The '*' character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
 
@@ -353,7 +339,7 @@ Lists every file in `/usr/bin` that ends in the characters `.sh`.
 $ ls Mov10*fq
 ```
 
-lists only the files that begin with 'Mov10' and end with 'fq'
+> lists only the files that begin with 'Mov10' and end with 'fq'
 
 So how does this actually work? The shell (bash) considers an asterisk "*" to be a wildcard character that can be used to substitute for any other single character or a string of characters. 
 
@@ -387,7 +373,7 @@ $ cd
 ```
 
 ```bash
-$ cd unix_lesson/raw_fastq
+$ cd Day1/unix_lesson/raw_fastq
 ```
 
 Then enter the command:
@@ -447,7 +433,7 @@ We now know how to move around the file system and look at the
 contents of directories, but how do we look at the contents of files?
 
 The easiest way to examine a file is to just print out all of the
-contents using the command `cat`. Print the contents of `unix_lesson/other/sequences.fa` by entering the following command:
+contents using the command `cat`. Print the contents of `Day1/unix_lesson/other/sequences.fa` by entering the following command:
 
 ```bash
 $ cat ~/unix_lesson/other/sequences.fa
@@ -643,7 +629,7 @@ the command line, automate something you don't really need to automate.
 
 ---
 
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
+*This lesson has been developed by Shahin Shahsavari, adapted from [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
 
 * *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
 All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
