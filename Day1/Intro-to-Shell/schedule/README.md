@@ -1,7 +1,7 @@
 # Workshop Schedule
 
 | Time            |  Topic  |
-|:------------------------:|:------------------------------------------------:|:--------:|
+|:------------------------:|:------------------------------------------------:|
 |09:00 - 09:40 | [Workshop Introduction](../lectures/Intro_to_workshop_new.pdf) |
 |09:40 - 10:30 | [Introduction to the Shell](../lessons/01_the_filesystem.md) |
 |10:30 - 10:45 | Break |
