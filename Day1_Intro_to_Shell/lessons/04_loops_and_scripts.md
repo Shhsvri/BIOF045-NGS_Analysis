@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Loops & Scripts"
-author: "Bob Freeman, Mary Piper, Radhika Khetani"
-date: "Thursday, May 5, 2016"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
 
 Approximate time: 60 minutes
@@ -339,10 +339,3 @@ $ mv *.sh scripts/
 ```
 
 ---
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
-
-* *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
-All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
-* *Adapted from the lesson by Tracy Teal. Original contributors: Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (http://software-carpentry.org/)*
-
-

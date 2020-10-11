@@ -87,8 +87,9 @@ from all the files into another file called `bad_reads.txt`.
 $ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fq > bad_reads.txt
 ```
 
-The prompt should sit there a little bit, and then it should look like nothing
-happened. But you should have a new file called `bad_reads.txt`. 
+The prompt takes some time to complete, and then it should look like nothing
+happened. Even if nothing shows on the screen, you should have a new file
+called `bad_reads.txt`. 
 
 ```bash
 $ ls -l
@@ -141,7 +142,7 @@ The philosophy behind these commands is that none of them really do anything all
 Finally, let's use the new tools in our kit and a few new ones to examine our gene annotation file, **chr1-hg19_genes.gtf**, which we will be using later to find the genomic coordinates of all known exons on chromosome 1.
 
 ```bash
-$ cd ~/unix_lesson/reference_data/
+$ cd ~/Day1/unix_lesson/reference_data/
 ```
 
 Let's explore our `chr1-hg19_genes.gtf` file a bit. What information does it contain?

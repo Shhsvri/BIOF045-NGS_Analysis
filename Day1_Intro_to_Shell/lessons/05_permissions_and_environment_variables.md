@@ -1,7 +1,7 @@
 ---
 title: "Permissions and Environment variables"
-author: "Christina Koch, Radhika Khetani"
-date: "Wednesday, September 20, 2017"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
 
 Approximate time: 40 minutes
@@ -24,11 +24,10 @@ Let's see what groups we all belong to:
 $ groups
 ```
 
-Depending on our affiliation, we all belong to at least a couple of groups. I belong to 4 groups,
-* rsk27
-* bcbio
-* hbctraining
-* Domain_Users
+Depending on our affiliation, we all belong to at least a couple of groups. I belong to 3 groups,
+* admin
+* shahin
+* instructors
 
 As you can imagine, on a shared system it is important to protect each user's data. To start, every file and directory on a Unix computer belongs to one owner and one group. Along with each file's content, the operating system stores the information about the user and group that own it, which is the "metadata" for a given file.
 
@@ -43,17 +42,17 @@ For each of these three categories, the computer keeps track of whether people i
 Let's look at this model in action by running the command `ls -l /n/groups/hbctraining/`, to list the files in that directory:
 
 ```bash
-$ ls -l /n/groups/hbctraining/
+$ ls -l /home
 
-drwxrwsr-x  4 mm573 hbctraining 831 Feb 29  2016 bcbio-rnaseq
-drwxrwsr-x 12 mm573 hbctraining 318 May 24 11:13 chip-seq
--rw-r--r--  1 root  hbctraining   0 Apr  5  2015 copy_me.txt
-drwxrwsr-x  3 rsk27 hbctraining 201 Apr  5  2015 exercises
-drwxrwsr-x  6 rsk27 hbctraining 293 Oct 27 09:40 for_chipseq
-drwxrwsr-x  4 mp298 hbctraining  51 Dec  6  2016 mep-data
-drwxrwsr-x  4 rsk27 hbctraining  53 Jun  2 15:57 ngs_course
-drwxrwsr-x  4 rsk27 hbctraining  53 Nov  2  2016 ngs-course_backup_Nov1-2016
-drwxrwsr-x  6 mm573 hbctraining 107 Mar 24  2016 ngs-data-analysis2016
+
+ADD
+
+
+
+
+
+
+
 .
 .
 .
@@ -64,23 +63,21 @@ The `-l` flag tells `ls` to give us a long-form listing. It's a lot of informati
 
 On the right side, we have the files' names. Next to them, moving left, are the times and dates they were last modified. Backup systems and other tools use this information in a variety of ways, but you can use it to tell when you (or anyone else with permission) last changed a file.
 
-Next to the modification time is the file's size in bytes and the names of the user and group that owns it. In this case, it is the eCommons IDs denoting either Mary, Meeta or me as an owner and `hbctraining` is the associated group. 
-
 Now, take a look at the `unix_lesson` directory in your home directory to explore that first column a little more:
 
 ```bash
 ls -l ~/unix_lesson/
 
-drwxrwsr-x 2 rsk27 rsk27  78 Aug 22 21:08 genomics_data
-drwxrwsr-x 2 rsk27 rsk27 725 Aug 22 21:16 other
-drwxrwsr-x 2 rsk27 rsk27 256 Aug 22 21:16 raw_fastq
--rw-rw-r-- 1 rsk27 rsk27 377 Sep 22 10:00 README.txt
-drwxrwsr-x 2 rsk27 rsk27  62 Aug 22 21:07 reference_data
+drwxrwsr-x 2 shahin instructor  78 Oct 11 21:08 genomics_data
+drwxrwsr-x 2 shahin instructor 725 Oct 11 21:16 other
+drwxrwsr-x 2 shahin instructor 256 Oct 11 21:16 raw_fastq
+-rw-rw-r-- 1 shahin instructor 377 Oct 11 10:00 README.txt
+drwxrwsr-x 2 shahin instructor  62 Oct 11 21:07 reference_data
 ```
 
 Who is the owner of the files in this directory? Which group do the files belong to?
 
-Basically, O2 has you (your account ID) listed both as an owner and a group, and this is usually the assignment for the files and folders in your personal directory.
+Basically, Linux has you (your account ID) listed both as an owner and a group, and this is usually the assignment for the files and folders in your personal directory.
 
 We'll skip over the second column for now (the one showing `1` for each file), because it's the first column that we care about most. This shows the file's permissions, i.e., who can read, write, or execute it.
 
@@ -127,7 +124,7 @@ $ chmod o-rw ~/unix_lesson/README.txt         # the "-" after o denotes removing
 
 $ ls -l ~/unix_lesson/README.txt
 
--rw-rw---- 1 rsk27 rsk27 377 Oct  6 10:28 /home/rsk27/unix_lesson/README.txt
+-rw-rw---- 1 shahin shahin 377 Oct  11 10:28 /home/shahin/Day1/unix_lesson/README.txt
 ```
 
 The `o` signals that we're changing the privileges of "others".
@@ -139,12 +136,12 @@ $ chmod o+r ~/unix_lesson/README.txt         # the "+" after o denotes adding/gi
 
 $ ls -l ~/unix_lesson/README.txt
 
--rw-rw-r-- 1 rsk27 rsk27 377 Oct  6 10:28 /home/rsk27/unix_lesson/README.txt
+-rw-rw-r-- 1 shahin shahin 377 Oct  6 10:28 /home/shahin/Day1/unix_lesson/README.txt
 ```
 
 If we wanted to make this an executable file for ourselves (the file's owners) we would say `chmod u+rwx`, where the `u` signals that we are changing permission for the file's owner. To change permissions for the "group", you'd use the letter `g`, e.g. `chmod g-w`. 
 
->> The fact that something is marked as executable doesn't actually mean it contains or is a program of some kind. We could easily mark the `~/unix_lesson/raw_fastq/Irrel_kd_1.subset.fq` file as executable using `chmod`. Depending on the operating system we're using, trying to "run" it will fail (because it doesn't contain instructions the computer recognizes, i.e. it is not a script of some type).
+>> The fact that something is marked as executable doesn't actually mean it contains or is a program of some kind. We could easily mark the `~/Day1/unix_lesson/raw_fastq/Irrel_kd_1.subset.fq` file as executable using `chmod`. Depending on the operating system we're using, trying to "run" it will fail (because it doesn't contain instructions the computer recognizes, i.e. it is not a script of some type).
 
 ****
 
@@ -194,13 +191,10 @@ $ echo $PATH
 
 I have a lot of full/absolute paths in my $PATH variable, which are separated from each other by a ":"; here is the list in a more readable format:
 
-* /n/cluster/bin
-* /n/app/bcbio/tools/bin
 * /usr/local/bin
 * /usr/bin
 * /usr/local/sbin
 * /usr/sbin
-* /opt/puppetlabs/bin
 
 These are the directories that the shell will look through (in the same order as they are listed) for a command or an executable file that you type on the command prompt.
 
@@ -232,23 +226,17 @@ Check what hidden files exist in our home directory using the `-a` flag:
 $ ls -al ~/
 ```
 
-Suppose we want to add `/n/app/bcbio/tools/bin` to the beginning of the list in `$PATH`. This directory contains executables for many tools useful for NGS analysis. We can add this location by including an `export` command to do this at the end of the `.bashrc` file, this will make it so that when you start a new shell session the location will always be in your path. 
+Suppose we want to add `~/.local/bin` to the beginning of the list in `$PATH`. This directory contains executables for many tools useful for NGS analysis. We can add this location by including an `export` command to do this at the end of the `.bashrc` file, this will make it so that when you start a new shell session the location will always be in your path. 
 
 Open the `.bashrc` file using `vim` and at the end of the file add the export command that adds a specific location to the list in `$PATH`. 
 
 ```bash
 $ vim ~/.bashrc
 
-# at the end of the file type in the following - export PATH=/n/app/bcbio/tools/bin:$PATH
+# at the end of the file type in the following - export PATH=~/.local/bin:$PATH
 # Don't forget the ":" between the full path and the "$PATH"!
 ```
 
 **In closing, permissions and environment variables, especially `$PATH`, are very useful and important concepts to understand in the context of UNIX and HPC.**
 
 ---
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
-
-* *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
-All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
-* *Adapted from the lesson by Tracy Teal. Original contributors: Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (http://software-carpentry.org/)*
-
