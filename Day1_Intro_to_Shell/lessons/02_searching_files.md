@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Searching and Redirection"
-author: "Sheldon  McKay, Bob Freeman, Mary Piper"
-date: "Wednesday, August 23, 2017"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
 
 Approximate time: 60 minutes
@@ -247,8 +247,7 @@ sort
 ---
 *This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
 
-* *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
-All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
+* *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/).
 
-* *Adapted from the lesson by Tracy Teal. Contributors: Paul Wilson, Milad Fatenejad, Sasha Wood, and Radhika Khetani for Software Carpentry (http://software-carpentry.org/)*
-
+- Shahin
+* *Shhain
