@@ -1,7 +1,7 @@
 ---
 title: "The Shell"
-author: "Sheldon  McKay, Mary Piper, Radhika Khetani, Meeta Mistry"
-date: "August 7, 2017"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
 
 ## Learning Objectives
@@ -13,21 +13,21 @@ date: "August 7, 2017"
   - automating tasks
 - What is it good for?
 
+
+
 ## Setting up
 
 We will spend most of our time learning about the basics of the shell by exploring experimental data.
-
-Since we are going to be working with this data on our remote cluster, **O2**, we first need to log in. After we're logged on, we will each make our own copy of the example data folder.
 
 ### Logging in
 
 **With Macs**
 
-Macs have a utility application called "**Terminal**" for performing tasks on the command line (shell), both locally and on remote machines. We will be using it to log into O2.
+Macs have a utility application called "**Terminal**" for performing tasks on the command line (shell), both locally and on remote machines.
 
 **With Windows**
 
-By default, there is no terminal for the bash shell available in the Windows OS, so you have to use a downloaded program, "**Git BASH**". Git BASH is part of the [Git for Windows](https://git-for-windows.github.io/) download, and is a shell (bash) emulator.
+Windows OS should by default come with the PowerShell that supports remoting over SSH.
 
 > You can also use [Putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) to log in to remote machines from Windows computers, but it is a little more involved and has different capabilities.
 
@@ -36,7 +36,7 @@ By default, there is no terminal for the bash shell available in the Windows OS,
 Type in the following command with your username to login:
 
 ```bash
-ssh username@o2.hms.harvard.edu
+ssh USERNAME@IP_ADDRESS
 ```
 
 You will receive a prompt for your password, and you should type in your associated password; note that the cursor will *not move* as you type in your password.
@@ -45,10 +45,10 @@ A warning might pop up the first time you try to connect to a remote machine, ty
 
 #### Copying example data folder
 
-Once logged in, you should see the O2 icon, some news, and the command prompt: 
+Once logged in, you should see:
 
 ```bash
-[rc_training10@login01 ~]$ 
+USERNAME@internal_ip_address$ 
 ```
 
 The command prompt will have some characters before it, something like `[rc_training01@login01 ~]`, this is telling you what the name of the computer you are working on is.
