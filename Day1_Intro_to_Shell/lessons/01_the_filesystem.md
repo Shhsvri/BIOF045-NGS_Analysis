@@ -71,7 +71,7 @@ Copy the example data folder to your home directory using the following command:
 ```bash
 $ cp -r /home/unix_lesson .
 ```
-> 'cp' is the command for copy. This command required you to specify the location of the item you want to copy (/groups/hbctraining/unix_lesson/) and the location of the destination (.); please note the space between the 2 in the command. The "-r" is an option that modifies the copy command to do something slightly different than usual. The "." means "here", i.e. the destination location is where you currently are.
+> 'cp' is the command for copy. This command required you to specify the location of the item you want to copy (/home/unix_lesson/) and the location of the destination (.); please note the space between the 2 in the command. The "-r" is an option that modifies the copy command to do something slightly different than usual. The "." means "here", i.e. the destination location is where you currently are.
 
 Let's see what we copied in here. Type:
 
@@ -107,11 +107,11 @@ $ ls -l
 to see whether items in a directory are files or directories. `ls -l` gives a lot more information too.
 ```
 total 124
-drwxrwsr-x 2 mp298 mp298  78 Sep 30 10:47 genomics_data
-drwxrwsr-x 6 mp298 mp298 107 Sep 30 10:47 other
-drwxrwsr-x 2 mp298 mp298 228 Sep 30 10:47 raw_fastq
--rw-rw-r-- 1 mp298 mp298 377 Sep 30 10:47 README.txt
-drwxrwsr-x 2 mp298 mp298 238 Sep 30 10:47 reference_data
+drwxrwsr-x 2 shahin shahin  78 Oct 11 10:47 genomics_data
+drwxrwsr-x 6 shahin shahin 107 Oct 11 10:47 other
+drwxrwsr-x 2 shahin shahin 228 Oct 11 10:47 raw_fastq
+-rw-rw-r-- 1 shahin shahin 377 Oct 11 10:47 README.txt
+drwxrwsr-x 2 shahin shahin 238 Oct 11 10:47 reference_data
 ```
 
 Let's go into the raw_fastq directory and see what is in there.
@@ -289,7 +289,7 @@ Over time, it will become easier for you to keep a mental note of the structure 
 
 ***
 
-**Exercise**
+**Exercise 3**
 
 Change directories to `/home/username/Day1/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
 
@@ -436,7 +436,7 @@ The easiest way to examine a file is to just print out all of the
 contents using the command `cat`. Print the contents of `Day1/unix_lesson/other/sequences.fa` by entering the following command:
 
 ```bash
-$ cat ~/unix_lesson/other/sequences.fa
+$ cat ~/Day1/unix_lesson/other/sequences.fa
 ```
 
 This prints out the all the contents of `sequences.fa` to the screen.
@@ -448,7 +448,7 @@ What does this file contain?
 `cat` is a terrific command, but when the file is really big, it can be annoying to use. In practice, when you are running your analyses on the command-line you will most likely be dealing with large files. The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
 
 ```bash
-ls -lh ~/unix_lesson/raw_fastq
+ls -lh ~/Day1/unix_lesson/raw_fastq
 ```
 
 > The `ls` command has a modifier `-h` when paired with `-l`, will print sizes of files in human readable format 
@@ -518,7 +518,7 @@ $ cp Mov10_oe_1.subset.fq Mov10_oe_1.subset-copy.fq
 $ ls -l
 ```
 
-Now ``Mov10_oe_1.subset-copy.fq`` has been created as a copy of `Mov10_oe_1.subset.fq`
+Now `Mov10_oe_1.subset-copy.fq` has been created as a copy of `Mov10_oe_1.subset.fq`
 
 Let's make a 'backup' directory where we can put this file.
 
@@ -540,7 +540,7 @@ $ mv *copy.fq backup
 ```bash
 $ ls -l backup
 
--rw-rw-r-- 1 mp298 mp298 75706556 Sep 30 13:56 Mov10_oe_1.subset-copy.fq
+-rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 Mov10_oe_1.subset-copy.fq
 ```
 
 The `mv` command is also how you rename files. Since this file is so

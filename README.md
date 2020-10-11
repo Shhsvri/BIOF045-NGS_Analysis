@@ -23,7 +23,7 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 ***Windows users:***
 [X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient)
 AND
-[PuTTY](https://www.putty.org/)
+[PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 
 ### Dataset
 [Introduction to Shell: Dataset](https://www.dropbox.com/s/3lua2h1oo18gbug/unix_lesson.tar.gz?dl=1)
