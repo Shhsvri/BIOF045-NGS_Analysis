@@ -18,16 +18,18 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 
 ### Installation Requirements
 ***Mac users:***
-X2Go for remote GUI
+[X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient)
 
 ***Windows users:***
-PuTTY and X2Go
+[X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient)
+AND
+[PuTTY](https://www.putty.org/)
 
 ### Dataset
 [Introduction to Shell: Dataset](https://www.dropbox.com/s/3lua2h1oo18gbug/unix_lesson.tar.gz?dl=1)
 
 ***
-*These materials have been developed by Shahin Shahsavari, adapted from the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
+*These materials have been developed by Shahin Shahsavari, adopted from the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
 
 * *Some materials used in these lessons were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/).
 All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
