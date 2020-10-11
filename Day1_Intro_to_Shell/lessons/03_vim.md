@@ -1,10 +1,8 @@
 ---
 title: Introduction to Vim
-author: "Mary Piper"
-date: "Wednesday October 26, 2016"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
-
-Approximate time: 30 min
 
 ## Learning Objectives
 
@@ -30,7 +28,7 @@ While there are simpler editors available for use (i.e. [nano](http://www.nano-e
 
 ### Introduction to Vim 
 
-To write and edit files, we're going to use a text editor called 'Vim'. Vim is a very powerful text editor, and it offers extensive text editing options. However, in this introduction we are going to focus on exploring some of the more basic functions. There is a lot of functionality that we are not going to cover during this session, but encourage you to go further as you become more comfortable using it. To help you remember some of the keyboard shortcuts that are introduced below and to allow you to explore additional functionality on your own, we have compiled a [cheatsheet](https://github.com/hbctraining/In-depth-NGS-Data-Analysis-Course/blob/master/resources/VI_CommandReference.pdf).
+To write and edit files, we're going to use a text editor called 'Vim'. Vim is a very powerful text editor, and it offers extensive text editing options. However, in this introduction we are going to focus on exploring some of the more basic functions. There is a lot of functionality that we are not going to cover during this session, but encourage you to go further as you become more comfortable using it. To help you remember some of the keyboard shortcuts that are introduced below and to allow you to explore additional functionality on your own, there is a great [cheatsheet](https://vim.rtorr.com/). Please rest assured that **most** bioinformaticians and computer scientists find it hard to use vim, though it is worth learning if you spend lots of time developing on remote servers.
 
 
 ### Vim Interface
@@ -38,7 +36,7 @@ To write and edit files, we're going to use a text editor called 'Vim'. Vim is a
 You can create a document by calling a text editor and providing the name of the document you wish to create. Change directories to the `unix_lesson/other` folder and create a document using `vim` entitled `draft.txt`:
 
 ```bash
-$ cd ~/unix_lesson/other
+$ cd ~/Day1/unix_lesson/other
 	
 $ vim draft.txt
 ```
@@ -171,6 +169,4 @@ practice what we just learned in a brief challenge.
 | <button>/pattern</button>     | to search for a pattern (*n/N* to move to next/previous match)    |
 | <button>:%s/search/replace/g</button>     | to search for a pattern and replace for all occurences     |	
 
----
-
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
+***
