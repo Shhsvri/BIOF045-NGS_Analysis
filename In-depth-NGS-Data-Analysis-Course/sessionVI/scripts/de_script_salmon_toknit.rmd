@@ -1,0 +1,183 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project details
+For this analysis, we are using the full count matrix from an RNA-Seq dataset which is part of a larger study described in Kenny PJ et al, Cell Rep 2014.
+
+The RNA-Seq was performed on HEK293F cells that were either transfected with a MOV10 transgene, or siRNA to knock down Mov10 expression, or non-specific (irrelevant) siRNA. This resulted in 3 conditions Mov10 oe (over expression), Mov10 kd (knock down) and Irrelevant kd, respectively. The number of replicates is as shown below.
+
+Using these data, we will evaluate transcriptional patterns associated with perturbation of MOV10 expression. Please note that the irrelevant siRNA will be treated as our control condition.
+
+
+## Setup
+
+### Load Libraries
+
+```{r load-libraries}
+
+### Bioconductor and CRAN libraries used
+library(DESeq2)
+library(tidyverse)
+library(RColorBrewer)
+library(pheatmap)
+library(DEGreport)
+library(tximport)
+library(annotables)
+library(ggplot2)
+library(grid) # may have to install
+library(gridExtra) # may have to install
+library(knitr)
+```
+
+### Load Data
+
+```{r}
+## List all directories containing data  
+samples <- list.files(path = "./data", full.names = T, pattern="\\.salmon$")
+
+## Obtain a vector of all filenames including the path
+files <- file.path(samples, "quant.sf")
+
+## Since all quant files have the same name it is useful to have names for each element
+names(files) <- str_replace(samples, "./data/", "") %>% 
+                str_replace(".salmon", "")
+
+# Run tximport
+txi <- tximport(files, type="salmon", tx2gene=grch38_tx2gene, countsFromAbundance=“lengthScaledTPM”)
+
+## Create a sampletable/metadata
+sampletype <- factor(c(rep("control",3), rep("MOV10_knockdown", 2), rep("MOV10_overexpression", 3)))
+meta <- data.frame(sampletype, row.names = colnames(txi$counts))
+
+```
+
+## DESeq2 Analysis
+
+```{r}
+
+# Create DESeq2Dataset object
+dds <- DESeqDataSetFromTximport(txi, colData = metadata, design = ~ sampletype)
+dds <- DESeq(dds)
+```
+
+## Quality Control
+
+```{r}
+### Transform counts for data visualization
+rld <- rlog(dds, blind=TRUE)
+
+### Plot PCA 
+plotPCA(rld, intgroup="sampletype")
+
+### Extract the rlog matrix and compute correlation
+rld_mat <- assay(rld) 
+rld_cor <- cor(rld_mat) 
+
+### Plot heatmap
+pheatmap(rld_cor)
+
+# Plot dispersion estimates
+plotDispEsts(dds)
+```
+
+
+## Extracting Results
+
+```{r}
+
+## Define contrasts, extract results table and shrink log2 fold changes OE
+contrast_oe <-  c("sampletype", "MOV10_overexpression", "control")
+res_tableOE <- results(dds, contrast=contrast_oe, alpha = 0.05)
+res_tableOE <- lfcShrink(dds, contrast=contrast_oe, res=res_tableOE)
+
+## Define contrasts, extract results table and shrink log2 fold changes KD
+contrast_kd <-  c("sampletype", "MOV10_knockdown", "control")
+res_tableKD <- results(dds, contrast=contrast_kd, alpha = 0.05)
+res_tableKD <- lfcShrink(dds, contrast=contrast_kd, res=res_tableKD)
+
+## Set thresholds
+padj.cutoff <- 0.05
+
+# Significant results for Mov10OE relative to control
+res_tableOE_tb <- res_tableOE %>%
+  data.frame() %>%
+  rownames_to_column(var="gene") %>% 
+  as_tibble()
+  
+sigOE <- res_tableOE_tb %>%
+        filter(padj < padj.cutoff)
+
+# Significant results for Mov10KD relative to control
+
+res_tableKD_tb <- res_tableKD %>%
+  data.frame() %>%
+  rownames_to_column(var="gene") %>% 
+  as_tibble()
+  
+sigKD <- res_tableKD_tb %>%
+        filter(padj < padj.cutoff)
+```
+
+## Summarizing and Visualizing Results
+
+At an adjusted p-value cutoff of `r padj.cutoff` we find the follwing number of significant genes:
+
+* Mov10 overepression vs. Control: `r nrow(sigOE)` genes
+* Mov10 knockdown vs. Control: `r nrow(sigKD)` genes
+
+## Volcano plots
+
+```{r}
+
+# Identify significant OE genes
+res_tableOE_tb <- res_tableOE_tb %>% 
+                  mutate(threshold_OE = padj < padj.cutoff & abs(log2FoldChange) >= 0.58)
+                  
+## Volcano plot
+p1 <- ggplot(res_tableOE_tb) +
+        geom_point(aes(x = log2FoldChange, y = -log10(padj), colour = threshold_OE)) +
+        ggtitle("Mov10 overexpression") +
+        xlab("log2 fold change") + 
+        ylab("-log10 adjusted p-value") +
+        #scale_y_continuous(limits = c(0,50)) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = rel(1.5), hjust = 0.5),
+              axis.title = element_text(size = rel(1.25)))  
+
+# Identify significant KD genes
+res_tableKD_tb <- res_tableKD_tb %>% 
+                  mutate(threshold_KD = padj < padj.cutoff & abs(log2FoldChange) >= 0.58)
+   
+# Volcano plot
+p2 <- ggplot(res_tableKD_tb) +
+        geom_point(aes(x = log2FoldChange, y = -log10(padj), colour = threshold_KD)) +
+        ggtitle("Mov10 knockdown") +
+        xlab("log2 fold change") + 
+        ylab("-log10 adjusted p-value") +
+        #scale_y_continuous(limits = c(0,50)) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = rel(1.5), hjust = 0.5),
+              axis.title = element_text(size = rel(1.25)))  
+
+grid.arrange(p1, p2, nrow=1)
+```
+
+## Heatmap of significant genes
+
+```{r}
+
+
+```
+
+
+## Packages and versions
+
+```{r}
+sessionInfo()
+```
