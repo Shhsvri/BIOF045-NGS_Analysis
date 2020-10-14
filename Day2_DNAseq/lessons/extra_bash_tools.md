@@ -1,7 +1,7 @@
 ---
 title: "Bash_extras"
-author: "Radhika Khetani"
-date: 2017-07-06
+author: "Shahin Shahsavari"
+date: October 2020
 duration: 45
 ---
 
