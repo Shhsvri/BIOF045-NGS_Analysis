@@ -5,7 +5,7 @@
 | Time            |   Topic  |
 |:------------------------:|:----------:|
 | 09:00 - 09:30 | Homework Review |
-| 09:30 - 10:15 | [Introduction to Variant Detection](slides/Variant_Intro_rsk.pdf) |
+| 09:30 - 10:15 | [Introduction to Variant Detection](Variant_Intro_rsk.pdf) |
 | 10:15 - 10:30 | Coffee |
 | 10:30 - 11:45 | [Variant Calling Methods](https://github.com/chapmanb/bcbb/blob/master/talks/ngscourse2018_teaching/ngscourse2018_teaching.pdf) |
 | 11:45 - 12:15 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
