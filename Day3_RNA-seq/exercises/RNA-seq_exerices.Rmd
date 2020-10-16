@@ -1,0 +1,11 @@
+---
+title: "Practive with RNA-seq"
+output: html_notebook
+---
+
+
+
+```{r}
+
+```
+
