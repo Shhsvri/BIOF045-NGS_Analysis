@@ -49,19 +49,44 @@ To further explore Linux, we are going to log into our teaching server that runs
 	* Login: USERNAME
 	* Session type: XFCE
 
-![X2Go](../img/X2Go.png)
+![X2Go](../img/X2Go_login.png)
 
+Click on the session you created, enter password, and log in.
 
-	
+You should see the content of your Desktop in a new window.
+
+## 3. Getting started with the Command Line (Terminal/Bash Shell)
+
+In your *Applications*, open the terminal emulator.
+
+![Bash](../img/terminal_emulator.png)
+
+This new window is referred to as the terminal or the shell. If you learn some basic commands, you can get some complicated jobs done with them.
+
 The command prompt will have some characters before it, something like `shahin@172-1-263-6 $`, this is telling what your username and the internal address of the cloud instance you are working on is.
 
-## Starting with the shell
-
-Let's create a directory (folder)
+Let's try a few commands:
 
 ```bash
-mkdir Day1
+$ date
+$ cal
+$ whoami
 ```
+
+## 3.1 Unix Filesystem
+
+Just like a file manager, you can navigate through your computers and move around in folders (directories) using the terminal. Let's see where we are:
+
+```bash
+$ pwd
+```
+
+Let's create a directory called *Day1*:
+
+```bash
+$ mkdir Day1
+```
+
 > mkdir stands for make directory. The people who create these unix commands decided to give these command names and they're should be the same one all Linux machines.
 
 Next, we will move into that directory
@@ -136,7 +161,7 @@ All six items in this directory have no trailing slashes, so they are all files,
 
 #### Arguments
 
-Most commands take additional arguments that control their exact behavior. For example, `-F` and `-l` are arguments to `ls`.  The `ls` command, like many commands, take a lot of arguments. Another useful one is `-a`, which shows everything, including hidden files.  How do we know what the available arguments that go with a particular command are?
+Most commands take additional arguments that control their exact behavior. For example, `-F` and `-l` are arguments to `ls`. The `ls` command, like many commands, take a lot of arguments. Another useful one is `-a`, which shows everything, including hidden files.  How do we know what the available arguments that go with a particular command are?
 
 Most commonly used shell commands have a manual available in the shell. You can access the
 manual using the `man` command. Try entering:
@@ -149,7 +174,8 @@ This will open the manual page for `ls`. Use the 'space' key to go forward and '
 
 Commands that are run from the shell can get extremely complicated. To see an example, open up the manual page for the `find` command. No one can possibly learn all of these arguments, of course. So you will probably find yourself referring to the manual page frequently.
 
-> If the manual page within the terminal is hard to read and traverse, the manual exists online, use your web searching powers to get it! In addition to the arguments, you can also find good examples online; Google is your friend.
+> If the manual page within the terminal is hard to read and traverse, the manual exists online,
+	 use your web searching powers to get it! In addition to the arguments, you can also find good examples online; Google is your friend.
 
 
 ## The Unix directory file structure (a.k.a. where am I?)
@@ -182,7 +208,7 @@ Type:
 $ cd ~
 ```
 
-> This puts you in your home directory. No matter where you are in the directory system, `cd` will always bring you back to your home directory.
+> This puts you in your home directory. No matter where you are in the directory system, `cd ~` will always bring you back to your home directory.
 
 
 **Exercise 1**
@@ -194,7 +220,6 @@ Let's also check to see where we are. Sometimes when we're wandering around in t
 $ pwd
 ```
 
-> This stands for 'print working directory'. i.e. the directory you're currently working in.
 
 What if we want to move back up and out of the `raw_fastq` directory? Can we just type `cd unix_lesson`? Try it and see what happens.
 
@@ -213,7 +238,7 @@ Now do `ls` and `pwd`.
 Finally, there is handy command that can help you see the structure of any directory, namely `tree`.
 
 ```bash
-#Ensure that you are in your unix_lesson directory and run the following command
+# Ensure that you are in your unix_lesson directory and run the following command
 
 $ tree
 ```
@@ -413,9 +438,6 @@ To summarize, while you are in your home directory, the commands `ls ~`, `ls ~/.
 
 You can easily access previous commands.  Hit the up arrow. Hit it again.  You can step backwards through your command history. The down arrow takes your forwards in the command history.
 
-'Ctrl-r' will do a reverse-search through your command history.  This
-is very useful.
-
 You can also review your recent commands with the `history` command.  Just enter:
 
 ```bash
@@ -451,7 +473,9 @@ This prints out the all the contents of `sequences.fa` to the screen.
 
 What does this file contain?
 
-`cat` is a terrific command, but when the file is really big, it can be annoying to use. In practice, when you are running your analyses on the command-line you will most likely be dealing with large files. The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
+`cat` is a terrific command, but when the file is really big, it can be annoying to use.
+In practice, when you are running your analyses on the command-line you will most likely be dealing with large files.
+The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
 
 ```bash
 ls -lh ~/Day1/unix_lesson/raw_fastq
@@ -469,30 +493,6 @@ less Mov10_oe_1.subset.fq
 
 We will explore FASTQ files in more detail later, but notice that FASTQ files have four lines of data associated with every sequence read. Not only is there a header line and the nucleotide sequence, similar to a FASTA file, but FASTQ files also contain quality information for each nucleotide in the sequence. 
 
-The `less` command opens the file, and lets you navigate through it. The keys used to move around the file are identical to the `man` command.
-
-<span class="caption">Shortcuts for `less`</span>
-
-| key              | action                 |
-| ---------------- | ---------------------- |
-| <kbd>SPACE</kbd> | to go forward          |
-| <kbd>b</kbd>     | to go backwards        |
-| <kbd>g</kbd>     | to go to the beginning |
-| <kbd>G</kbd>     | to go to the end       |
-| <kbd>q</kbd>     | to quit                |
-
-`less` also gives you a way of searching through files. Just hit the <kbd>/</kbd> key to begin a search. Enter the name of the string of characters you would like to search for and hit enter. It will jump to the next location where that string is found. If you hit <kbd>/</kbd> then <kbd>ENTER</kbd>, `less` will just repeat the previous search. `less` searches from the current location and works its way forward. If you are at the end of the file and search for the word "cat", `less` will not find it. You need to go to the beginning of the file and search.
-
-For instance, let's search for the sequence `GAGACCC` in our file. You can see that we go right to that sequence and can see what it looks like. To exit hit <kbd>q</kbd>.
-
-The `man` command (program) actually uses `less` internally and therefore uses the same keys and methods, so you can search manuals using `/` as well!
-
-There's another way that we can look at files, and in this case, just
-look at part of them. This can be particularly useful if we just want
-to see the beginning or end of the file, or see how it's formatted.
-
-The commands are `head` and `tail` and they just let you look at
-the beginning and end of a file respectively.
 
 ```bash
 $ head Mov10_oe_1.subset.fq

@@ -12,9 +12,3 @@
 |13:45 - 15:00 | [Loops and Shell Scripts](lessons/04_loops_and_scripts.md) |
 |15:00 - 15:15 | Break |
 |15:15 - 17:00 | [Intro to R](lessons/05_Intro_to_R.md)
-
-***
-*These materials have been adopted and modified from [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/).*
-
-* *Some materials used in these lessons were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
-All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*

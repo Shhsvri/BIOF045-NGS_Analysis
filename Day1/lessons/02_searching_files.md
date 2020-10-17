@@ -14,22 +14,27 @@ Approximate time: 60 minutes
 
 ## Searching files
 
-We went over how to search within a file using `less`. We can also
-search within files without even opening them, using `grep`. Grep is a command-line
-utility for searching plain-text data sets for lines matching a pattern or regular expression (regex).
-Let's give it a try!
+We went through `cat`, `head`, and `tail` for viewing the contents of a file.
+What if we want to view the lines that contain a certain word without going through every line.
+Grep is a command-line utility for searching data sets for lines matching a pattern
+or regular expression (regex). Let's give it a try!
 
-We are going to practice searching with `grep` using our FASTQ files, which contain the sequencing reads (nucleotide sequences) output from a sequencing facility. Each sequencing read in a FASTQ file is associated with four lines of output, with the first line (header line) always starting with an `@` symbol. A whole fastq record for a single read should appear similar to the following:
+We are going to practice searching with `grep` using our genomic FASTQ files, which contain the sequencing
+reads (nucleotide sequences) output from a sequencing facility. Each sequencing read in a FASTQ file
+is associated with four lines of output, with the first line (header line) always starting with an `@`
+symbol. A whole fastq record for a single read should appear similar to the following:
 
+```bash
 	@HWI-ST330:304:H045HADXX:1:1101:1111:61397
 	CACTTGTAAGGGCAGGCCCCCTTCACCCTCCCGCTCCTGGGGGANNNNNNNNNNANNNCGAGGCCCTGGGGTAGAGGGNNNNNNNNNNNNNNGATCTTGG
 	+
 	@?@DDDDDDHHH?GH:?FCBGGB@C?DBEGIIIIAEF;FCGGI#########################################################
+```
 
 Suppose we want to see how many reads in our file `Mov10_oe_1.subset.fq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
 
-```bash
-$ cd ~/unix_lesson/raw_fastq
+```
+$ cd ~/Day1/unix_lesson/raw_fastq
 
 $ grep NNNNNNNNNN Mov10_oe_1.subset.fq
 ```
@@ -133,7 +138,7 @@ $ grep NNNNNNNNNN Mov10_oe_1.subset.fq | wc -l
 
 This command when used without any arguments would tell us the number of lines, words and characters in the file; the `-l` flag specifies that we only want the number of lines. Try it out without the `-l` to see the full output.
 
-Redirecting is not super intuitive, but it's really powerful for stringing together these different commands, so you can do whatever you need to do.
+Redirecting is not super intuitive, but it's really powerful for combining these different commands, so you can do whatever you need to do.
 
 The philosophy behind these commands is that none of them really do anything all that impressive. BUT when you start chaining them together, you can do some really powerful things really efficiently. **To be able to use the shell effectively, becoming proficient with the pipe and redirection operators:  `|`, `>`, `>>` is essential.**
 
@@ -148,7 +153,7 @@ $ cd ~/Day1/unix_lesson/reference_data/
 Let's explore our `chr1-hg19_genes.gtf` file a bit. What information does it contain?
 
 ```bash
-$ less chr1-hg19_genes.gtf
+$ head chr1-hg19_genes.gtf
 ```
 
 	chr1    unknown exon    14362   14829   .       -       .       gene_id "WASH7P"; gene_name "WASH7P"; transcript_id "NR_024540"; tss_id "TSS7245";
@@ -189,7 +194,7 @@ $ grep exon chr1-hg19_genes.gtf | head
 
 We will define the uniqueness of an exon by its genomic coordinates. Therefore, we only need the genomic location (chr, start, stop, and strand) information to find the total number of unique exons. The columns corresponding to this information are 1, 4, 5, and 7. 
 
-'cut' is a program that will extract columns from files.  It is a very good command to know.  Let's first try out the 'cut' command on a just the exonic lines to make sure we have the command correct by using multiple piped commands and looking at the first 10 lines:
+'cut' is a command that will extract columns from files.  It is a very good command to know.  Let's first try out the 'cut' command on a just the exonic lines to make sure we have the command correct by using multiple piped commands and looking at the first 10 lines:
 
 ```bash
 $ grep exon chr1-hg19_genes.gtf | cut -f1,4,5,7  | head
