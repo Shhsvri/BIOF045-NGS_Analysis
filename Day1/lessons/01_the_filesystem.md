@@ -42,12 +42,12 @@ To further explore Linux, we are going to log into our teaching server that runs
 
 ### Logging in using X2Go Client
 
-- 1. open the **X2Go Client**
-- 2. click on session -> New Session
-- 3. Enter the following:
-	Host: 3.237.4.148
-	Login: USERNAME
-	Session type: XFCE
+1. open the **X2Go Client**
+2. click on session -> New Session
+3. Enter the following:
+	* Host: 3.237.4.148
+	* Login: USERNAME
+	* Session type: XFCE
 
 ![X2Go](../img/X2Go.png)
 
