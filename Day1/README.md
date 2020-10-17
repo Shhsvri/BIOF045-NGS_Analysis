@@ -11,4 +11,4 @@
 |13:15 - 13:45 | [Introduction to the Vim Text Editor](lessons/03_vim.md) |
 |13:45 - 15:00 | [Loops and Shell Scripts](lessons/04_loops_and_scripts.md) |
 |15:00 - 15:15 | Break |
-|15:15 - 17:00 | [Intro to R](lessons/05_Intro_to_R.md)
+|15:15 - 17:00 | [Intro to R](lessons/05_intro_to_R.md)

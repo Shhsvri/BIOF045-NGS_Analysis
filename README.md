@@ -25,4 +25,4 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 [FileZilla](https://filezilla-project.org/download.php)
  - Choose your corresponding operating system (OSx-64 bit; Windows-64 bit)
 
-[PuTTY (Only for Windows)]()
+[PuTTY (Only for Windows)](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
