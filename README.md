@@ -17,17 +17,12 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 
 
 ### Installation Requirements
-***Mac users:***
+
 [X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient)
-AND
+
 [IGV](https://software.broadinstitute.org/software/igv/download)
 
-***Windows users:***
-[X2Go Client](https://wiki.x2go.org/doku.php/doc:installation:x2goclient)
-AND
-[PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
-AND
-[IGV](https://software.broadinstitute.org/software/igv/download)
+[FileZilla](https://filezilla-project.org/download.php)
+ - Choose your corresponding operating system (OSx-64 bit; Windows-64 bit)
 
-### Dataset
-[Introduction to Shell: Dataset](https://www.dropbox.com/s/3lua2h1oo18gbug/unix_lesson.tar.gz?dl=1)
+[PuTTY (Only for Windows)]()
