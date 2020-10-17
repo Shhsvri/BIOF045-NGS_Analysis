@@ -1,0 +1,278 @@
+---
+title: " Intro to RNA-seq"
+author: "Vinay Swamy"
+date: "10/13/2020"
+output:
+  ioslides_presentation: 
+    widescreen: true
+---
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+});
+</script>
+<style>
+slides > slide {
+  overflow-y: auto !important;
+}
+.container{
+    display: flex;
+}
+.col{
+    flex: 1;
+}
+</style>
+
+```{r setup, include = F}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = F)
+```
+
+
+## Schedule
+- Overview on RNA-seq
+- How to perform transcript quantification with Salmon
+- Using R for making Plots
+- Exploring RNA-seq data 
+- Differential Gene expression
+
+## RNA Biology -  The Central Dogma
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/dna_central_dogma_yourgenome.png')
+```
+
+</div>
+
+<div class="col">
+- In transcription, distinct parts of the genome are transcribed into immature RNA. 
+- `inline exampl`
+</div>
+</div> 
+
+## RNA processing 
+
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/rna_isoforms.gif')
+```
+
+</div>
+
+<div class="col">
+####  
+- RNA processing mechanisms convert immature RNA to mature RNA (mRNA)
+- RNA processing mechanisms include polyadenylation and splicing
+- Exons - regions of immature RNA that are retained in mRNA
+- introns - regions of immature RNA that are **NOT** retained in mRNA
+</div>
+</div>
+
+
+## One gene, multiple isoforms
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/alt_splice.jpg')
+```
+</div>
+<div class="col">
+- the locus associated with a single gene often leads to multiple distinct isoforms
+- This occurs because each RNA processing mechanism can lead to the formation of different gene isoforms
+- For example, alternative splicing leads to the inclusion/exclusion of different exons, and can lead encoded proteins with distinct functions 
+- mRNA transcripts are the distinct units of transcription, not genes
+</div>
+</div> 
+
+## High throughput RNA sequencing - RNA-seq
+
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/rnaseq_lib_prep.png')
+```
+</div>
+<div class="col">
+- In RNA-seq, mRNA transcripts are converted to cDNA
+- cDNA is fragmented. Steps up to here are commonly refered to as library preparation
+- Fragments are amplified with PCR and then sequenced. Each PCR cycle there is a chance of introducing errors
+- Amplified fragments are called "Reads". Reads are typcially 50-150bp long. Generally theres around 50 Million reads per sample
+- reads are then computationally assigned to the original mRNA transcript they come from 
+</div>
+</div> 
+
+## Library Selection Method
+
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/types_of_rna.png')
+```
+</div>
+<div class="col">
+- There are multiple types of RNA
+- RNA-seq generally refers to mRNA only, so part of the library prep procedure is to remove unwated types
+- polyA selection 
+  - pros: cheap, and efficient. Most commonly used method
+  - cons: removes ncRNA and introduces a bias for the 3' end of transcripts
+- riboRNA(rRNA) depletion
+  - pros: only removes rRNA and tRNA, no coverage bias, useful for prokaryotic organisms
+  - cons: expensive
+</div>
+</div> 
+
+## The Spliced alignment problem
+
+<div class="container">
+<div class="col">
+```{r}
+include_graphics('src/spliced_aln.png')
+```
+</div>
+<div class="col">
+- The challenge with aligning RNA-seq reads arises from the fact that reads spanning exon-exon junctions can't be directly mapped to the genome
+- aligners for RNA-seq most acocunt for this problem, often at the expense of increased computing resources
+- typical spliced aligners: TopHat, STAR, Hisat2
+- these tools align reads to the genome
+</div>
+</div> 
+
+## Library Type
+- stranded  OR
+- unstranded
+          AND
+- single OR
+- paired 
+
+## Transcript Quantification
+- With transcript quantification, reads are assigned to individual mRNA transcripts, not the genome. This eliminates the spliced alignment problem 
+- In transcript quantification, reads are not precisely aligned, but rather are assigned to where they most likely should be aligned (pseudoalignment)
+- Early iterations of transcript aligners were not as accurate as conventional genome based alignment, but newer versions have beeen show to as accruate as genome based alignment
+- Transcript quantification requries **significantly** fewer resources than spliced alignment. 
+- typical tools: Salmon, Kallisto. We'll be using salmon for this course 
+
+## Using Salmon
+- While the code I show is specifically for Salmon, the general process is similar for any transcriptome quantifier
+- What you'll need to run Salmon
+  - FASTA(.fa/.fasta) file for all RNA transcripts for your organism, ie [human](https://www.gencodegenes.org/human/). I'll refer to this as `transcripts.fa`
+  - FASTA(.fa/.fasta) file for genome sequence for your organism I'll refer to this as `transcripts.fa`
+  - FASTQ(.fq/.fastq) file(s) for your RNA-seq data. Me example is with paired end data, which I'll refer to as `sample_left.fq` and `sample_right.fq`
+
+## Preparing an Index for Salmon
+- the index is a computationally efficient representation of the distinct RNA transcripts in `transcripts.fa`
+- the index prepartion for Salmon is slightly different, and requires the preparation of decoy sequences. decoy sequences improve the accuracy of transcriptome quantification
+```{bash, eval= F, echo = T}
+grep "^>" genome.fa | cut -d " " -f 1 | sed  -e 's/>//g'  > decoys.txt # get names of chromosomes 
+cat transcripts.fa genome.fa > transcript_genome_merged.fa # merge two fastas together
+salmon index -t gentrome.fa.gz -d decoys.txt -p 12 -i salmon_human_index --gencode # use salmon to build the index
+```
+
+## Quantifying Transcripts 
+- We next use our index and fastq files(s) for quantification
+- This is a typical command
+```{bash, eval = F, echo = T}
+salmon quant  \
+  --threads 8 \ # number of process to use
+  --libType A \  # stranded or unstranded library. Use "A" to allow salmon to infer
+  -1 sample_left.fq \ # fastqs; use "-r sample.fq" for single end data 
+  -2 sample_right.fq \
+  --index salmon_human_index \ # name of th index we built earlier
+  --seqBias \ # Perform sequence-specific bias correction.
+  --gcBias \  # Perform fragment GC bias correction.
+  --posBias \ # Perform positional bias correction.
+  --output sample_quantified/ # output folder. the actual file with the quantification will be named "quant.sf"
+```
+
+## Output
+- the `quant.sf` file produced looks something like this 
+```{r, echo = F}
+txt <- 'Name    Length  EffectiveLength TPM     NumReads
+DNTX_00000017   12501   9261.044        2.532237        2529.632
+DNTX_00000019   3218    1783.769        12.960541       2493.762
+DNTX_00000020   39670   27993.255       1.370513        4138.375
+DNTX_00000018   26868   17512.212       2.156619        4073.875
+DNTX_00000034   12032   7527.305        0.713575        579.392
+DNTX_00000033   8417    6031.772        0.725138        471.801
+DNTX_00000035   3349    1579.033        3.459229        589.201'
+read.table(text = txt, header = T ) %>% kable()
+```
+
+
+## Normalization of RNA-seq data
+- Normalization of RNA-seq data is a *critical* step for its analysis
+- Aligned RNA-seq data is presented as counts, where each read is a single count 
+- The two most important parts of RNA-seq normalization  is "between-sample normalization" and "between transcript normaization"
+
+## Between Sample Normalization 
+- Library size refers to the number of reads in a given sample
+- Library size is generally not indicative of the total amount of gene expression within the sample, but is influenced heavily by the PCR amplification step 
+- And so when we compare samples we want to ensure that the number of reads is uniformn across samples 
+
+## Between transcript normalization
+- mRNA transcripts have a wide range of lengths, and the number of counts per transcript is *directly* correlated with transcript length
+- Consider two transcripts, A and B. 
+   - A and B are expresse at the exact same levels .A is 1000 bp long, and B is 10000bp long. 
+   - We divide each transcript into uniform 100bp fragments, producing 10 fragments for A(1000/100 = 10) and 100 fragments for B (10000/100 = 100)
+   - We then each amplify each fragment 100 times. For A this gives 10 x 100 = 1000 reads, and for B this gives 100 *100 = 10000 reads
+   - And so despite being expressed at the same level, transcript B has more counts and appears to be expressed higher. 
+   - to combat this, we normalize the expression of each transcript by its length. For A this is 1000 reads/ 1000 bp = 1, and B 10000 reads/ 10000bp = 1
+
+## Transcripts per Million reads (TPM)
+- Combines both normalization methods, account ing for both transcript length and library size 
+- Formally Let TPM is $TPM_t= \frac{c_t/l_t}S * 1000000$ where
+  - $S= \sum_{t \in T} c_t/l_t $
+  - $c_t$ = total number of counts(reads) for a  transcript *t*, 
+  - $l_t$ = length of *t* in kilobases
+  - $T$ = all transcripts quantified in the entire sample
+- TPM values are provided as part of Salmon's output
+  
+## RNA-seq analyses methods use more robust methods for normalization
+- RNA-seq analysis tools like `edgeR` and `DESeq2` use a more sophisticated approach for normaliztion, but generally follow the priniples mentioned earlier
+- Because of this, **ALWAYS** pass *raw* counts to these tools, and allow them to normalize for you
+
+## Reading RNA-seq data into R
+- the `tximport` package provides a uniform interface to read RNA-seq data into R. 
+- It also can aggreagate transcript level expression to gene level expression. 
+- install the required packages this with `BiocManger::install(c('tximport', 'rtracklayer'))`
+
+## Using `tximport`
+```{r eval = F, echo = T}
+library(tximport)
+tximport(
+    files, # a vector containing file paths to your "quant.sf" files
+    type, # the type of tools used to generate the data ie "salmon" or "kallisto"
+    txOut,# whether or not to return transcript level expression
+    tx2gene,# a dataframe that maps transcript_id (first column) to gene_ids (second column)
+    ignoreTxVersion# many transcript id's are versioned based on release. 
+                   # set this to true to ignore versions
+)
+```
+
+## Creating a `tx2gene`
+- many tutorials recommend getting annotations through R-based tools, like `BiomaRt`
+- I've found that its much easier to simply download the appropriate transcript annotation file(.GTF) from the same source you obtained your transcript fasta from
+- for example with,  [gencode](https://www.gencodegenes.org/human/)
+- gtfs can be read directly in R to with the `rtracklayer` package
+```{recho = T, eval = F}
+library(dplyr)
+gtf <- rtracklayer::readGFF('path/to/gtf')
+tx2gene <- gtf %>% 
+  filter(type == 'transcript') %>% 
+  select(transcript_id, gene_id) %>% 
+  distinct()
+```
+
+
+
+
+
+
+
+
+
