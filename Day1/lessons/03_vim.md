@@ -36,7 +36,7 @@ To write and edit files, we're going to use a text editor called 'Vim'. Vim is a
 You can create a document by calling a text editor and providing the name of the document you wish to create. Change directories to the `unix_lesson/other` folder and create a document using `vim` entitled `draft.txt`:
 
 ```bash
-$ cd ~/Day1/unix_lesson/other
+$ cd ~/unix_lesson/other
 	
 $ vim draft.txt
 ```
@@ -54,7 +54,7 @@ Vim has **_two basic modes_** that will allow you to create documents and edit y
 
 Upon creation of a file, vim is automatically in command mode. Let's _change to insert mode_ by typing <kbd>i</kbd>. Notice the `--INSERT--` at the bottom left hand of the screen. Now type in a few lines of text:
 
-![vim-insert-mode](../img/vim_insert.png)
+<img src="../img/vim_insert.png" width="600">
 
 After you have finished typing, press <kbd>esc</kbd> to enter command mode. Notice the `--INSERT--` disappeared from the bottom of the screen.
 

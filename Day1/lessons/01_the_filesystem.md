@@ -5,10 +5,10 @@ date: "October 2020"
 ---
 
 ## Learning Objectives
-- How do you access the shell?
+- How do you access the shell/terminal?
 - How do you use it?
-  - Getting around the Unix file system
-  - looking at files
+  - getting around the Unix file system
+  - viewing the content of files
   - manipulating files
   - automating tasks
 - What is it good for?
@@ -104,7 +104,7 @@ to do something slightly different than usual. The "~" means "/home/USERNAME".
 Let's go into our unix_lessons directory and see what we copied there. Type:
 
 ```bash
-$ cd unix_lessons
+$ cd unix_lesson
 
 $ ls
 ```

@@ -47,21 +47,25 @@ RStudio is freely available open-source Integrated Development Environment (IDE)
 * Open source
 
 
-## Creating a new project directory in RStudio
+## Accessing RStudio Server
 
-Let's create a new project directory for our "Introduction to R" lesson today. 
+RStudio is available in two formats: RStudio Desktop is a regular desktop application
+you can run on your local computer while RStudio Server runs on a remote server and
+allows accessing RStudio using a web browser.
 
-1. Open RStudio
-2. Go to the `File` menu and select `New Project`.
-3. In the `New Project` window, choose `New Directory`. Then, choose `New Project`. Name your new directory `Intro-to-R` and then "Create the project as subdirectory of:" the Desktop (or location of your choice).
-4. Click on `Create Project`.
-5. After your project is completed, if the project does not automatically open in RStudio, then go to the `File` menu, select `Open Project`, and choose `Intro-to-R.Rproj`.
-6. When RStudio opens, you will see three panels in the window.
-7. Go to the `File` menu and select `New File`, and select `R Script`. The RStudio interface should now look like the screenshot below.
+To access the RStudio on the FAES Server:
 
-![RStudio interface](../img/Rstudio_interface.png)
+1. Close your X2Go Session.
+2. Open your Web Browser (Chrome, Firefox, etc).
+3. Search for: **3.237.4.148:8787**
+4. Insert your Username and Password
+
+<img src="../img/RStudio_Server_login.png" width="600">
 
 ## RStudio Interface
+
+The unique feature of an IDE is that you can access your terminal
+console, file manager, and even more in the same window.
 
 **The RStudio interface has four main panels:**
 

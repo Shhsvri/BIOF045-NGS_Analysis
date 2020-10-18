@@ -1,7 +1,7 @@
 ---
 title: R Syntax and Data Structures
-authors: Meeta Mistry, Mary Piper
-date: "Friday, September 8, 2017"
+authors: Shahin Shahsavari
+date: "October 2020"
 ---
 Approximate time: 70 min
 
