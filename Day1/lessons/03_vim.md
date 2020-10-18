@@ -61,17 +61,17 @@ After you have finished typing, press <kbd>esc</kbd> to enter command mode. Noti
 ### Vim Saving and Quitting
 To **write to file (save)**, type <kbd>:w</kbd>. You can see the commands you type in the bottom left-hand corner of the screen. 
 
-![vim-save](../img/vim_save.png)
+<img src="../img/vim_save.png" width="600">
 
 After you have saved the file, the total number of lines and characters in the file will print out at the bottom left-hand section of the screen.
 
-![vim-postsave](../img/vim_postsave.png)
+<img src="../img/vim_postsave.png" width="600">
 
 Alternatively, we can **write to file (save) and quit**. Let's do that by typing <kbd>:wq</kbd>. Now, you should have exited vim and returned back to your terminal window.
 
 To edit your `draft.txt` document, open up the file again by calling vim and entering the file name: `vim draft.txt`. Change to insert mode and type a few more lines (you can move around the lines using the arrows on the keyboard). This time we decide to **quit without saving** by typing <kbd>:q!</kbd>
  
-![vim-quit](../img/vim_quit.png)
+<img src="../img/vim_quit.png" width="600">
 
 ### Vim Editing
 Create the document `spider.txt` in vim. Enter the text as follows: 
