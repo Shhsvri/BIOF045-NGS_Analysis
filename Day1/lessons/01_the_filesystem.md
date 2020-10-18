@@ -49,7 +49,7 @@ To further explore Linux, we are going to log into our teaching server that runs
 	* Login: USERNAME
 	* Session type: XFCE
 
-![X2Go](../img/X2Go_login.png)
+<img src="../img/X2Go_login.png" width="600">
 
 Click on the session you created, enter password, and log in.
 
@@ -59,7 +59,7 @@ You should see the content of your Desktop in a new window.
 
 In your *Applications*, open the terminal emulator.
 
-![Bash](../img/terminal_emulator.png)
+<img src="../img/terminal_emulator.png" width="600">
 
 This new window is referred to as the terminal or the shell. If you learn some basic commands, you can get some complicated jobs done with them.
 
@@ -81,32 +81,31 @@ Just like a file manager, you can navigate through your computers and move aroun
 $ pwd
 ```
 
-Let's create a directory called *Day1*:
+> 'pwd' stands for 'print working directory'. It tells you what folder you are currently located in.
+
+Let's list all the files and folders we have here.
 
 ```bash
-$ mkdir Day1
+$ ls
 ```
 
-> mkdir stands for make directory. The people who create these unix commands decided to give these command names and they're should be the same one all Linux machines.
-
-Next, we will move into that directory
-
-```bash
-$ cd Day1
-```
-
-> 'cd' stands for 'change directory'
+> ls stands for 'list' and it lists the contents of a directory.
 
 Copy the example data folder to your home directory using the following command:
 
 ```bash
-$ cp -r /home/unix_lesson .
+$ cp -r /data/unix_lesson ~
 ```
-> 'cp' is the command for copy. This command required you to specify the location of the item you want to copy (/home/unix_lesson/) and the location of the destination (.); please note the space between the 2 in the command. The "-r" is an option that modifies the copy command to do something slightly different than usual. The "." means "here", i.e. the destination location is where you currently are.
+> 'cp' is the command for copy. This command required you to specify the location of the item
+you want to copy (/data/unix_lesson/) and the location of the destination (.); please note 
+the space between the 2 in the command. The "-r" is an option that modifies the copy command
+to do something slightly different than usual. The "~" means "/home/USERNAME".
 
-Let's see what we copied in here. Type:
+Let's go into our unix_lessons directory and see what we copied there. Type:
 
 ```bash
+$ cd unix_lessons
+
 $ ls
 ```
 
@@ -115,7 +114,6 @@ You will see:
 ```
 genomics_data  other  raw_fastq  README.txt  reference_data
 ```
-> ls stands for 'list' and it lists the contents of a directory.
 
 There are five items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
 
@@ -125,7 +123,7 @@ $ ls -F
 genomics_data/  other/  raw_fastq/  README.txt  reference_data/
 ```
 
-Anything with a "/" after it is a directory. Things with a "*" after them are programs.  If there are no decorations after the name, it's a file.
+Anything with a "/" after it is a directory. If there are no decorations after the name, it's a file.
 
 > All commands are essentially programs that are able to perform specific, commonly-used tasks.
 
@@ -178,7 +176,7 @@ Commands that are run from the shell can get extremely complicated. To see an ex
 	 use your web searching powers to get it! In addition to the arguments, you can also find good examples online; Google is your friend.
 
 
-## The Unix directory file structure (a.k.a. where am I?)
+## The Unix directory file structure
  
 As you've already just seen, you can move around in different directories or folders at the command line. Why would you want to do this, rather than just navigating around the normal way using a GUI (GUI = Graphical User Interface, pronounced like "gooey")?
 
@@ -249,10 +247,6 @@ By default, the `ls` commands lists the contents of the working directory (i.e. 
 
 Type:
 
-```bash
-$ cd ~/Day1
-```
-
 Then enter the command:
 
 ```bash
@@ -298,14 +292,14 @@ which is the full path for your home directory. This tells you that you are in a
 Now enter the following command:
 
 ```bash
-$ cd /home/username/Day1/unix_lesson/raw_fastq/
+$ cd /home/username/unix_lesson/raw_fastq/
 ```
 
 This jumps to `raw_fastq`. Now go back to the home directory (`cd ~`). We saw
 earlier that the command:
 
 ```bash
-$ cd Day1/unix_lesson/raw_fastq/
+$ cd unix_lesson/raw_fastq/
 ```
 
 had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/Day1/unix_lesson/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
@@ -322,7 +316,7 @@ Over time, it will become easier for you to keep a mental note of the structure 
 
 **Exercise 3**
 
-Change directories to `/home/username/Day1/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
+Change directories to `/home/username/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
 
 ***
 
@@ -333,7 +327,7 @@ Change directories to `/home/username/Day1/unix_lesson/raw_fastq/`, and list the
 Navigate to the home directory. Typing out directory names can waste a lot of time. When you start typing out the name of a directory, then hit the tab key, the shell will try to fill in the rest of the directory name. For example, type `cd` to get back to your home directly, then enter:
 
 ```bash
-$ cd Day<tab>/uni<tab>
+$ cd uni<tab>
 ```
 
 The shell will fill in the rest of the directory name for `unix_lesson`. Now go to `unix_lesson/raw_fastq` and 
@@ -350,7 +344,7 @@ Tab completion can also fill in the names of commands. For example, enter `e<tab
 
 #### Wild cards
 
-Navigate to the `~/Day1/unix_lesson/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
+Navigate to the `~/unix_lesson/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
 
 The '*' character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
 
@@ -404,7 +398,7 @@ $ cd
 ```
 
 ```bash
-$ cd Day1/unix_lesson/raw_fastq
+$ cd unix_lesson/raw_fastq
 ```
 
 Then enter the command:
@@ -461,10 +455,10 @@ We now know how to move around the file system and look at the
 contents of directories, but how do we look at the contents of files?
 
 The easiest way to examine a file is to just print out all of the
-contents using the command `cat`. Print the contents of `Day1/unix_lesson/other/sequences.fa` by entering the following command:
+contents using the command `cat`. Print the contents of `unix_lesson/other/sequences.fa` by entering the following command:
 
 ```bash
-$ cat ~/Day1/unix_lesson/other/sequences.fa
+$ cat ~/unix_lesson/other/sequences.fa
 ```
 
 This prints out the all the contents of `sequences.fa` to the screen.
@@ -478,12 +472,12 @@ In practice, when you are running your analyses on the command-line you will mos
 The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
 
 ```bash
-ls -lh ~/Day1/unix_lesson/raw_fastq
+ls -lh ~/unix_lesson/raw_fastq
 ```
 
 > The `ls` command has a modifier `-h` when paired with `-l`, will print sizes of files in human readable format 
 
-In the fourth column you wll see the size of each of these files, and you can see they are quite large, so we probably do not want to use the `cat` command to look at them. Instead, we can use the `less` command. 
+In the fourth column you see the size of each of these files, and you can see they are quite large, so we probably do not want to use the `cat` command to look at them. Instead, we can use the `less` command. 
 
 Move back to our `raw_fastq` directory and enter the following command:
 
@@ -639,4 +633,3 @@ the command line, automate something you don't really need to automate.
 
 * *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
 All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
-* *Adapted from the lesson by Tracy Teal. Original contributors: Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (http://software-carpentry.org/)*
