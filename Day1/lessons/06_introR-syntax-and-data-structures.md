@@ -3,7 +3,7 @@ title: R Syntax and Data Structures
 authors: Shahin Shahsavari
 date: "October 2020"
 ---
-Approximate time: 70 min
+Approximate time: 75 min
 
 ## Learning Objectives
 
@@ -22,39 +22,14 @@ Below is an example script highlighting the many different "parts of speech" for
   - the **assignment operator** `<-`
   - the `=` for **arguments** in functions
 
-_NOTE: indentation and consistency in spacing is used to improve clarity and legibility_
+> **NOTE**: indentation and consistency in spacing is used to improve clarity and legibility
 
-
-### Example script
-
-```r
-# Load libraries
-library(Biobase)
-library(limma)
-library(ggplot2)
-
-# Setup directory variables
-baseDir <- getwd()
-dataDir <- file.path(baseDir, "data")
-metaDir <- file.path(baseDir, "meta")
-resultsDir <- file.path(baseDir, "results")
-
-# Load data
-meta <- read.delim(file.path(metaDir, '2015-1018_sample_key.csv'), header=T, sep="\t", row.names=1)
-```
-
-## Assignment operator
-
-To do useful and interesting things in R, we need to assign _values_ to
-_variables_ using the assignment operator, `<-`.  For example, we can use the assignment operator to assign the value of `3` to `x` by executing:
 
 ```r
 x <- 3
 ```
 
 The assignment operator (`<-`) assigns **values on the right** to **variables on the left**. 
-
-*In RStudio, typing `Alt + -` (push `Alt` at the same time as the `-` key, on Mac type `option + -`) will write ` <- ` in a single keystroke.*
 
 
 ## Variables
@@ -91,13 +66,13 @@ Try assigning the results of this operation to another variable called `number`.
 number <- x + y
 ```
 
-***
+---
 **Exercises**
 
 1. Try changing the value of the variable `x` to 5. What happens to `number`?
 2. Now try changing the value of variable `y` to contain the value 10. What do you need to do, to update the variable `number`?
 
-***
+---
 
 ### Tips on variable names
 Variables can be given almost any name, such as `x`, `current_temperature`, or
@@ -189,131 +164,4 @@ species <- c("ecoli", "human", "corn")
 species
 ```
 
-***
-**Exercise**
-
-Try to create a vector of numeric and character values by _combining_ the two vectors that we just created (`glengths` and `species`). Assign this combined vector to a new variable called `combined`. *Hint: you will need to use the combine `c()` function to do this*. 
-Print the `combined` vector in the console, what looks different compared to the original vectors?
-
-***
-
-### Factors
-
-A **factor** is a special type of vector that is used to **store categorical data**. Each unique category is referred to as a **factor level** (i.e. category = level). Factors are built on top of integer vectors such that each **factor level** is assigned an **integer value**, creating value-label pairs. 
-
-![factors](../img/factors_sm.png)
-
-Let's create a factor vector and explore a bit more.  We'll start by creating a character vector describing three different levels of expression:
-
-```r
-expression <- c("low", "high", "medium", "high", "low", "medium", "high")
-```
-
-Now we can convert this character vector into a *factor* using the `factor()` function:
-
-```r
-expression <- factor(expression)
-```
-
-So, what exactly happened when we applied the `factor()` function? 
-
-![factor_new](../img/factors_new.png)
-
-The expression vector is categorical, in that all the values in the vector belong to a set of categories; in this case, the categories are `low`, `medium`, and `high`. By turning the expression vector into a factor, the **categories are assigned integers alphabetically**, with high=1, low=2, medium=3. This in effect assigns the different factor levels. You can view the newly created factor variable and the levels in the **Environment** window.
-
-![Factor variables in environment](../img/factors.png)
-
-
-***
-**Exercises**
-
-Let's say that in our experimental analyses, we are working with three different sets of cells: normal, cells knocked out for geneA (a very exciting gene), and cells overexpressing geneA. We have three replicates for each celltype.
-
-1. Create a vector named `samplegroup` using the code below. This vector will contain nine elements: 3 control ("CTL") samples, 3 knock-out ("KO") samples, and 3 over-expressing ("OE") samples:
-
-	```r
-	samplegroup <- c("CTL", "CTL", "CTL", "KO", "KO", "KO", "OE", "OE", "OE")
-	```
-
-2. Turn `samplegroup` into a factor data structure.
-
-***
-
-### Matrix
-
-A `matrix` in R is a collection of vectors of **same length and identical datatype**. Vectors can be combined as columns in the matrix or by row, to create a 2-dimensional structure.
-
-![matrix](../img/matrix.png)
-
-Matrices are used commonly as part of the mathematical machinery of statistics. They are usually of numeric datatype and used in computational algorithms to serve as a checkpoint. For example, if input data is not of identical data type (numeric, character, etc.), the `matrix()` function will throw an error and stop any downstream code execution.
-
-### Data Frame
-
-A `data.frame` is the _de facto_ data structure for most tabular data and what we use for statistics and plotting. A `data.frame` is similar to a matrix in that it's a collection of vectors of the **same length** and each vector represents a column. However, in a dataframe **each vector can be of a different data type** (e.g., characters, integers, factors). 
-
-![dataframe](../img/dataframe.png)
-
-A data frame is the most common way of storing data in R, and if used systematically makes data analysis easier. 
-
-We can create a dataframe by bringing **vectors** together to **form the columns**. We do this using the `data.frame()` function, and giving the function the different vectors we would like to bind together. *This function will only work for vectors of the same length.*
-
-```r
-df <- data.frame(species, glengths)
-```
-
-Beware of `data.frame()`’s default behaviour which turns **character vectors into factors**. Print your data frame to the console:
-
-```r
-df
-```
-
-Upon inspection of our dataframe, we see that although the species vector was a character vector, it automatically got converted into a factor inside the data frame (the removal of quotation marks). We will show you how to change the default behavior of a function in the next lesson.
-
-*Note that you can view your data.frame object by clicking on its name in the `Environment` window.*
-
-### Lists
-
-Lists are a data structure in R that can be perhaps a bit daunting at first, but soon become amazingly useful. A list is a data structure that can hold any number of any types of other data structures.
-
-![list](../img/list.png)
-
-
-If you have variables of different data structures you wish to combine, you can put all of those into one list object by using the `list()` function and placing all the items you wish to combine within parentheses:
-
-```r
-list1 <- list(species, df, number)
-```
-Print out the list to screen to take a look at the components:
-
-```r
-list1
-	
-[[1]]
-[1] "ecoli" "human" "corn" 
-
-[[2]]
-  species glengths
-1   ecoli      4.6
-2   human   3000.0
-3    corn  50000.0
-
-[[3]]
-[1] 5
-
-```
-
-There are three components corresponding to the three different variables we passed in, and what you see is that structure of each is retained. Each component of a list is referenced based on the number position. We will talk more about how to inspect and manipulate components of lists in later lessons.
-
-***
-**Exercise**
-
-Create a list called `list2` containing `species`, `glengths`, and `number`.
-
 ---
-
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
-
-* *The materials used in this lesson are adapted from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
-All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*
-
-

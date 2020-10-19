@@ -89,7 +89,7 @@ Before we move further, do the following in Rstudio's built-in terminal.
 ```bash
 mkdir ~/Intro_to_R
 ```
-** Optional Exercise **
+**Optional Exercise**
 
 1. Create a file using `vim` in that directory named 'first\_Rscript.R'
 2. Enter the following text
@@ -124,7 +124,7 @@ setwd("~/Intro_to_R")
 
 ### 3.2 Setting up 
 
-This is more of a housekeeping task. We will be writing long lines of code in our script editor and want to make sure that the lines "wrap" and you don't have to scroll back and forth to look at your long line of code.
+In the lower right quadrant, find the "first\_Rscript.R" text file we created, and click on it.
 
 ## 4. Interacting with R
 
@@ -147,7 +147,7 @@ Best practice is to enter the commands in the **script editor**, and save the sc
 
 **The Rstudio script editor allows you to 'send' the current line or the currently highlighted text to the R console by clicking on the `Run` button in the upper-right hand corner of the script editor**. Alternatively, you can run by simply pressing the `Ctrl` and `Enter` keys at the same time as a shortcut.
 
-Now let's try entering commands to the **script editor** and using the comments character `#` to add descriptions and highlighting the text to run:
+If you didn't previously write this file, you can enter them in the **script editor** and use the comments character `#` to add descriptions and highlighting the text to run:
 	
 	# Intro to R Lesson
 	# October 19th, 2020
@@ -162,7 +162,7 @@ Now let's try entering commands to the **script editor** and using the comments 
 You should see the command run in the console and output the result.
 
 ![Script editor output](../img/script_editor_output.png)
-	
+
 What happens if we do that same command without the comment symbol `#`? Re-run the command after removing the # sign in the front:
 
 ```r
@@ -209,18 +209,9 @@ If you're in Rstudio and you can't figure out why your command isn't running, yo
 
 R is commonly used for handling big data, and so it only makes sense that we learn about R in the context of some kind of relevant data. Let's take a few minutes to add files to the folders we created and familiarize ourselves with the data.
 
-### 5.1 Adding files to your working directory
+### 5.1 The dataset
 
-You can access the files we need for this workshop using the links provided below. If you right click on the link, and "Save link as..". Choose `~/Desktop/Intro-to-R/data` as the destination of the file. You should now see the file appear in your working directory. **We will discuss these files a bit later in the lesson.**
-
-* Download the **normalized counts file** by right clicking on [this link](https://raw.githubusercontent.com/hbc/NGS_Data_Analysis_Course/master/sessionII/data/counts.rpkm.csv)
-* Download **metadata file** using [this link](https://github.com/hbc/NGS_Data_Analysis_Course/raw/master/sessionII/data/mouse_exp_design.csv)
-
-> *NOTE:* If the files download automatically to some other location on your laptop, you can move them to the your working directory using your file explorer or finder (outside RStudio), or navigating to the files in the `Files` tab of the bottom right panel of RStudio
-
-### 5.2 The dataset
-
-In this example dataset, we have collected whole brain samples from 12 mice and want to evaluate expression differences between them. The expression data represents normalized count data obtained from RNA-sequencing of the 12 brain samples. This data is stored in a comma separated values (CSV) file as a 2-dimensional matrix, with **each row corresponding to a gene and each column corresponding to a sample**.
+R is particularly good for working with large tabular dataset (dataframes). Later in the workshop, we will be able to read such files into R and work the for whatever downstream analysis we need.
 
 <img src="../img/counts_view.png" width="900"> 
 
