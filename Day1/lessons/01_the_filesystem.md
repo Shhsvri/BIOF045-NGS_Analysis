@@ -94,12 +94,12 @@ $ ls
 Copy the example data folder to your home directory using the following command:
 
 ```bash
-$ cp -r /data/unix_lesson ~
+$ cp -r /data/unix_lesson .
 ```
 > 'cp' is the command for copy. This command required you to specify the location of the item
 you want to copy (/data/unix_lesson/) and the location of the destination (.); please note 
 the space between the 2 in the command. The "-r" is an option that modifies the copy command
-to do something slightly different than usual. The "~" means "/home/USERNAME".
+to do something slightly different than usual. You could have also used "~" which means "/home/USERNAME" which is also called home directory
 
 Let's go into our unix_lessons directory and see what we copied there. Type:
 
@@ -112,18 +112,18 @@ $ ls
 You will see:
 
 ```
-genomics_data  other  raw_fastq  README.txt  reference_data
+README.txt  R_data  genomics_data  hello  other  raw_fastq  reference_data
 ```
 
-There are five items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
+There are seven items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
 
 ```bash
 $ ls -F
 
-genomics_data/  other/  raw_fastq/  README.txt  reference_data/
+README.txt  R_data/  genomics_data/  hello*  other/  raw_fastq/  reference_data/
 ```
 
-Anything with a "/" after it is a directory. If there are no decorations after the name, it's a file.
+Anything with a "/" after it is a directory. If there are no decorations after the name, it's a file. Files that end with "\*" are executables.
 
 > All commands are essentially programs that are able to perform specific, commonly-used tasks.
 
