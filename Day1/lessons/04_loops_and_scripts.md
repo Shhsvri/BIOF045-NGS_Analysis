@@ -27,6 +27,14 @@ We are finally ready to see what makes the shell such a powerful programming env
 1. Tell us our current working directory
 2. List the contents of the directory 
 
+Before we do so, let's try a new command for *printing* text into the terminal:
+
+```bash
+$ echo "Hello World"
+```
+
+> `echo` displays a line of text onto your terminal. You can redirect these into files.
+
 First open a new file using `vim`:
 
 ```bash
@@ -36,16 +44,23 @@ $ vim listing.sh
 Then type in the following lines in the `listing.sh` file:
 
 ```bash
+# This is my first shell script
+# Shahin
+# 10/19/2020
 echo "Your current working directory is:"
 pwd
 echo "These are the contents of this directory:"
 ls -l 
 ```
 
+> **NOTE** lines that start with <kbd>#</kbd> are comments. Shell ignores them.
+It is crucial to document what your scripts are supposed to do so you and your
+colleagues could read them. This helps make your code reproducible.
+
 Exit `vim` and save the file. Now let's run the new script we have created. To run a shell script you usually use the `bash` or `sh` command.
 
 ```bash
-$ sh listing.sh
+$ bash listing.sh
 ```
 
 > Did it work like you expected?
@@ -106,7 +121,7 @@ $ wc -l $file
 
 **Exercise**
 
-* Reuse the `$file` variable to store a different file name, and rerun the commands we ran above (`wc -l`, `echo`)
+* Reuse the `$file` variable to store a different file name, and rerun the commands we ran above (`wc -l`, `echo`, `cat`)
 
 ***
 
@@ -174,7 +189,7 @@ where the ***variable_name*** defines (or initializes) a variable that takes the
 for x in *.fq
  do
    echo $x
-   wc -l $x
+   ls -l $x
  done
 ```
 
@@ -182,7 +197,12 @@ Most simply, it writes to the terminal (`echo`) the name of the file and the num
 
 In this case the list of files is specified using the asterisk wildcard: `*.fq`, i.e. all files that end in `.fq`. 
 
-> **What else could we have used in place of the `ls *.fq`?**
+> **What else could we have used in place of the `ls -l *.fq`?**
+
+** Exercise **
+
+- Write a for loop that calculates the number of lines available in all the files that end with .fq
+using `wc -l`
 
 Then, we execute 2 commands between the `do` and `done`. With a loop, we execute these commands for each file at a time. Once the commands are executed for one file, the loop then executes the same commands on the next file in the list. 
 
