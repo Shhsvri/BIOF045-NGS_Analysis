@@ -34,7 +34,7 @@ symbol. A whole fastq record for a single read should appear similar to the foll
 Suppose we want to see how many reads in our file `Mov10_oe_1.subset.fq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
 
 ```
-$ cd ~/Day1/unix_lesson/raw_fastq
+$ cd ~/unix_lesson/raw_fastq
 
 $ grep NNNNNNNNNN Mov10_oe_1.subset.fq
 ```
@@ -147,7 +147,7 @@ The philosophy behind these commands is that none of them really do anything all
 Finally, let's use the new tools in our kit and a few new ones to examine our gene annotation file, **chr1-hg19_genes.gtf**, which we will be using later to find the genomic coordinates of all known exons on chromosome 1.
 
 ```bash
-$ cd ~/Day1/unix_lesson/reference_data/
+$ cd ~/unix_lesson/reference_data/
 ```
 
 Let's explore our `chr1-hg19_genes.gtf` file a bit. What information does it contain?
