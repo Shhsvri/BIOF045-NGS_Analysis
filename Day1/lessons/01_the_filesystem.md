@@ -135,12 +135,14 @@ $ ls -l
 
 to see whether items in a directory are files or directories. `ls -l` gives a lot more information too.
 ```
-total 124
-drwxrwsr-x 2 shahin shahin  78 Oct 11 10:47 genomics_data
-drwxrwsr-x 6 shahin shahin 107 Oct 11 10:47 other
-drwxrwsr-x 2 shahin shahin 228 Oct 11 10:47 raw_fastq
--rw-rw-r-- 1 shahin shahin 377 Oct 11 10:47 README.txt
-drwxrwsr-x 2 shahin shahin 238 Oct 11 10:47 reference_data
+total 44
+-rw-r--r-- 1 shahin shahin   377 Oct 19 02:20 README.txt
+drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 R_data
+drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 genomics_data
+-rwxr-xr-x 1 shahin shahin 16840 Oct 19 02:20 hello
+drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 other
+drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 raw_fastq
+drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 reference_data
 ```
 
 Let's go into the raw_fastq directory and see what is in there.
