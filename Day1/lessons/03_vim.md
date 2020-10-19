@@ -73,16 +73,8 @@ To edit your `draft.txt` document, open up the file again by calling vim and ent
  
 <img src="../img/vim_quit.png" width="600">
 
-### Vim Editing
-Create the document `spider.txt` in vim. Enter the text as follows: 
 
-![image](../img/vim_spider.png)
-
-To make it easier to refer to distinct lines, we can add line numbers by typing <kbd>:set number</kbd>. **Save the document.** Later, if you choose to remove the line numbers you can type <kbd>:set nonumber</kbd>.
-
-![image](../img/vim_spider_number.png)
-
-While we cannot point and click to navigate the document, we can use the arrow keys to move around. Navigating with arrow keys can be very slow, so Vim has shortcuts (which are completely unituitive, but very useful as you get used to them over time). Check to see what mode you are currently in. While in command mode, try moving around the screen and familarizing yourself with some of these shortcuts:    
+While we cannot point and click to navigate the document, we can use the arrow keys to move around. Navigating with arrow keys can be very slow, so Vim has shortcuts (which are completely unituitive, but very useful as you get used to them over time). Check to see what mode you are currently in. While in command mode, try moving around the screen and familarizing yourself with some of these shortcuts:
 
 | key              | action                 |
 | ---------------- | ---------------------- |
@@ -114,15 +106,13 @@ Practice some of the editing shortcuts, then quit the document without saving an
 We have covered some basic commands in vim, but practice is key for getting comfortable with the program. Let's
 practice what we just learned in a brief challenge.
 
-1. Open `spider.txt`, and delete the word "water" from line #2.
-2. Quit without saving.
-3. Open `spider.txt` again, and replace every occurrence of "spider" with "unicorn".
-4. Delete: "Down came the rain." 
+1. Navigate into your "~/unix_lesson/R_data"
+2. Use `cat` to view the content of patients.tsv
+3. Use vim to open the file and then close without saving
+4. Open the file again and change *harvey*'s height from NA to 174 
 5. Save the file.
-6. Undo your previous deletion.
-7. Redo your previous deletion.
-8. Delete the first and last words from each of the lines.
-9. Save the file and see whether your results match your neighbors.
+6. Open the file again and add one more person to the end of your file
+	- We will read this file in R later
 
 ***
 
