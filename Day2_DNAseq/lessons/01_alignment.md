@@ -29,7 +29,6 @@ Create the following directory structure for the variant calling project in your
     ├── logs/
     ├── meta/
     ├── raw_data/
-    ├── reference_data/
     ├── scripts/
     ├── quality_control
     ├── results/
@@ -40,7 +39,7 @@ Create the following directory structure for the variant calling project in your
 $ mkdir ~/var_calling
 $ cd ~/var_calling
 
-$ mkdir -p quality_control raw_data reference_data scripts logs meta results/bwa
+$ mkdir -p quality_control raw_data scripts logs meta results/bwa
 $ ls -l
 ```
 
@@ -67,7 +66,7 @@ We will be using the following softwares. These have been already installed on o
 
 Depending on the software, you can download and compile the source code using this kind of pattern:
 
-**DO NOT RUN THIS**
+> **DO NOT RUN THIS**
 
 ```bash
 $ git clone https://github.com/lh3/bwa
@@ -97,7 +96,7 @@ On the server, we have _firefox_ installed.
 
 ```bash
 cd ~/var_calling/quality_control
-firefox 08008_r1.html
+firefox 08008_r1_fastqc.html
 ```
 
 ### 1.2 Alignment
@@ -124,11 +123,11 @@ We are going to copy our hg38 human reference genome and its bwa index in our re
 > **NOTE** The human reference genome contains 3 billion base pairs. Indexing is a computationally intensive process.
 I already generated the BWA index which took about an hour.
 Your institution's High Performance Computing server admin may have most likely generating these for you.
-On NIH Biowulf, these references are in `/fdb/igenomes/Homo_Sapiens/UCSC/hg38/BWAIndex/genome.fa*`
+On NIH Biowulf, these references are in `/fdb/igenomes/Homo_Sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa*`
 
 ```bash
-cd ~/var_calling/reference_data
-cp /data/DNAseq/human/genome.fa* .
+$ cd /data/DNAseq/BWAIndex/
+$ ls -l genome.fa*
 ```
 
 Let's explore this fasta reference file before alignment.
@@ -138,13 +137,14 @@ Let's explore this fasta reference file before alignment.
 1. How large (Bytes) is this fasta reference?
 2. View the top 20 lines of your fasta reference
 3. Count the number of lines in your fasta reference
-4. find all the lines that contain ">"
-5. find all the lines that contain ">" and in addition to 3 more lines after each hit.
+4. Count the number of characters in your fasta reference
+4. Find all the lines that contain ">"
+5. Find all the lines that contain ">" and in addition to 3 more lines after each hit.
 ---
 
 ### 1.2.2 Aligning reads with BWA-MEM
 
-Now that we have our indeces, let's perform alignment in our paired-end reads for sample 08008.
+Now that we have our indexes, let's perform alignment in our paired-end reads for sample 08008.
 
 > We will find out what disease this individual has later today.
 
@@ -164,8 +164,9 @@ Additionally, we will specify:
 - `>`: save alignment output to a SAM(Sequence Alignment Map) file. aka standard output
 
 ```bash
+$ cd ~/var_calling
 $ bwa mem -t 2 \
-	reference_data/genome \
+	/data/DNAseq/BWAIndex/genome.fa \
 	raw_data/08008_r1.fq raw_data/08008_r2.fq \
 	2> logs/bwa.err \
 	> results/bwa/08008.sam
@@ -175,14 +176,20 @@ It may take some time for the process to complete. When alignment is over, you c
 
 ```bash
 $ cd results/bwa
-$ head 08008.sam
+$ head -n 200 08008.sam
+$ grep -v "@" 08008.sam | head
 ```
 
-**Question**
+> Every sam file starts with a header. It contains the reference chromosomes, command that was used to generate it and more. Sam header lines start with "@"
 
-Is this file sorted?
+> -v option for `grep` indicates that we want to exclude all the lines that containt our character.
 
-### 1.3 Convert your sam file into bam
+**Questions**
+
+1. Is this file sorted?
+2. What are the columns?
+
+### 1.3 Convert your sam file to bam
 
 SAM files are pure text files which take too much space. Common practice is to compress these files
 using samtools into bam files.
@@ -201,6 +208,11 @@ $ sambamba sort 08008.bam
 ```
 
 This will generated the sorted bam file in the same directory.
+
+**Exercise**
+
+- How much smaller is that BAM file compared with the SAM?
+- How does the size of the sorted BAM file compare with our unsorted BAM file?
 
 ### 1.5 Marking duplicates
 
@@ -222,13 +234,14 @@ Marking duplicates with tools such as sambamba will result in the variant caller
 The variant caller will be more likely to discard the error, instead of calling it as a variant.
 
 ```bash
-$ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.dedup.bam
+$ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.markdup.bam
 ```
+
 
 ### 1.6 Creating an index for final bam file
 
-Now that we have a sorted BAM file that has duplicates marked, let's index it for visualization with
-IGV.
+Now that we have a sorted BAM file that has duplicates marked, we need to ensure the index files for it exist. sambamba creates the index by default. This file is ready for visualization in IGV or any other visualization tool.
+
 
 
 This lesson has been developed by Shahin Shahsavari, adapted from the teaching team at the Harvard Chan Bioinformatics Core (HBC). These are open access materials distributed under the terms of the Creative Commons Attribution license (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.

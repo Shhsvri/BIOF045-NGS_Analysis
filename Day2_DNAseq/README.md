@@ -1,21 +1,19 @@
-# Schedule for Day2
+#Schedule for Day2
 
 ## DNAseq and Variant Calling
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 09:00 - 09:30 | Day 1 Review |
-| 09:30 - 10:15 | [Introduction to Variant Detection](Variant_Intro_rsk.pdf) |
-| 10:15 - 10:30 | Coffee |
-| 10:30 - 11:45 | [Variant Calling Methods](https://github.com/chapmanb/bcbb/blob/master/talks/ngscourse2018_teaching/ngscourse2018_teaching.pdf) |
+| 09:00 - 10:00 | Day 1 Review |
+| 10:00 - 10:30 | [Introduction to Next Generation Sequencing]() |
+| 10:30 - 10:45 | break |
+| 10:45 - 12:15 | [Variant Calling Methods]() |
 | 11:45 - 12:15 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
 | 12:15 - 13:15 | Lunch |
-| 13:15 - 13:45 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
-| 13:45 - 14:30 | [Variant Calling (FreeBayes)](lessons/02_variant-calling.md) |
-| 14:30 - 15:00 | [Variant Annotation (SnpEff)](lessons/03_annotation-snpeff.md) |
-| 15:00 - 15:15 | Coffee |
-| 15:15 - 15:50 | [Variant Annotation (SnpEff)](lessons/03_annotation-snpeff.md) |
-| 15:50 - 16:10 | Visualization with IGV |
-| 16:10 - 17:00 | [Variant Prioritization (Gemini)](lessons/04_prioritization-gemini.md) |
+| 13:15 - 14:00 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
+| 14:00 - 14:20 | [Visualization with IGV]() |
+| 14:20 - 15:15 | [Variant Calling (FreeBayes)](lessons/02_variant-calling.md) |
+| 15:15 - 15:45 | Break |
+| 15:45 - 17:00 | [Variant Annotation (SnpEff)](lessons/03_annotation-snpeff.md) |
 
 ---

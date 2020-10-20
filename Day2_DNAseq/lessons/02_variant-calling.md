@@ -32,19 +32,15 @@ Some of the more popular tools for calling variants include [bcftools mpileup](h
 ---
 <img src="../img/freebayes_1.png" width="200">
 
-> "FreeBayes uses short-read alignments (BAM files with Phred+33 encoded quality scores, now standard) for any number of individuals from a population and a reference genome (in FASTA format) to determine the most-likely combination of genotypes for the population at each position in the reference. It reports positions which it finds putatively polymorphic in variant call file (VCF) format. It can also use an input set of variants (VCF) as a source of prior information, and a copy number variant map (BED) to define non-uniform ploidy variation across the samples under analysis."
+> "FreeBayes uses short-read alignments (BAM files with Phred+33 encoded quality scores, now standard) for any number of individuals from a population and a reference genome (in FASTA format) to determine the most-likely combination of genotypes for the population at each position in the reference. It reports positions which it finds putatively polymorphic in variant call file (VCF) format."
 
-### Running FreeBayes
+### Running the FreeBayes Variant Caller
 
 ```bash
+$ cd ~
 $ mkdir ~/var_calling/results/variants
 $ cd ~/var_calling/results/variants/
-
-$ which freebayes
 ```
-
-If the output of the `which` command is `/usr/local/bin/freebayes`.
-You can use the which command to find out where an executable is stored in.
 
 Let's check the freebayes options:
 
@@ -53,8 +49,16 @@ $ freebayes -h
 ```
 
 ```bash
-$ freebayes -f ~/var_calling/reference_data/genome.fa ~/var_calling/results/bwa/08008.sorted.dedup.bam > ~/var_calling/results/variants/08008.vcf
+$ freebayes -f /data/DNAseq/BWAIndex/genome.fa ~/var_calling/results/bwa/08008.sorted.markdup.bam > ~/var_calling/results/variants/08008.vcf
 ```
+
+#### Running the bcftools Variant Caller (Alternative)
+
+```bash
+$ cd ~/var_calling/results/variants
+$ bcftools mpileup -f /data/DNAseq/BWAIndex/genome.fa ../../results/bwa/08008.sorted.dedup.bam | bcftools call -mv -Ob -o calls.bcf
+```
+
 
 ### Variant Call Format (VCF)
 
