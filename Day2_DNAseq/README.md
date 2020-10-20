@@ -4,7 +4,7 @@
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 09:00 - 10:00 | Day 1 Review |
+| 09:00 - 10:00 | [Day 1 Review](lessons/review.md) |
 | 10:00 - 10:30 | [Introduction to Next Generation Sequencing]() |
 | 10:30 - 10:45 | break |
 | 10:45 - 12:15 | [Variant Calling Methods]() |
