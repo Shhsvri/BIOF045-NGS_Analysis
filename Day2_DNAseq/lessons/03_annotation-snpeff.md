@@ -1,7 +1,7 @@
 ---
 title: "Variant annotation with snpEff"
-author: "Meeta Mistry, Mary Piper"
-date: "Thursday, April 28th, 2016"
+author: "Shahin Shahsavari"
+date: "October 2020"
 ---
 
 Approximate time: 90 minutes
@@ -27,19 +27,7 @@ At this stage, we have a large tab-delimited file containing loci at which a var
 
 ### Setting up
 
-For this section we are going to need to copy over some reference data required for annotation. Start an interactive session and move into `var-calling` directory. Then copy over the required data.
-
-```
-$ srun --pty -p interactive -c 2 -t 0-6:00 --mem 8G -reservation=HBC bash
-
-$ cd ~/var-calling
-
-$ cp /n/groups/hbctraining/ngs-data-analysis-longcourse/var-calling/reference_data/dbsnp.138.chr20.vcf.gz* \
-reference_data/
-
-```
-
-Let's also create a new directory for the results of our annotation steps:
+Let's create a new directory for the results of our annotation steps:
 
 ```
 $ mkdir results/annotation
@@ -61,27 +49,23 @@ To annotate our data with dbSNP information we wil be using [`bcftools`](https:/
 The `bcftools annotate` command allows the user to **add or remove annotations**. 
 
 ```bash
-$ module load gcc/6.2.0 bcftools/1.9
-
 $ bcftools annotate --help
 ```
 
 The annotation we wish to add and the file we are annotating must be a Bgzip-compressed and tabix-indexed file (usually VCF or BED format). Tabix indexes a tab-delimited genome position file and creates an index file (.tbi), which facilitates quick retrieval of data lines overlapping regions. *NOTE: this has already been done for our dbSNP file*
 
 ```bash
-$ bgzip ~/var-calling/results/variants/na12878_q20.recode.vcf 
-$ tabix ~/var-calling/results/variants/na12878_q20.recode.vcf.gz
+$ bgzip ~/var_calling/results/variants/na12878_q20.recode.vcf 
+$ tabix ~/var_calling/results/variants/na12878_q20.recode.vcf.gz
 ```
-
-> Both `bgzip` and `tabix` are not available on O2 as modules, we are using bcbio's installations of these tools.
 
 When running `bcftools annotate`, we also need to specify the column(s) to carry over from the annotation file, which in our case is ID.
 
 ```bash
 $ bcftools annotate -c ID \
--a ~/var-calling/reference_data/dbsnp.138.chr20.vcf.gz \
-~/var-calling/results/variants/na12878_q20.recode.vcf.gz \
-> ~/var-calling/results/annotation/na12878_q20_annot.vcf
+-a ~/var_calling/reference_data/dbsnp.138.chr20.vcf.gz \
+~/var_calling/results/variants/na12878_q20.recode.vcf.gz \
+> ~/var_calling/results/annotation/na12878_q20_annot.vcf
 ```
 
 Take a quick peek at the new VCF file that was generated using `less`. You should now see in the ID column `rs` ids which correspond to identifiers from dbSNP. For the variants that are not known, you will find the `.` in place of an ID indicating novelty of that sequence change.
@@ -108,8 +92,6 @@ Take a look at the options available. We will be using `snpEff` to annotate our 
 ```bash
 
 $ cd results/annotation
-
-$ module load snpEff/4.3g
 
 $ java -jar $SNPEFF/snpEff.jar -h
 ```

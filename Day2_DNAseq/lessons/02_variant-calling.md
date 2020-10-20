@@ -1,7 +1,7 @@
 ---
 title: "Variant calling with Freebayes"
-author: "Radhika Khetani, Meeta Mistry"
-date: 2017-07-06
+author: "Shahin Shahsavari"
+date: October 2020
 duration: 45
 ---
 
@@ -18,7 +18,7 @@ We have the aligned and cleaned up the data, and have a BAM file ready for calli
 
 <img src="../img/variant_calling_workflow_2.png" width="450">
 
-Some of the more popular tools for calling variants include [SAMtools mpileup](http://samtools.sourceforge.net/mpileup.shtml), [the GATK suite](https://www.broadinstitute.org/gatk/about/) and [FreeBayes](https://github.com/ekg/freebayes#freebayes-a-haplotype-based-variant-detector) ([Garrison and Marth, 2012](http://arxiv.org/abs/1207.3907)). While it can be useful to work through the [GATK Best Practices](https://software.broadinstitute.org/gatk/best-practices/) we will be using FreeBayes in this module as it is just as sensitive and precise, but has no license restrictions. After calling variants, we will filter out low quality variants using *[vcftools](https://vcftools.github.io/index.html)*, a toolkit designed to work with Variant Call Format or VCF files.
+Some of the more popular tools for calling variants include [bcftools mpileup](http://samtools.sourceforge.net/mpileup.shtml), [the GATK suite](https://www.broadinstitute.org/gatk/about/) and [FreeBayes](https://github.com/ekg/freebayes#freebayes-a-haplotype-based-variant-detector) ([Garrison and Marth, 2012](http://arxiv.org/abs/1207.3907)). While it can be useful to work through the [GATK Best Practices](https://software.broadinstitute.org/gatk/best-practices/) we will be using FreeBayes in this module as it is just as sensitive and precise (maybe even better), but has java requirements. Also, it is much more straightforward to use. After calling variants, we will filter out low quality variants using *[vcftools](https://vcftools.github.io/index.html)*, a toolkit designed to work with Variant Call Format or VCF files.
 
 ## Freebayes
 
@@ -37,36 +37,23 @@ Some of the more popular tools for calling variants include [SAMtools mpileup](h
 ### Running FreeBayes
 
 ```bash
-$ mkdir ~/var-calling/results/variants
-$ cd ~/var-calling/results/variants/
+$ mkdir ~/var_calling/results/variants
+$ cd ~/var_calling/results/variants/
 
 $ which freebayes
 ```
 
-If the output of the `which` command is `/n/app/bcbio/tools/bin/freebayes`, then you are all set! Since there is no module for freebayes on O2, we are using the bcbio version of the tool.
+If the output of the `which` command is `/usr/local/bin/freebayes`.
+You can use the which command to find out where an executable is stored in.
 
-> If you don't get `/n/app/bcbio/tools/bin/freebayes` as the output, do one of the following options below:
->
-> **Option #1**:
->
->```bash
->$ PATH=:$PATH
->```
->
-> **Option #2**, add the following line to your `.bashrc` file:
->
->```bash
->export PATH=/n/app/bcbio/tools/bin:$PATH
->```
-
-Once you have freebayes in your path, let's check out our options:
+Let's check the freebayes options:
 
 ```bash
 $ freebayes -h
 ```
 
 ```bash
-$ freebayes -f ~/var-calling/reference_data/chr20.fa ~/var-calling/results/bwa/na12878_sorted_marked.bam > ~/var-calling/results/variants/na12878.vcf
+$ freebayes -f ~/var_calling/reference_data/genome.fa ~/var_calling/results/bwa/08008.sorted.dedup.bam > ~/var_calling/results/variants/08008.vcf
 ```
 
 ### Variant Call Format (VCF)
@@ -98,7 +85,7 @@ Below is another example with slightly different fields in the INFO column:
 Now, let's take a look at the one we just generated:
 
 ```bash
-$ less na12878.vcf
+$ head 08008.vcf
 ```
 
 How does this compare to the 2 examples we have seen so far? How does the ID column compare?
@@ -108,10 +95,6 @@ How does this compare to the 2 examples we have seen so far? How does the ID col
 It is very important to filter out low-quality variants before moving to the assessment and annotation steps. Low quality variants usually represent sequencing errors (low quality bases). Freebayes variant quality determination is done as described here: [https://github.com/ekg/freebayes#observation-qualities](https://github.com/ekg/freebayes#observation-qualities).
 
 Today we are going to use `vcftools` to remove entries that have calls with a quality score of lower than 20.
-
-```bash
-$ module load gcc/6.2.0 vcftools/0.1.15
-```
 
 The manual for `vcftools` is [available here](https://vcftools.github.io/man_latest.html), let's take a quick look at it.
 
@@ -142,7 +125,7 @@ So the most basic options you need to specify are input `--vcf <name>` and outpu
 We are going to stick with using only the quality score for today's class:
 	
 ```bash
-$ vcftools --vcf na12878.vcf --minQ 20 --recode --recode-INFO-all --out na12878_q20  
+$ vcftools --vcf 08008.vcf --minQ 20 --recode --recode-INFO-all --out 08008_q20  
 ```
 
 > "`--recode` : These options are used to generate a new file in either VCF or BCF from the input VCF or BCF file after applying the filtering options specified by the user. The output file has the suffix ".recode.vcf" or ".recode.bcf". By default, the INFO fields are removed from the output file, as the INFO values may be invalidated by the recoding (e.g. the total depth may need to be recalculated if individuals are removed). This behavior may be overriden by the following options. By default, BCF files are written out as BGZF compressed files."
@@ -152,6 +135,3 @@ $ vcftools --vcf na12878.vcf --minQ 20 --recode --recode-INFO-all --out na12878_
 > Information about `recode` adapted from the [VCFtools manual](https://vcftools.github.io/man_latest.html).
 
 Now we are *(almost)* ready to annotate this VCF with known information from dbSNP, and add functional annotation information to enable variant prioritization.
-	
-***
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*

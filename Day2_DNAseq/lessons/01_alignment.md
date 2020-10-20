@@ -11,18 +11,12 @@ duration: 90
 * Exploring the variant calling workflow
 * Hands-on alignment 
 
-## Variant Calling Workflow (IMG MAY NEED CHANGES)
+## Variant Calling Workflow
 
-Today, we will download raw DNAseq data from two E.coli experiments and align these to the E.Coli genome.
+The variant calling workflow begins with quality control and alignment, similar to the other NGS applications. Alignment is followed by alignment clean-up to prepare data for variant calling. Then, variant calling is performed, followed by filtering and annotation of the variant calls.
 
-![var_calling_workflow](../img/variant_calling_workflow.png)
+![var\_calling\_workflow](../img/variant_calling_workflow.png)
 
-
-### Before we start let's do a few bash exercises
-
--
--
--
 
 ## Directory Set-up
 
@@ -31,46 +25,49 @@ To start with variant calling, we need to set-up our directory structure, and en
 Create the following directory structure for the variant calling project in your home directory:
 
 ```bash
-~/DNAseq/
-    ├── Reference
-    ├── Raw_data
-    ├── Aligned_Data
-    ├── Scripts
-    ├── Results
+~/var_calling/
+    ├── logs/
+    ├── meta/
+    ├── raw_data/
+    ├── reference_data/
+    ├── scripts/
+    ├── quality_control
+    ├── results/
+        ├── bwa/
 ```
 
 ```bash
-$ mkdir ~/DNAseq
-$ cd ~/DNAseq
+$ mkdir ~/var_calling
+$ cd ~/var_calling
 
-$ mkdir -p Reference Raw_data Aligned_Data Scripts Results
+$ mkdir -p quality_control raw_data reference_data scripts logs meta results/bwa
+$ ls -l
 ```
 
-Now that we have the directory structure created, let's copy over the data to perform our quality control and alignment, including our fastq files and reference data files:
+Now that we have the directory structure created, let's copy over the raw data (fastq) to perform quality control and alignment:
 
 ```bash
-$ cp /home/data/SRR* .
+$ cp /data/DNAseq/human/*.fq ~/var_calling/raw_data
+$ ls -l ~/var_calling/raw_data
 ```
 
 ## Part0: executables and tools Setup
 
+We will be using the following softwares. These have been already installed on our server.
 
 1. [bwa](https://github.com/lh3/bwa)
 2. [samtools](https://github.com/samtools/samtools)
 3. [htslib](https://github.com/samtools/htslib)
-4. [vt](https://github.com/atks/vt)
 5. [freebayes](https://github.com/ekg/freebayes)
 6. [vcflib](https://github.com/ekg/vcflib/)
 7. [sambamba](https://github.com/lomereiter/sambamba)
 8. [seqtk](https://github.com/lh3/seqtk)
 9. [mutatrix](https://github.com/ekg/mutatrix)
 10. [sra-tools](https://github.com/ncbi/sra-tools/wiki/HowTo:-Binary-Installation)
-11. [glia](https://github.com/ekg/glia.git)
-12. [hhga](https://github.com/ekg/hhga)
-13. [vg](https://github.com/vgteam/vg)
-14. [vw](https://github.com/JohnLangford/vowpal_wabbit/wiki/Download)
 
-In the cases of compiled languages, you can download and build these by cloning the source code and compiling it using this kind of pattern:
+Depending on the software, you can download and compile the source code using this kind of pattern:
+
+**DO NOT RUN THIS**
 
 ```bash
 $ git clone https://github.com/lh3/bwa
@@ -78,22 +75,173 @@ $ cd bwa
 $ make
 ```
 
-### Exercise 1
+## Part1: Aligning raw sequencing data with `bwa mem`
 
-In our yesterday's class, we learned the $PATH variable. Bash will search through the folders for executables whenever we use these commands. `bwa` is currently not in the default $PATH. How do we add the folder containing `bwa` (/home/bin/bwa) to our $PATH variable?
+### 1.1 QC
+
+> **NOTE:** It is a good practice to perform a short Quality Control step to ensure there are no
+serious problems with our samples such as the presence of vector contamination or low quality reads.
+In general, bwa mem doesn't need trimming.
+
+```bash
+$ cd ~/var_calling/raw_data
+$ ls -l
+$ fastqc 08008_r1.fq
+$ mv *fastqc* ~/var_calling/quality_control
+```
+
+#### Viewing the result of fastqc
+
+The fastqc command creates an html file that could be opened using your web browser.
+On the server, we have _firefox_ installed.
+
+```bash
+cd ~/var_calling/quality_control
+firefox 08008_r1.html
+```
+
+### 1.2 Alignment
+
+Choice of alignment tool is often determined by the type of NGS application being conducted.
+For variant calling we will use [BWA (Burrows-Wheeler Aligner)](http://bio-bwa.sourceforge.net).
+It may be slower than Bowtie2 or some other alternatives, though it is generally considered to be more accurate.
+
+#### BWA Modes
+
+Depending on read length, BWA has different modes optimized for different sequence lengths:
+
+- BWA-backtrack: designed for Illumina sequence reads up to 100bp (3-step)
+- BWA-SW: designed for longer sequences ranging from 70bp to 1Mbp, long-read support and split alignment
+- BWA-MEM: shares similar features to BWA-SW, but BWA-MEM is the latest, and is generally recommended for
+high-quality queries as it is faster and more accurate. BWA-MEM also has better performance than
+BWA-backtrack for ≥70 bp Illumina reads.
+
+### 1.2.1 Creating BWA-MEM index
+
+The BWA aligner needs to create an index of our reference genome to process our data faster.
+We are going to copy our hg38 human reference genome and its bwa index in our reference directory
+
+> **NOTE** The human reference genome contains 3 billion base pairs. Indexing is a computationally intensive process.
+I already generated the BWA index which took about an hour.
+Your institution's High Performance Computing server admin may have most likely generating these for you.
+On NIH Biowulf, these references are in `/fdb/igenomes/Homo_Sapiens/UCSC/hg38/BWAIndex/genome.fa*`
+
+```bash
+cd ~/var_calling/reference_data
+cp /data/DNAseq/human/genome.fa* .
+```
+
+Let's explore this fasta reference file before alignment.
+
+---
+**Exercise**
+1. How large (Bytes) is this fasta reference?
+2. View the top 20 lines of your fasta reference
+3. Count the number of lines in your fasta reference
+4. find all the lines that contain ">"
+5. find all the lines that contain ">" and in addition to 3 more lines after each hit.
+---
+
+### 1.2.2 Aligning reads with BWA-MEM
+
+Now that we have our indeces, let's perform alignment in our paired-end reads for sample 08008.
+
+> We will find out what disease this individual has later today.
+
+Before we start, let's check the [user manual](http://bio-bwa.sourceforge.net/bwa.shtml) for bwa.
+I encourage you to peruse the document for bwa. Any other bioinformatics tool you plan to use
+in the future should have a similar manual telling you how to choose the correct options for your data.
+
+One of the most used options for aligning reads to a reference genome using BWA-MEM is:
+
+- `-t`: number of threads/cores
+
+Additionally, we will specify:
+
+- the path to genome indexes including prefix
+- FASTQ files for paired-end reads (r1 and r2)
+- `2>`: save standard error to file
+- `>`: save alignment output to a SAM(Sequence Alignment Map) file. aka standard output
+
+```bash
+$ bwa mem -t 2 \
+	reference_data/genome \
+	raw_data/08008_r1.fq raw_data/08008_r2.fq \
+	2> logs/bwa.err \
+	> results/bwa/08008.sam
+```
+
+It may take some time for the process to complete. When alignment is over, you can view the content of your sam file.
+
+```bash
+$ cd results/bwa
+$ head 08008.sam
+```
+
+**Question**
+
+Is this file sorted?
+
+### 1.3 Convert your sam file into bam
+
+SAM files are pure text files which take too much space. Common practice is to compress these files
+using samtools into bam files.
+
+```bash
+$ samtools view -b 08008.sam > 08008.bam
+```
+
+### 1.4 Sorting your alignment bam file
+
+The next step is to sort all the aligned records by their chromosomal location.
+There are a variety of tools for this task and they all do the same task. Some are faster than others. sambamba is very fast.
+
+```bash
+$ sambamba sort 08008.bam
+```
+
+This will generated the sorted bam file in the same directory.
+
+### 1.5 Marking duplicates
+
+The last stage of the alignment phase is marking duplicates, and it is usually only required for variant calling.
+We need to find reads that are likely artifacts from the PCR amplification as they can bias variant calls.
+
+![align\_cleanup](../img/workflow_cleanup.png)
+
+If duplicates aren't marked, then the PCR-based errors will be picked up again and again as false
+positive variant calls. Duplicates are easy to detect: since they have the same mapping information
+and CIGAR string:
+
+![dedup1](../img/dedup_begin.png)
+
+Marking duplicates with tools such as sambamba will result in the variant caller ignoring these PCR-based errors, and instead seeing:
+
+![dedup1](../img/dedup_end.png)
+
+The variant caller will be more likely to discard the error, instead of calling it as a variant.
+
+```bash
+$ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.dedup.bam
+```
+
+### 1.6 Creating an index for final bam file
+
+Now that we have a sorted BAM file that has duplicates marked, let's index it for visualization with
+IGV.
 
 
-## Part1: Aligning E. Coli data with `bwa mem`
+This lesson has been developed by Shahin Shahsavari, adapted from the teaching team at the Harvard Chan Bioinformatics Core (HBC). These are open access materials distributed under the terms of the Creative Commons Attribution license (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
 
-### QC and Alignment
 
-> **NOTE:** In our workflow, we are going to skip over the Quality Control steps, but we will assume that we used *FastQC* to ensure there are no serious problems with our samples such as the presence of an adapter or vector contamination. In general, you must cut adapters, but bwa mem doesn't need trimming.
 
-Choice of alignment tool is often determined by the type of NGS application being conducted. For variant calling we will use [BWA (Burrows-Wheeler Aligner)](http://bio-bwa.sourceforge.net). It may be slower than Bowtie2 or some other alternatives, though it is generally considered to be more accurate.
 
-### 1.1 Downloading the reference genome
 
-Change directories into the `Reference` directory and download the FASTA reference there:
+
+---
+# Ecoli Alignment
+
+Go into the `` directory and download the FASTA reference there:
 
 ```bash
 $ cd ~/DNAseq/Reference
@@ -237,405 +385,3 @@ tabix -p vcf SRR1770413.vcf.gz
 ```
 
 Now you can pick up a single part of the file. For instance, we could count the variants in a particular region:
-
-```bash
-tabix SRR1770413.vcf.gz NC_000913.3:1000000-1500000 | wc -l
-```
-
-If we want to pipe the output into a tool that reads VCF, we'll need to add the `-h` flag, to output the header as well.
-
-```bash
-tabix -h SRR1770413.vcf.gz NC_000913.3:1000000-1500000 | vcffilter ...
-```
-
-The `bgzip` format is very similar to that used in BAM, and the indexing scheme is also similar (blocks of compressed data which we build a chromosome position index on top of).
-
-### Take a peek with `vt`
-
-[vt](https://github.com/atks/vt) is a toolkit for variant annotation and manipulation. In addition to other methods, it provides a nice method, `vt peek`, to determine basic statistics about the variants in a VCF file.
-
-We can get a summary like so:
-
-```bash
-vt peek SRR1770413.vcf.gz
-```
-
-### Filtering using the transition/transversion ratio (ts/tv) as a rough guide
-
-`vt` produces a nice summary with the transition/transversion ratio. Transitions are mutations that switch between DNA bases that have the same base structure (either a [purine](https://en.wikipedia.org/wiki/Purine) or [pyrimidine](https://en.wikipedia.org/wiki/Pyrimidine) ring).
-
-In most biological systems, [transitions (A<->G, C<->T) are far more likely than transversions](https://upload.wikimedia.org/wikipedia/commons/3/35/Transitions-transversions-v3.png), so we expect the ts/tv ratio to be pretty far from 0.5, which is what it would be if all mutations between DNA bases were random. In practice, we tend to see something that's at least 1 in most organisms, and ~2 in some, such as human. In some biological contexts, such as in mitochondria, we see an even higher ratio, perhaps as much as 20.
-
-As we don't have validation information for our sample, we can use this as a simple guide for our first filtering attempts. An easy way is to try different filterings using `vcffilter` and check the ratio of the resulting set with `vt peek`:
-
-```bash
-# a basic filter to remove low-quality sites
-vcffilter -f 'QUAL > 10' SRR1770413.vcf.gz | vt peek -
-
-# scaling quality by depth is like requiring that the additional log-unit contribution
-# of each read is at least N
-vcffilter -f 'QUAL / AO > 10' SRR1770413.vcf.gz | vt peek -
-```
-
-Note that the second filtering removes a large region near the beginning of the reference where there appears to be some paralogy. The read counts for reference and alternate are each around half of the total depth, which is unusual for a sequenced clone and may indicate some structural differences between the sample and the original reference.
-
-## Part 3: When you know the truth
-
-For serious applications, it's not sufficient to simply filter on the basis of bulk metrics like the ts/tv ratio. Some external validation information should be used to guide the development of pipelines for processing genomic data. In our case, we're just using free data from the web, and unless we find some validation data associated with the strains that were sequenced, we can only filter on intuition, bulk metrics like ts/tv, and with an eye for the particular question we're interested in. What we want is to know the truth for a particular context, so as to understand if our filtering criteria make sense.
-
-### The NIST Genome in a Bottle truth set for NA12878
-
-Luckily, a group at the [National Institute of Standards and Technology](https://en.wikipedia.org/wiki/National_Institute_of_Standards_and_Technology) (NIST) has developed a kind of truth set based on the [HapMap CEU cell line NA12878](https://catalog.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=GM12878). It's called the [Genome in a Bottle](https://sites.stanford.edu/abms/giab). In addition to characterizing the genome of this cell line using extensive sequencing and manual curation of inconsistencies found between sequencing protocols, the group actually distributes reference material from the cell line for use in validating sequencing pipelines.
-
-To download the truth set, head over to the [Genome in a Bottle ftp site](ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/) and pick up the latest release. As of writing this, we're at [GiAB v3.3.2](ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/NISTv3.3.2/). Download the highly confident calls and the callable region targets:
-
-```bash
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/NISTv3.3.2/GRCh37/HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.vcf.gz{,.tbi}
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/NISTv3.3.2/GRCh37/HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_nosomaticdel.bed
-```
-
-### The human reference
-
-For variant calling work, we can use the [1000 Genomes Project's version of the GRCh37 reference](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz). We could also use the [version of the reference that doesn't include dummy sequences](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.gz), as we're just doing variant calling.
-
-```bash
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz
-gunzip hs37d5.fa.gz
-samtools faidx hs37d5.fa
-```
-
-### Calling variants in [20p12.1](http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg19&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr20%3A12100001-17900000&hgsid=220600397_Vs2XvVv0rRPE9lPwepHAL4Iq3ndi)
-
-To keep things quick enough for the tutorial, let's grab a little chunk of an NA12878 dataset. Let's use [20p12.1](http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg19&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr20%3A12100001-17900000&hgsid=220600397_Vs2XvVv0rRPE9lPwepHAL4Iq3ndi). We'll use a downsampled alignment made from Illumina HiSeq sequencing of NA12878 (HG001) that was used as an input to the [NIST Genome in a Bottle](https://github.com/genome-in-a-bottle) truth set for this sample. (Other relevant data can be found in the [GiAB alignment indexes](https://github.com/genome-in-a-bottle/giab_data_indexes).)
-
-We don't need to download the entire BAM file to do this. `samtools` can download the BAM index (`.bai`) provided it hosted alongside the file on the HTTP/FTP server and then use this to jump to a particular target in the remote file.
-
-```bash
-samtools view -b ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/NA12878/NIST_NA12878_HG001_HiSeq_300x/RMNISTHS_30xdownsample.bam 20:12100000-17900000 >NA12878.20p12.1.30x.bam
-samtools index NA12878.20p12.1.30x.bam
-```
-
-We can call variants as before. Note that we drop the `--ploidy 1` flag. `freebayes` assumes its input is diploid by default. We can use bgzip in-line here to save the extra command for compression.
-
-```bash
-freebayes -f hs37d5.fa NA12878.20p12.1.30x.bam | bgzip >NA12878.20p12.1.30x.vcf.gz
-tabix -p vcf NA12878.20p12.1.30x.vcf.gz
-```
-
-### Comparing our results to the GiAB truth set
-
-We'll need to download the [GiAB truth set](ftp://ftp-trace.ncbi.nih.gov/giab/ftp/release/NA12878_HG001/NISTv2.19/). Its core consists of a VCF file defining "true" variants and a BED file defining callable regions.
-
-In order to compare, we need to exclude things in our output that are outside the callable region, and then intersect with the truth set. That which we don't see in the truth set, and is also in the callable region should be considered a false positive.
-
-First, we'll prepare a reduced representation of this dataset to match 20p12.1:
-
-```bash
-# subset the callable regions to chr20 (makes intersection much faster)
-cat HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_nosomaticdel.bed | grep ^20 >giab_callable.chr20.bed
-
-# subset the high confidence calls to 20p12.1 and rename the sample to match the BAM
-tabix -h HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.vcf.gz 20:12100000-17900000 \
-    | sed s/HG001/NA12878/ | bgzip >NIST_NA12878_20p12.1.vcf.gz
-tabix -p vcf NIST_NA12878_20p12.1.vcf.gz
-```
-
-Now, we can compare our results to the calls to get a list of potentially failed sites.
-
-```bash
-vcfintersect -r hs37d5.fa -v -i NIST_NA12878_20p12.1.vcf.gz NA12878.20p12.1.30x.vcf.gz \
-    | vcfintersect -b giab_callable.chr20.bed \
-    | bgzip >NA12878.20p12.1.30x.giab_failed.vcf.gz
-tabix -p vcf NA12878.20p12.1.30x.giab_failed.vcf.gz
-```
-
-We can now examine these using `vt peek` and `vcfstats`, or manually by inspecting them either serially:
-
-```bash
-zcat NA12878.20p12.1.30x.giab_failed.vcf.gz | less -S
-```
-
-... or by looking at loci which fail in `samtools tview`.
-
-
-### Variant normalization
-
-Many of the failed variants are unusual in their normalization. For instance:
-
-```text
-20   9575773 .  GAGAG  TATAT  1172.52
-```
-
-To ensure that comparisons work correctly, we should "normalize" the variants so that they are represented solely as short indels and SNPs.
-
-There are two main problems:
-
-1. freebayes represents short haplotypes in the VCF output
-2. indels may not be completely left-aligned, there could be additional bases on the call that should be removed so that it can be represented in most-normalized form
-
-Finally, the variants in the GiAB set have been normalized using a similar process, and doing so will ensure there are not any discrepancies when we compare.
-
-```bash
-vcfallelicprimitives -kg NA12878.20p12.1.30x.vcf.gz \
-    | vt normalize -r hs37d5.fa - \
-    | bgzip >NA12878.20p12.1.30x.norm.vcf.gz
-tabix -p vcf NA12878.20p12.1.30x.norm.vcf.gz
-```
-
-Here, `vcfallelicprimitives -kg` decomposes any haplotype calls from `freebayes`, keeping the genotype and site level annotation. (This isn't done by default because in some contexts doing so is inappropriate.) Then `vt normalize` ensures the variants are left-aligned. This isn't important for the comparison, as `vcfintersect` is haplotype-based, so it isn't affected by small differences in the positioning or description of single alleles, but it is good practice.
-
-We can now compare the results again:
-
-```bash
-vcfintersect -r hs37d5.fa -v -i NIST_NA12878_20p12.1.vcf.gz NA12878.20p12.1.30x.norm.vcf.gz \
-    | vcfintersect -b giab_callable.chr20.bed \
-    | bgzip >NA12878.20p12.1.30x.norm.giab_failed.vcf.gz
-tabix -p vcf NA12878.20p12.1.30x.norm.giab_failed.vcf.gz
-```
-
-Here we observe why normalization is important when comparing VCF files. Fortunately, the best package available for comparing variant calls to truth sets, [rtgeval](https://github.com/lh3/rtgeval), addresses exactly this concern, and also breaks comparisons into three parts matching the three types of information provided by the VCF file--- positional, allele, and genotype. We'll get into that in the next section when we learn to genotype and filter.
-
-### Hard filtering strategies
-
-The failed list provides a means to examine ways to reduce our false positive rate using post-call filtering. We can look at the failed list to get some idea of what might be going on with the failures.
-
-For example, we can test how many of the failed SNPs are removed by applying a simple quality filter and checking the output file's statistics.
-
-```bash
-vcffilter -f "QUAL > 10" NA12878.20p12.1.30x.norm.giab_failed.vcf.gz \
-    | vt peek -
-```
-
-We might also want to measure our sensitivity from different strategies. To do this, just invert the call to `vcfintersect` by removing the `-v` flag (which tells it to invert):
-
-```bash
-vcfintersect -r hs37d5.fa -i NIST_NA12878_20p12.1.vcf.gz NA12878.20p12.1.30x.norm.vcf.gz \
-    | vcfintersect -b giab_callable.chr20.bed \
-    | bgzip >NA12878.20p12.1.30x.norm.giab_passed.vcf.gz
-tabix -p vcf NA12878.20p12.1.30x.norm.giab_passed.vcf.gz
-```
-
-Now we can test how many variants remain after using the same filters on both:
-
-```bash
-vcffilter -f "QUAL / AO > 10 & SAF > 0 & SAR > 0" NA12878.20p12.1.30x.norm.giab_passed.vcf.gz | vt peek -
-vcffilter -f "QUAL / AO > 10 & SAF > 0 & SAR > 0" NA12878.20p12.1.30x.norm.giab_failed.vcf.gz | vt peek -
-```
-
-
-## Part 4: Learning to filter and genotype
-
-Bayesian variant callers like `freebayes` use models based on first principles to generate estimates of variant quality, or the probability that a given genotyping is correct.
-However, there is not reason that such a model could not be learned directly from labeled data using supervised machine learning techniques.
-In the previous section, we used hard filters on features provided in the VCF file to remove outlier and low-quality variants.
-In this section we will use the Genome in a Bottle truth set to learn a model that will directly genotype and filter candidate calls in one step.
-
-### HHGA (Have Haplotypes, Genotypes, and Alleles) and the Vowpal Wabbit
-
-[hhga](https://github.com/ekg/hhga) is an "example decision synthesizer" that transforms alignments (in BAM) and variant calls (in VCF) into a line-based text format compatible with the [Vowpal Wabbit](http://hunch.net/~vw/) (vw).
-The Vowpal Wabbit is a high-throughput machine learning method that uses the hashing trick to map arbitrary text features into a bounded vector space.
-It then uses online stochastic gradient descent (SGD) to learn a regressor (the model) mapping the hashed input space to a given output label.
-The fact that it is online and uses SGD allows it to be applied to staggeringly large data sets.
-Its use of the hashing trick enables its use on extremely large feature sets--- trillions of unique features are not out of the question, although they may be overkill for practical use!
-
-HHGA is implemented as a core utility in C++, `hhga`, as well as a wrapper script that enables the labeling of a VCF file with a truth set.
-The output file from this script can then be fed into `vw` to generate a model. This model then can be applied to other `hhga`-transformed data, and finally the labeled result may be transformed back into VCF.
-Effectively, this allows us to use the model we train as the core of a generic variant caller and genotyper that is driven by candidates produced by a variant caller like freebayes, samtools, platypus, or the GATK.
-
-Let's train a model on 20p12.2 (the neighboring band to 20p12.1). We'll then apply it to 20p12.1 to see if we can best the hard filters we tested in the previous section.
-
-First, we download the region using samtools:
-
-```bash
-samtools view -b ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/NA12878/NIST_NA12878_HG001_HiSeq_300x/RMNISTHS_30xdownsample.bam 20:9200000-12100000 >NA12878.20p12.2.30x.bam
-samtools index NA12878.20p12.2.30x.bam
-```
-
-Now subset the truth set to 20p12.2:
-
-```bash
-cat HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_nosomaticdel.bed | grep ^20 >giab_callable.chr20.bed
-tabix -h HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.vcf.gz 20:9200000-12100000 \
-    | sed s/HG001/NA12878/ | bgzip >NIST_NA12878_20p12.2.vcf.gz
-tabix -p vcf NIST_NA12878_20p12.2.vcf.gz
-```
-
-And call variants using `freebayes`:
-
-```bash
-freebayes -f hs37d5.fa NA12878.20p12.2.30x.bam | bgzip >NA12878.20p12.2.30x.vcf.gz
-tabix -p vcf NA12878.20p12.2.30x.vcf.gz
-```
-
-We can now generate the approprate input to `vw` for training by using the `hhga_region` script provided in the `hhga` distribution:
-
-```bash
-hhga_region \
-    -r 20:9200000-12100000 \
-    -w 32 \
-    -W 128 \
-    -x 20 \
-    -f hs37d5.fa \
-    -T NIST_NA12878_20p12.2.vcf.gz \
-    -B giab_callable.chr20.bed \
-    -b NA12878.20p12.2.30x.bam \
-    -v NA12878.20p12.2.30x.vcf.gz \
-    -o 20p12.2 \
-    -C 3 \
-    -E 0.1 \
-    -S NA12878
-```
-
-Each line in the output file `20p12.2/20:9200000-12100000.hhga.gz` contains the "true" genotype as the label. We allow up to 7 alleles, allowing 120 different diploid genotypes--- thus we should see numbers up to 120 at the start of each line. The rest of the line contains a number of feature spaces, each of which captures information from a particular source relevant to variant calling. The feature spaces are:
-
-```
-ref          # the reference sequence
-hap*         # the alleles in the VCF record
-geno*        # the genotype called in the VCF record
-aln*         # the alignments sorted by affinity for each allele
-col*         # the alignment matrix transposed
-match*       # a match score between each alignment and allele
-qual*        # qualty-scaled match score
-properties*  # alignment properties from bam
-kgraph       # variation graph alignment weights
-software     # annotations in the VCF file from the variant caller
-```
-
-We now can build models using `vw` that learn the mapping between these different feature spaces and the genotype. Because we can have a large number of different classes, we use the "error correcting tournament", enabled via the `--ect` argument. Otherwise, we build a model by selecting the feature spaces to consider using `--keep`, followed by a list of the namespaces by the first letter of their name. For instance:
-
-```bash
-vw --ect 120 \
-   -d 20p12.2/20:9200000-12100000.hhga.gz \
-   -ck \
-   --passes 20 \
-   --keep s \
-   -f soft.model
-```
-
-This would learn a model based only on the software features and save it in `soft.model`. In effect, we would be learning a kind of one againt all regression for each possible class label (genotype) based only on the features that freebayes provides in the QUAL and INFO columns of the VCF file. Of note, the `--passes 20` argument tells vw to make up to 20 passes over the data using SGD to learn a regressor, while `-ck` tells vw to use caching to speed this iteration up and to kill any pre-made caches. As `vw` runs it prints an estimate of its performance by holding out some of the data and testing the model against it at every iteration. If it stops improving on the holdout, it will stop iterating. This, like virtually every aspect of `vw`, is configurable.
-
-The above model is good for 3% error, but we can do better by adding feature spaces and ineractions between them. We can also change the learning model in various ways. We might try adding nonlinearities, such as a neural network (`--nn 10`).
-
-Interactions are particularly important, as they allow us to generate feature spaces for all combinations of other feature spaces. For instance, we might cross the software features with themselves, generating a new feature for every pair of software features. This could be important if we tend to see certain errors or genotypes when pairs of software features move in a correlated way. (We can specify this interaction as `-q ss`.)
-
-Here is a slightly better model that uses more of the feature spaces provided by `hhga`. Including the alignments allows us to learn directly from the raw input to the variant caller. The `match` namespace provides a compressed description of the relationship between every alignment and every allele, while the `kgraph` namespace provides a high-level overview of the set of alignments versus the set of alleles, assuming we've realigned them to a graph that includes all the alleles so as to minimize local alignment bias. The large number of interaction terms are essential for good performance:
-
-```bash
-vw --ect 120 \
-   -d 20p12.2/20:9200000-12100000.hhga.gz \
-   -ck \
-   --passes 20 \
-   --keep kmsa \
-   -q kk -q km -q mm -q ms -q ss \
-   -f kmsa.model
-```
-
-This achieves 0.2% loss on the held out portion of the data.
-
-We can now test it on 20p12.1 by running `hhga` to generate unlabeled transformations of our results from `freebayes`, labeling these by running `vw` in prediction mode, and then piping the output back into `hhga`, which can transform the `vw` output into a VCF file. Note that we _must_ not forget to add `--keep kmsa`, as this is not recorded in the model file and omission will result in poor performance.
-
-```bash
-hhga -b NA12878.20p12.1.30x.bam -v NA12878.20p12.1.30x.norm.vcf.gz -f hs37d5.fa \
-    -C 3 -E 0.1 -w 32 -W 128 -x 20 \
-    | vw --quiet -t -i kmsa.model --keep kmsa -p /dev/stdout \
-    | hhga -G -S NA12878 \
-    | bgzip >NA12878.20p12.1.30x.norm.hhga.vcf.gz
-```
-
-### RTG-eval
-
-The best variant calling comparison and evaluation framework in current use was developed by Real Time Genomics, and has since been open sourced and repackaged into [rtgeval](https://github.com/lh3/rtgeval) by Heng Li. This package was subsequently used for the basis of comparison in the PrecisionFDA challenges in 2016, for which `hhga` was initially developed.
-
-We can easily apply `rtgeval` to our results, but we will need to prepare the reference in RTG's "SDF" format first.
-
-```bash
-rtg format -o hs37d5.sdf hs37d5.fa
-```
-
-Now we can proceed and test the performance of our previous `hhga` run against the GiAB truth set:
-
-```bash
-run-eval -o eval1 -s hs37d5.sdf -b giab_callable.chr20.bed \
-    NIST_NA12878_20p12.1.vcf.gz NA12878.20p12.1.30x.norm.hhga.vcf.gz
-```
-
-The output of `rtgeval` is a set of reports and files tallying true and false positives.
-
-```
-# for alleles
-Running allele evaluation (rtg vcfeval --squash-ploidy)...
-Threshold  True-pos  False-pos  False-neg  Precision  Sensitivity  F-measure
-----------------------------------------------------------------------------
-None      8120        139        324     0.9832       0.9616     0.9723
-
-# for genotypes
-Running allele evaluation (rtg vcfeval)...
-Threshold  True-pos  False-pos  False-neg  Precision  Sensitivity  F-measure
-----------------------------------------------------------------------------
-None      8085        176        359     0.9787       0.9575     0.9680
-```
-
-In this case, we can get a quick overview by looking in the files and directories prefixed by `eval1`. It is also quick to clean up with `rm -rf eval1.*`. _Make sure you clean up before re-running on a new file, or use a different prefix!_
-
-## Part 5: Genome variation graphs
-
-Variation graphs are a data structure that enables a powerful set of techniques which dramatically reduce reference bias in resequencing analysis by embedding information about variation directly into the reference.
-In these patterns, the reference is properly understood as a graph.
-Nodes and edges describe sequences and allowed linkages, and paths through the graph represent the sequences of genomes that have been used to construct the system.
-
-In this section, we will walk through a basic resequencing pipeline, replacing operations implemented on the linear reference with ones that are based around a graph data model.
-
-First, we construct a variation graph using a [megabase long fragment of the 1000 Genomes Phase 3 release that's included in the `vg` repository](https://github.com/vgteam/vg/tree/master/test/1mb1kgp).
-
-```bash
-vg construct -r 1mb1kgp/z.fa -v 1mb1kgp/z.vcf.gz -m 32 -p >z.vg
-```
-
-Having constructed the graph, we can take a look at it using a [GFA](https://github.com/GFA-spec/GFA-spec) output format in `vg view`.
-
-```bash
-vg view z.vg | head
-```
-
-The output shows nodes, edges, and path elements that thread the reference through the graph:
-
-```text
-H       VN:Z:1.0
-S       1       TGGGAGAGA
-P       1       z       1       +       9M
-L       1       +       2       +       0M
-L       1       +       3       +       0M
-S       2       T
-L       2       +       4       +       0M
-S       3       A
-P       3       z       2       +       1M
-L       3       +       4       +       0M
-```
-
-To implement high-throughput operations on the graph, we use a variety of indexes. The two most important ones for read alignment are the [xg](https://github.com/vgteam/xg) and [gcsa2](https://github.com/jltsiren/gcsa2) indexes. `xg` provides a succinct, but immutable index of the graph that allows high-performance queries of various attributes of the graph--- such as neighborhood searches and queries relating to the reference sequences that are embedded in the graph. Meanwhile, `GCSA2` provides a full generalization of the FM-index to sequence graphs. GCSA2 indexes a de Bruijn graph generated from our underlying variation graph.
-
-```bash
-vg index -x z.xg -g z.gcsa -k 16 -p z.vg
-```
-
-This will generate the xg index and a 128-mer GCSA2 index.
-
-Now, we can simulate reads from the graph and align them back.
-
-```bash
-vg sim -n 10000 -l 100 -e 0.01 -i 0.002 -x z.xg -a >z.sim
-```
-
-Aligning them back is straightforward:
-
-```bash
-vg map -x z.xg -g z.gcsa -G z.sim >z.gam
-```
-
-We are then able to look at our alignments (in JSON format) using `vg view -a z.gam | less`.
-
-
-## errata
-
-If you're part of the 2018 Biology for Adaptation genomics course, [here is a shared document describing system-specific information about available data sets and binaries](https://docs.google.com/document/d/1CV3AUackPEaSw7GkY6f7Q5lnlTVeWkyh6IOrB4jQwMg/edit?usp=sharing).
-The [day's lecture slides](https://docs.google.com/presentation/d/1t921ccF66N0_oyn09gbM0w8nzADzWF20rfZkeMv3Sy8/edit?usp=sharing) are also available.
