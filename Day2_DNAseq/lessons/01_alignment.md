@@ -242,6 +242,11 @@ $ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.markdup.bam
 
 Now that we have a sorted BAM file that has duplicates marked, we need to ensure the index files for it exist. sambamba creates the index by default. This file is ready for visualization in IGV or any other visualization tool.
 
+### 1.7 Viewing the files
+
+
+
+##Create a script
 
 
 This lesson has been developed by Shahin Shahsavari, adapted from the teaching team at the Harvard Chan Bioinformatics Core (HBC). These are open access materials distributed under the terms of the Creative Commons Attribution license (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
