@@ -1,5 +1,5 @@
 #
-chedule for Day2
+Schedule for Day2
 
 ## DNAseq and Variant Calling
 
