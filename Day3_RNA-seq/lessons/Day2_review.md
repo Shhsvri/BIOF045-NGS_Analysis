@@ -78,6 +78,8 @@ bcftools index var.bcf
 
 > **NOTE** You can replace `-Ob` with `-Ov` if you want to produce a text file (var.vcf)
 
+OR
+
 ##### gatk
 
 ```bash
@@ -86,7 +88,7 @@ gatk HaplotypeCaller -f ref.fa -I aln.bam -O var.vcf
 
 ## BASH
 
-Let's look at a few text file formats:
+Let's look at a few text file:
 
 ```bash
 cd /data/review
@@ -106,7 +108,7 @@ cd /data/review
 
 We are working with 4 text files in the `/data/review` directory. What are the data columns separated by in each file?
 
-The most common delimiter in a text file would be `\t` or <kbd>tab<kbd>. These files are frequently given the extention `.tsv`
+The most common delimiter in a text file would be `\t` or <kbd>tab</kbd>. These files are frequently given the extention `.tsv`
 However, it is also common to see `, ; :` used as delimiters.
 
 If you want to view the second column of `file4.txt`, you can specify a delimiter using cut -d:
