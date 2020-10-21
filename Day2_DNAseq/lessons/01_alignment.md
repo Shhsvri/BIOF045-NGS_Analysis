@@ -186,8 +186,8 @@ $ grep -v "@" 08008.sam | head
 
 **Questions**
 
-1. Is this file sorted?
-2. What are the columns?
+1. Is the output of our aligner sorted?
+2. What are the columns in a sam file?
 
 ### 1.3 Convert your sam file to bam
 
@@ -201,18 +201,19 @@ $ samtools view -b 08008.sam > 08008.bam
 ### 1.4 Sorting your alignment bam file
 
 The next step is to sort all the aligned records by their chromosomal location.
-There are a variety of tools for this task and they all do the same task. Some are faster than others. sambamba is very fast.
+There are a variety of tools for this task and they all perform the same task. Some are faster than
+others. We will use `sambamba` which is very fast and generates all the needed downstream files.
 
 ```bash
 $ sambamba sort 08008.bam
 ```
 
-This will generated the sorted bam file in the same directory.
+This will generate the sorted bam file in the same directory.
 
 **Exercise**
 
-- How much smaller is that BAM file compared with the SAM?
-- How does the size of the sorted BAM file compare with our unsorted BAM file?
+1. How much smaller is that BAM file compared with the SAM?
+2. How does the size of the sorted BAM file compare with our unsorted BAM file?
 
 ### 1.5 Marking duplicates
 
@@ -238,168 +239,77 @@ $ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.markdup.bam
 ```
 
 
-### 1.6 Creating an index for final bam file
+### 1.6 Creating an index for the final bam file
 
-Now that we have a sorted BAM file that has duplicates marked, we need to ensure the index files for it exist. sambamba creates the index by default. This file is ready for visualization in IGV or any other visualization tool.
+Now that we have a sorted BAM file that has duplicates marked, we need to ensure the index file
+for it exist. sambamba creates the index by default.
+
+This file is now ready for visualization in IGV or any other visualization tool.
 
 ### 1.7 Viewing the files
 
+[IGV](http://software.broadinstitute.org/software/igv/) (Integrative Genomics Viewer) is a graphical
+tool for the visualiztion of sorted bam files.
 
+> **NOTE** BAM files must be indexed before viewing in IGV. Ensure a bam index file exists in the same directory alongside your BAM file.
+
+```
+$ la -l
+
+-rw-rw-r-- 1 shahin shahin 56382104 Oct 20 17:21 08008.sorted.markdup.bam
+-rw-rw-r-- 1 shahin shahin  1534200 Oct 20 17:54 08008.sorted.markdup.bam.bai
+```
 
 ##Create a script
 
+For the final step, we would like to create a shell script that can run all commands we have used today in one go. As always, it is good practice to leave comments in your shell scripts.
 
-This lesson has been developed by Shahin Shahsavari, adapted from the teaching team at the Harvard Chan Bioinformatics Core (HBC). These are open access materials distributed under the terms of the Creative Commons Attribution license (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
+Use vim to write the following into a shell script named "DNA\_alignment.sh":
+
+```
+#!/bin/bash
+
+# This is for DNA alignment, sorting, and indexing
+  
+i=08008
+## Set up the variables for reference and raw data 
+
+### Assign the full path of your reference genome
+### the input fastq files
+### and the output directory you would like to save the end result in
+
+ref=/data/DNAseq/BWAIndex/genome.fa
+fastq1=~/var\_calling/raw\_data/"$i"\_r1.fq
+fastq2=~/var\_calling/raw\_data/"$i"\_r2.fq
+outdir=~/var\_calling/results/
 
 
+## 1. BWA MEM alignment with 2 threads
+
+bwa mem -t 2 $ref $fastq1 $fastq2 2> $outdir/bwa.err > $outdir/bwa/"$i".sam
 
 
+## 2. Convert sam to bam
+
+samtools view -b $outdir/bwa/"$i".sam > $outdir/bwa/"$i".bam
+
+
+## 3. Sort your bam file using sambamba
+
+sambamba sort $outdir/bwa/"$i".bam
+
+
+## 4. markduplicates with 2 threads
+
+sambamba markdup -t 2 $outdir/bwa/"$i".sorted.bam "$i".sorted.marked.bam
+```
+
+For future alignments, you could change the variables (ref, fastq, and outdir), and
+run this alignment script using `source DNA_alignment.sh`
 
 
 ---
-# Ecoli Alignment
 
-Go into the `` directory and download the FASTA reference there:
+This lesson has been developed by Shahin Shahsavari, adapted from the teaching team at the Harvard Chan Bioinformatics Core (HBC). These are open access materials distributed under the terms of the Creative Commons Attribution license (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
 
-```bash
-$ cd ~/DNAseq/Reference
-$ wget http://hypervolu.me/~erik/genomes/E.coli_K12_MG1655.fa
-```
-
-> Any other organism you are working with, you need to download its assembled genome from online resources
-
-### 1.2 Setting up our reference Indexes
-
-#### BWA's FM-index
-
-BWA uses the [FM-index](https://en.wikipedia.org/wiki/FM-index), which a compressed full-text substring index based around the [Burrows-Wheeler transform](https://en.wikipedia.org/wiki/Burrows%E2%80%93Wheeler_transform).
-To use this index, we first need to build it:
-
-```bash
-bwa index E.coli_K12_MG1655.fa
-```
-
-You should see `bwa` generate some information about the build process:
-
-```text
-[bwa_index] Pack FASTA... 0.04 sec
-[bwa_index] Construct BWT for the packed sequence...
-[bwa_index] 2.26 seconds elapse.
-[bwa_index] Update BWT... 0.04 sec
-[bwa_index] Pack forward-only FASTA... 0.03 sec
-[bwa_index] Construct SA from BWT and Occ... 0.72 sec
-[main] Version: 0.7.8-r455
-[main] CMD: bwa index E.coli_K12_MG1655.fa
-[main] Real time: 3.204 sec; CPU: 3.121 sec
-```
-
-And, you should notice a new index file which has been made using the FASTA file name as prefix:
-
-```bash
-$ ls -rt1 E.coli_K12_MG1655.fa*
-# -->
-E.coli_K12_MG1655.fa
-E.coli_K12_MG1655.fa.fai
-E.coli_K12_MG1655.fa.bwt
-E.coli_K12_MG1655.fa.pac
-E.coli_K12_MG1655.fa.ann
-E.coli_K12_MG1655.fa.amb
-E.coli_K12_MG1655.fa.sa
-```
-
-When done, go back to the parent directory:
-
-```bash
-$ cd ../
-```
-
-### 1.3 Aligning our data against the E. Coli K12 reference
-
-Here's an outline of the steps we'll follow to align our K12 strain against the K12 reference:
-
-1. use bwa to generate SAM - Sequence Alignment Map - records for each read
-2. convert the output to BAM - Binary Alignment Map
-3. sort the output based on position
-4. mark PCR duplicates that result from exact duplication of a template during amplification
-
-We could the steps one-by-one, generating an intermediate file for each step.
-However, this isn't really necessary unless we want to debug the process, and it will make a lot of excess files which will do nothing but confuse us when we come to work with the data later.
-Thankfully, it's easy to use [unix pipes](https://en.wikiepdia.org/wiki/Pipeline_%28Unix%29) to stream most of these tools together (see this [nice thread about piping bwa and samtools together on biostar](https://www.biostars.org/p/43677/) for a discussion of the benefits and possible drawbacks of this).
-
-> Details on BWA and its functionality can be found in the [user manual](http://bio-bwa.sourceforge.net/bwa.shtml); I encourage you to peruse through to get familiar with all available options.
-
-You can now run the alignment using a piped approach. _Replace `$threads` with the number of CPUs you would like to use for alignment._ Not all steps in `bwa` run in parallel, but the alignment, which is the most time-consuming step, does. You'll need to set this given the available resources you have.
-
-```bash
-bwa mem -t 2 -R '@RG\tID:K12\tSM:K12' \
-    ~/DNAseq/Reference/E.coli_K12_MG1655.fa ~/DNAseq/Raw_data/SRR1770413_1.fastq.gz ~/DNAseq/Raw_data/SRR1770413_2.fastq.gz \
-    | samtools view -b - > SRR1770413.raw.bam
-smatools sort SRR1770413.raw.bam
-samtools markdup SRR1770413.raw.sorted.bam SRR1770413_fin.bam
-```
-
-Breaking it down by line:
-
-- *alignment with bwa*: `bwa mem -t $threads -R '@RG\tID:K12\tSM:K12'` --- this says "align using so many threads" and also "give the reads the read group K12 and the sample name K12"
-- *reference and FASTQs* `E.coli_K12_MG1655.fa SRR1770413_1.fastq.gz SRR1770413_2.fastq.gz` --- this just specifies the base reference file name (`bwa` finds the indexes using this) and the input alignment files. The first file should contain the first mate, the second file the second mate.
-- *conversion to BAM*: `samtools view -b -` --- this reads SAM from stdin (the `-` specifier in place of the file name indicates this) and converts to BAM.
-- *sorting the BAM file*: `sambamba sort SRR1770413.raw.bam` --- sort the BAM file, writing it to `.sorted.bam`.
-- *marking PCR duplicates*: `sambamba markdup SRR1770413.raw.sorted.bam SRR1770413.bam` --- this marks reads which appear to be redundant PCR duplicates based on their read mapping position. It [uses the same criteria for marking duplicates as picard](http://lomereiter.github.io/sambamba/docs/sambamba-markdup.html).
-
-Now, run the same alignment process for the O104:H4 strain's data. Make sure to specify a different sample name via the `-R '@RG...` flag incantation to specify the identity of the data in the BAM file header and in the alignment records themselves:
-
-```bash
-bwa mem -t 2 -R '@RG\tID:O104_H4\tSM:O104_H4' \
-    ~/DNAseq/Reference/E.coli_K12_MG1655.fa ~/DNAseq/Raw_data/SRR341549_1.fastq.gz  ~/DNAseq/Raw_data/SRR341549_2.fastq.gz \
-    | samtools view -b - >SRR341549.raw.bam
-samtools sort SRR341549.raw.bam
-samtools markdup SRR341549.raw.sorted.bam SRR341549.bam
-```
-
-As a standard post-processing step, it's helpful to add a BAM index to the files. This let's us jump around in them quickly using BAM compatible tools that can read the index. `sambamba` does this for us by default, but if it hadn't or we had used a different process to generate the BAM files, we could use samtools to achieve exactly the same index.
-
-```bash
-samtools index SRR1770413.bam
-samtools index SRR341549.bam
-```
-
-## Part 2: Calling variants
-
-Now that we have our alignments sorted, we can quickly determine variation against the reference by scanning through them using a variant caller.
-There are many options, including [samtools mpileup](http://samtools.sourceforge.net/samtools.shtml), [platypus](http://www.well.ox.ac.uk/platypus), and the [GATK](https://www.broadinstitute.org/gatk/).
-
-For this tutorial, we'll keep things simple and use [freebayes](https://github.com/ekg/freebayes). It has a number of advantages in this context (bacterial genomes), such as long-term support for haploid (and polyploid) genomes. However, the best reason to use it is that it's very easy to set up and run, and it produces a very well-annotated VCF output that is suitable for immediate downstream filtering.
-
-### 2.1 Variant calls with `freebayes`
-
-It's quite easy to use `freebayes` provided you have your BAM file completed. We use `--ploidy 1` to indicate that the sample should be genotyped as haploid.
-
-```bash
-freebayes -f ~/DNAseq/Reference/E.coli_K12_MG1655.fa --ploidy 1 SRR1770413.bam >SRR1770413.vcf
-```
-
-### Joint calling
-
-We can put the samples together if we want to find differences between them. Calling them jointly can help if we have a population of samples to use to help remove calls from paralogous regions. The Bayesian model in freebayes combines the data likelihoods from sequencing data with an estimate of the probability of observing a given set of genotypes under assumptions of neutral evolution and a [panmictic](https://en.wikipedia.org/wiki/Panmixia) population. For instance, [it would be very unusual to find a locus at which all the samples are heterozygous](https://en.wikipedia.org/wiki/Hardy%E2%80%93Weinberg_principle). It also helps improve statistics about observational biases (like strand bias, read placement bias, and allele balance in heterozygotes) by bringing more data into the algorithm.
-
-However, in this context, we only have two samples and the best reason to call them jointly is to make sure we have a genotype for each one at every locus where a non-reference allele passes the caller's thresholds in either sample.
-
-We would run a joint call by dropping in both BAMs on the command line to freebayes:
-
-```bash
-freebayes -f ~/DNAseq/Reference/E.coli_K12_MG1655.fa --ploidy 1 SRR1770413.bam SRR341549.bam >e_colis.vcf
-```
-
-As long as we've added the read group (@RG) flags when we aligned (or did so after with [bamaddrg](https://github.com/ekg/bamaddrg), that's all we need to do to run the joint calling. (NB: due to the amount of data in SRR341549, this should take about 20 minutes.)
-
-### `bgzip` and `tabix`
-
-We can speed up random access to VCF files by compressing them with `bgzip`, in the [htslib](https://github.com/samtools/htslib) package.
-`bgzip` is a "block-based GZIP", which compresses files in chunks of lines. This chunking let's us quickly seek to a particular part of the file, and support indexes to do so. The default one to use is tabix. It generates indexes of the file with the default name `.tbi`.
-
-```bash
-bgzip SRR1770413.vcf # makes SRR1770413.vcf.gz
-tabix -p vcf SRR1770413.vcf.gz
-```
-
-Now you can pick up a single part of the file. For instance, we could count the variants in a particular region:
+---

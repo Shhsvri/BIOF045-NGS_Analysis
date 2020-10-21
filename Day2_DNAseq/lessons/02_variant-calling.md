@@ -56,9 +56,12 @@ $ freebayes -f /data/DNAseq/BWAIndex/genome.fa ~/var_calling/results/bwa/08008.s
 
 ```bash
 $ cd ~/var_calling/results/variants
-$ bcftools mpileup -f /data/DNAseq/BWAIndex/genome.fa ../../results/bwa/08008.sorted.marked.bam | bcftools call -mv -Ob -o 08008.bcf
+$ bcftools mpileup -f /data/DNAseq/BWAIndex/genome.fa ../bwa/08008.sorted.marked.bam | bcftools call -mv -Ob -o 08008.bcf
+$ bcftools index 08008.bcf
+$ bcftools view 08008.bcf
 ```
 
+## _Optional Steps_
 
 ### Variant Call Format (VCF)
 
