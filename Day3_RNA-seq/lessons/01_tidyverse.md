@@ -106,6 +106,7 @@ filter(data, _condition_) function:
 ```R
 filter(RNA_counts,sample12 > 5)
 ```
+
 > **Note** This function is available through tidyverse. You must use library(tidyverse) before 
 running it
 
@@ -122,6 +123,8 @@ filter(RNA_counts, sample12 > 5) %>%
 	filter(sample8 != 0)
 ```
 
+
+
 **Exercise**
 
 - read the vcf file we generated yesterday into a data frame in R
@@ -130,4 +133,19 @@ filter(RNA_counts, sample12 > 5) %>%
 The file is saved in:
 
 **/data/review/08008.dbSNP.annotate.vcf**
+
+
+
+We will continue exploring tidyverse using an RMarkdown file available [here](https://github.com/tidyverse/dplyr/blob/master/vignettes/dplyr.Rmd)
+
+
+---
+
+
+
+
+
+
+
+
 
