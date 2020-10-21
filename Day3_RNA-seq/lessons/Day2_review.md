@@ -23,7 +23,7 @@ We introduced the various genomics file formats yesterday. Let's quickly review 
 
 
 4. [VCF/BCF](https://www.internationalgenome.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40/)
-<img src="../img/vcf.png" width="600">
+<img src="../img/vcf.png" width="900">
 
 ### Alignment Steps
 
