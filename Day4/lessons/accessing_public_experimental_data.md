@@ -72,37 +72,29 @@ Now that we have these files, if we wanted to perform differential expression an
 
 ## Using the command line to download from GEO
 
-While navigating the GEO website is a perfectly fine way to download data from GEO, oftentimes you may want to download multiple files at the same time or download large files that you don't want to store on your personal computer. Generally, the best way to do this is by using a high-performance computing cluster, such as FAS Odyssey or HMS O2.
+While navigating the GEO website is a perfectly fine way to download data from GEO, oftentimes you may want to download multiple files at the same time or download large files that you don't want to store on your personal computer. Generally, the best way to do this is by downloading the files on the cloud.
 
-### Downloading on a cluster
+### Downloading on a remote server 
 
-We will demo downloading data to a high-performance computing cluster using the Odyssey cluster.  
-
-To access the Odyssey cluster we need to use the secure shell (`ssh`) command using the 'Terminal' program for Macs or 'GitBash' for Windows. In the console from these programs, type:
+We will now use the secure shell (`ssh`) command using the 'Terminal' program for Macs or 'Power Shell' for Windows (Use PuTTY if you don't have the latest updates). In the console from these programs, type:
 
 ```bash
-$ ssh username@o2.hms.harvard.edu
+$ ssh username@3.237.4.148
 ```
 
-Odyssey will then ask for the associated password and verification code (2-factor authentication). For more information on 2-factor authentication, please see the [Odyssey resources](https://www.rc.fas.harvard.edu/resources/odyssey-quickstart-guide/).
+You will be prompted to enter your password.
 
-Now we are logged onto a 'login' computer, but to perform any work we should transfer to a 'compute' computer by running the `srun` command.
-
-```bash
-$ srun --pty -p interactive -t 0-12:00 --mem 8G /bin/bash
-```
-
-This will transfer us onto a 'compute' computer, where we can do our work. 
+This is the common way to access most servers in a secure manner.
 
 Now, we can download our data to an appropriate directory. Good data management practices will ensure we have an organized project directory for our analysis. We can create and change directories to the folder to which we plan to download the data.
 
 ```bash
-$ mkdir -p mov10_rnaseq_project/data/counts
+$ mkdir -p ~/access_public_data/GEO/counts
 
-$ cd mov10_rnaseq_project/data/counts
+$ cd ~/access_public_data/GEO/counts
 ```
 
-Now that we are ready on the cluster, we can find the link to transfer the data using GEO's FTP site. To access the FTP site, return to the [GEO home page](https://www.ncbi.nlm.nih.gov/geo/) and under the "Tools" header, click on "FTP site".
+To access the FTP site, return to the [GEO home page](https://www.ncbi.nlm.nih.gov/geo/) and under the "Tools" header, click on "FTP site".
 
 <img src="../img/geo_ftp.png" width="350">
 
@@ -115,28 +107,26 @@ To download the data associated with the paper, "MOV10 and FMRP Regulate AGO2 As
 1. Navigate the FTP site to the `series/` folder
 2. Find the `GSE50nnn/` directory 
 3. Enter the `GSE50499/` folder
-4. The data files available are in the `suppl/` directory. If we choose to download all associated data, we can download the entire `suppl/` directory
-5. Use the `wget` command followed by the link to the `suppl/` directory (right-clicking and choosing 'Copy Link Address'). 
+4. Use the `wget` command followed by the link to the `suppl/` directory (right-clicking and choosing 'Copy Link Address'). 
 
 	<img src="../img/geo_folder_cp.png" width="500">
 
-	Using the `wget` command to copy this directory requires a few options. Since we are copying a directory, the `-r/--recursive` option is required. Also, the `-np/--no-parent` option and the `-nd` for no directories is used to avoid the `wget`'s  default copying of any parent directories.
+	Using the `wget` command to copy this dataset.
+
+	```bash
+	$ wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE50nnn/GSE50499/suppl/GSE50499_GEO_Ceman_counts.txt.gz 
+	```
+
+5. You could also load the entire directory using:
 
 	```bash
 	$ wget --recursive --no-parent -nd ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE50nnn/GSE50499/suppl/
 	```
-
-> **NOTE:** Sometimes the `wget` will result in an extra file called `index.html` to be downloaded as well. If you would prefer not to download the automatically generated `index.html` file, then another useful flag would be `-R`/`--reject`.
-> 
->	```bash
->	$ wget -r -np -nd -R "index.html*" ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE50nnn/GSE50499/suppl/
->	```
-
-***
+---
 
 **Exercises**
 
-1. What command would we use to download all data for the [study](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111889): 
+1. What command would we use to download the data from this [paper](https://immunology.sciencemag.org/content/5/49/eabd1554.long): 
 
 	<img src="../img/study_exercise_head.png" width="500">
 	
@@ -146,14 +136,10 @@ To download the data associated with the paper, "MOV10 and FMRP Regulate AGO2 As
 	>```bash
 	>$ tar -xvf GSE111889_RAW.tar 
 	>
-	>$ for all in *.gz; do gunzip $all; done
+	>$ for file in *.gz; do gunzip $all; done
 	>```
 
-
-2. How would you download the associated metadata?
-
-
-***
+---
 
 ### Downloading on a local computer
 
@@ -163,11 +149,9 @@ If we are downloading a small file(s) to use on our personal computer, then it m
 curl -O ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE50nnn/GSE50499/suppl/GSE50499_GEO_Ceman_counts.txt.gz
 ```
 
-Unfortunately, we cannot download folders with `curl`. However, for MacOS, the [Homebrew package manager](https://brew.sh/) is a wonderful way to install programs/commands that may not be installed on your operating system, such as `wget`.
-
 Also, it's worth noting that we don't need to navigate the FTP site to find individual files to download, since the link on the GEO site should list a link to the file. By right-clicking on the `ftp` link on GEO, you can copy the 'ftp address' to use with the `wget` or `curl` command.
 
 <img src="../img/geo_ftp_cl.png" width="700">
 
 ---
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
+*This lesson has been developed by Shahin Shahsavvari using resources from members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*

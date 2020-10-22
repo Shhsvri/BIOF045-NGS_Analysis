@@ -1,6 +1,6 @@
 # Workshop Schedule
 
-| Time            |  Topic  | Instructor |
+| Time            |  Topic  |
 |:------------------------:|:------------------------------------------------:|
 
 |13:15 - 14:00 | [Accessing publically available NGS experimental data from Gene Expression Omnibus (GEO)](lessons/accessing_public_experimental_data.md) |
