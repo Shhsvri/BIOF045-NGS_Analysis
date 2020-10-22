@@ -52,51 +52,19 @@ Also on this page is a listing of each run and the corresponding sample it came 
 **Copy the contents of this downloaded file to a new file on the cluster** using the following commands:
 
 ```bash
-$ cd /n/scratch2/$USER/
+$ mkdir -p ~/access_public_data/SRA/GSE51443
 
-$ mkdir -p mov10_rnaseq_project/data/GSE51443    # make a new set of directories
-
-$ cd mov10_rnaseq_project/data/GSE51443   # change to that directory
+$ cd ~/access_public_data/SRA/GSE51443
 
 $ vim SRR_Acc_List_GSE51443.txt   # paste into this new file and save
 ```
 
-> **NOTE:** Instead of copying and pasting you can also use `scp` to copy over the downloaded file to the cluster.
-
 During download, in addition to writing the fastq files, SRA-toolkit writes additional cache files, which are automatically directed to your home directory by default, even if you are working elsewhere. Because of this, we need to write a **short configuration file** to tell SRA-toolkit to **write its cache files to the scratch space**, instead of our home, to avoid running out of storage.
-
-```bash
-# navigate to your scratch space
-cd /n/scratch2/$USER/
-
-# make a directory for ncbi configuration settings
-mkdir -p ~/.ncbi
-
-# write configuration file with a line that redirects the cache
-echo '/repository/user/main/public/root = "/n/scratch2/$USER/sra-cache"' > ~/.ncbi/user-settings.mkfg
-```
-
-Now we have what we need to run a `fastq-dump` for **all of the SRRs** we want.
-
-## Downloading a single SRR
 
 Given one single SRR, it is possible to convert that directly to a fastq file on the server, using [SRA toolkit](https://github.com/ncbi/sra-tools/wiki/HowTo:-Access-SRA-Data) which is a toolkit created by NCBI. This should be already downloaded and installed on most clusters used for biomedical purposes.
 
 ```bash
-$ module load sratoolkit/2.9.0
-
-## The fastq-dump command will only download the fastq version of the SRR, given the SRR number and an internet connection
 $ fastq-dump SRR1013512
-```
-
-## Parallelizing the SRR download of multiple FASTQ files
-
-Downloading individual SRRs can become painful if the experiment you are downloading has loads of SRRs. Unfortunately, the SRA-toolkit doesn't have its own methods for downloading multiple SRR files at once; so, we've written two scripts to help you do this efficiently **in parallel**. Note that we will be walking through these scripts and not demoing them in class.
-
-The **first script** contains the **command to do a fastq dump on a given SRR number**, where the SRR variable is given using a positional parameter. You can learn more about positional parameters [here](https://github.com/hbctraining/Intro-to-rnaseq-hpc-O2/blob/master/lessons/07_automating_workflow.md#more-flexibility-with-variables).
-
-```bash
-$ vim inner_script.slurm
 ```
 
 > **NOTE: Downloading Paired End Data:**
