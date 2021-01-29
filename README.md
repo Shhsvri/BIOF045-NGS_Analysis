@@ -22,7 +22,7 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 | Day1 | [Introduction to Shell and Cloud Computing](Day1) |
 | Day2 | [DNA Sequencing and Variant Calling](Day2_DNAseq) |
 | Day3 | [RNA Sequencing and Transcriptomics](Day3_RNA-seq) |
-| Day4 | [RNAseq by Vinay](Day4) |
+| Day4 | [Accessing Public Data and Capstone Project](Day4) |
 
 ### Installation Requirements
 
