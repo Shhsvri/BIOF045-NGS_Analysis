@@ -15,6 +15,14 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 3.	Perform RNA sequencing alignment and differential expression analysis.
 4.	Access and use publicly available datasets.
 
+### Course Material
+
+| Time            |   Topic  |
+|:------------------------:|:----------:|
+| Day1 | [Introduction to Shell and Cloud Computing](Day1) |
+| Day2 | [DNA Sequencing and Variant Calling](Day2_DNAseq) |
+| Day3 | [RNA Sequencing and Transcriptomics](Day3_RNA-seq) |
+| Day4 | [RNAseq by Vinay](Day4) |
 
 ### Installation Requirements
 
