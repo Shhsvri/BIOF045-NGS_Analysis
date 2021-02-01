@@ -8,6 +8,8 @@
 
 This repository has teaching materials for a 4-day Introduction to Next Generation Sequencing Data Analysis. The workshop focuses on teaching basic skills to use the command line interface, specifically `bash`, DNA sequencing, RNA sequencing, and the use of publicly available datasets.
 
+- [Syllabus](Syllabus_October.pdf)
+
 ### Learning Objectives
 
 1.	Understand the necessity for, and use of, the command line interface (bash/shell).
@@ -19,10 +21,10 @@ This repository has teaching materials for a 4-day Introduction to Next Generati
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| Day1 | [Introduction to Shell and Cloud Computing](Day1) |
-| Day2 | [DNA Sequencing and Variant Calling](Day2_DNAseq) |
-| Day3 | [RNA Sequencing and Transcriptomics](Day3_RNA-seq) |
-| Day4 | [Accessing Public Data and Capstone Project](Day4) |
+| Day1 | [Introduction to Shell and Cloud Computing](lectures/Day1) |
+| Day2 | [DNA Sequencing and Variant Calling](lectures/Day2_DNAseq) |
+| Day3 | [RNA Sequencing and Transcriptomics](lectures/Day3_RNA-seq) |
+| Day4 | [Accessing Public Data and Capstone Project](lectures/Day4) |
 
 ### Installation Requirements
 
