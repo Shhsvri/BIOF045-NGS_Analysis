@@ -27,11 +27,11 @@ RNA sequencing, ChIP sequencing and the use of publicly available datasets.
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| Day1 | [Introduction to Shell and Cloud Computing](lectures/Day1) |
+| Day1 | [Introduction to Shell and Cloud Computing](lectures/Day1_IntroShell) |
 | Day2 | [DNA Sequencing and Variant Calling](lectures/Day2_DNAseq) |
 | Day3 | [RNA Sequencing and Transcriptomics](lectures/Day3_RNAseq) |
 | Day4 | [ChIP Sequencing and ](lectures/Day4_ChIPseq)
-| Day5 | [Accessing Public Data and Capstone Project](lectures/Day5) |
+| Day5 | [Accessing Public Data and Capstone Project](lectures/Day5_PublicData) |
 
 
 ### Installation Requirements

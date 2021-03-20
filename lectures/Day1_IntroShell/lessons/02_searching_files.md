@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Searching and Redirection"
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "March 2021"
 ---
 
 Approximate time: 60 minutes
@@ -31,12 +31,12 @@ symbol. A whole fastq record for a single read should appear similar to the foll
 	@?@DDDDDDHHH?GH:?FCBGGB@C?DBEGIIIIAEF;FCGGI#########################################################
 ```
 
-Suppose we want to see how many reads in our file `Mov10_oe_1.subset.fq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
+Suppose we want to see how many reads in our file `Mov10_oe_1.subset.fastq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
 
 ```
-$ cd ~/unix_lesson/raw_fastq
+$ cd ~/Day1/raw_fastq
 
-$ grep NNNNNNNNNN Mov10_oe_1.subset.fq
+$ grep NNNNNNNNNN Mov10_oe_1.subset.fastq
 ```
 
 We get back a lot of lines.  What if we want to see the whole fastq record for each of these reads? 
@@ -44,7 +44,7 @@ We get back a lot of lines.  What if we want to see the whole fastq record for e
 We can use the `-B` and `-A` arguments for grep to return the matched line plus one before (`-B1`) and two lines after (`-A2`). Since each record is four lines and the second line is the sequence, this should return the whole record.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fq
+$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq
 ```
 
 ```
@@ -63,7 +63,7 @@ CACAAATCGGCTCAGGAGGCTTGTAGAAAAGCTCAGCTTGACANNNNNNNNNNNNNNNNNGNGNACGAAACNNNNGNNNN
 
 **Exercises**
 
-1. Search for the sequence CTCAATGA in `Mov10_oe_1.subset.fq`.
+1. Search for the sequence CTCAATGA in `Mov10_oe_1.subset.fastq`.
 In addition to finding the sequence, have your search also return
 the name of the sequence.
 
@@ -89,7 +89,7 @@ Let's try it out and put all the sequences that contain 'NNNNNNNNNN'
 from all the files into another file called `bad_reads.txt`.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fq > bad_reads.txt
+$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq > bad_reads.txt
 ```
 
 The prompt takes some time to complete, and then it should look like nothing
@@ -107,7 +107,7 @@ Take a look at the file and see if it contains what you think it should. *NOTE: 
 If we use `>>`, it will append to rather than overwrite a file.  This can be useful for saving more than one search, for example.
     
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_2.subset.fq >> bad_reads.txt
+$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_2.subset.fastq >> bad_reads.txt
 
 $ ls -l
 ```
@@ -125,7 +125,7 @@ There's one more useful redirection command that we're going to show, and that's
 It's probably not a key on your keyboard you use very much. What `|` does is take the output that went scrolling by on the terminal and runs it through another command. When it was all whizzing by before, we wished we could just slow it down and look at it, like we can with `less`. Well it turns out that we can! We pipe the `grep` command to `less` or to `head` to just see the first few lines.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fq | less
+$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq | less
 ```
 
 Now we can use the arrows to scroll up and down and use `q` to get out.
@@ -133,7 +133,7 @@ Now we can use the arrows to scroll up and down and use `q` to get out.
 We can also do count the number of lines using the `wc` command. `wc` stands for *word count*. It counts the number of lines, words or characters. So, we can use it to count the number of lines we're getting back from our `grep` command using the `-l` argument. And that will magically tell us how many bad sequences we have in the file.
 
 ```bash
-$ grep NNNNNNNNNN Mov10_oe_1.subset.fq | wc -l
+$ grep NNNNNNNNNN Mov10_oe_1.subset.fastq | wc -l
 ```
 
 This command when used without any arguments would tell us the number of lines, words and characters in the file; the `-l` flag specifies that we only want the number of lines. Try it out without the `-l` to see the full output.
@@ -147,7 +147,7 @@ The philosophy behind these commands is that none of them really do anything all
 Finally, let's use the new tools in our kit and a few new ones to examine our gene annotation file, **chr1-hg19_genes.gtf**, which we will be using later to find the genomic coordinates of all known exons on chromosome 1.
 
 ```bash
-$ cd ~/unix_lesson/reference_data/
+$ cd ~/Day1/reference_data/
 ```
 
 Let's explore our `chr1-hg19_genes.gtf` file a bit. What information does it contain?

@@ -1,7 +1,7 @@
 ---
 title: Introduction to Vim
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "Mar 2021"
 ---
 
 ## Learning Objectives
@@ -106,7 +106,7 @@ Practice some of the editing shortcuts, then quit the document without saving an
 We have covered some basic commands in vim, but practice is key for getting comfortable with the program. Let's
 practice what we just learned in a brief challenge.
 
-1. Navigate into your "~/unix_lesson/R_data"
+1. Navigate into your "~/Day1/R_data"
 2. Use `cat` to view the content of patients.tsv
 3. Use vim to open the file and then close without saving
 4. Open the file again and change *harvey*'s height from NA to 174 

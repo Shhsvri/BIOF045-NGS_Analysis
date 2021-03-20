@@ -1,7 +1,7 @@
 ---
 title: "Intro to R and Rstudio"
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "Mar 2021"
 ---
 
 ## Learning Objectives
@@ -57,7 +57,7 @@ To access the RStudio on the FAES Server:
 
 1. Close your X2Go Session.
 2. Open your Web Browser (Chrome, Firefox, etc).
-3. Search for: **3.237.4.148:8787**
+3. Search for: **3.235.24.141:8787**
 4. Insert your Username and Password
 
 <img src="../img/RStudio_Server_login.png" width="600">
@@ -82,10 +82,6 @@ console, file manager, and even more in the same window.
 
 ### 3.1 Viewing your working directory
 
-Before we move further, do the following in Rstudio's built-in terminal.
-       
-1. let's create a directory in your home using the terminal:
-
 ```bash
 mkdir ~/Intro_to_R
 ```
@@ -96,11 +92,11 @@ mkdir ~/Intro_to_R
 
 ```
 # Intro to R Lesson
-# October 19th, 2020
+# March 22th, 2021
 
 # Interacting with R
     
-## I am adding 3 and 5. R is fun!
+## I am adding 3 and 5
 3+5
 ```
 
@@ -150,11 +146,9 @@ Best practice is to enter the commands in the **script editor**, and save the sc
 If you didn't previously write this file, you can enter them in the **script editor** and use the comments character `#` to add descriptions and highlighting the text to run:
 	
 	# Intro to R Lesson
-	# October 19th, 2020
+	# Mar 22, 2021
 
-	# Interacting with R
-	
-	## I am adding 3 and 5. R is fun!
+	## I am adding 3 and 5
 	3+5
 
 ![Running in the script editor](../img/script_editor.png)

@@ -1,7 +1,7 @@
 ---
 title: "The Shell"
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "March 2021"
 ---
 
 ## Learning Objectives
@@ -13,9 +13,14 @@ date: "October 2020"
   - automating tasks
 - What is it good for?
 
+
 ## 1. What is Linux
 
-Linux is a family of open source Unix-like operating systems based on the Linux kernel, an operating system kernel first released in September, 1991, by Linus Torvalds. 67% of the world’s servers run some variant of Unix or Linux. Android also uses a modified version of the Linux Kernel. There are a wide variety of Linux distributions (Ubuntu, Mint, Fedora, Arch, etc).
+Linux is a family of open source Unix-like operating systems based on the Linux kernel, an operating system kernel
+first released in September, 1991, by Linus Torvalds. 67% of the world’s servers run some variant of Unix or Linux.
+Android also uses a modified version of the Linux Kernel. There are a wide variety of Linux distributions (Ubuntu,
+Mint, Fedora, Arch, etc).
+
 
 ### 1.1 A Brief History of Unix
 
@@ -33,19 +38,20 @@ Linux is a family of open source Unix-like operating systems based on the Linux 
 - 2007: Mac OS X certified to Unix standard.
 - 2010: Apple reports 50 million desktops and growing, all Certified Unix Systems.
 - 2012: 500 million Android (Linux) and iOS (Darwin) devices have been sold world wide.
-- 2020: All 500 of the top 500 supercomputers in the world run variants of Linux today.
+- 2020: All 500 of the top 500 supercomputers in the world run variants of Linux.
 
 
 ## 2. Setting up
 
 To further explore Linux, we are going to log into our teaching server that runs Ubuntu Linux.
 
+
 ### Logging in using X2Go Client
 
 1. open the **X2Go Client**
 2. click on session -> New Session
 3. Enter the following:
-	* Host: 3.237.4.148
+	* Host: 3.235.24.141
 	* Login: USERNAME
 	* Session type: XFCE
 
@@ -54,6 +60,7 @@ To further explore Linux, we are going to log into our teaching server that runs
 Click on the session you created, enter password, and log in.
 
 You should see the content of your Desktop in a new window.
+
 
 ## 3. Getting started with the Command Line (Terminal/Bash Shell)
 
@@ -73,9 +80,11 @@ $ cal
 $ whoami
 ```
 
+
 ## 3.1 Unix Filesystem
 
-Just like a file manager, you can navigate through your computers and move around in folders (directories) using the terminal. Let's see where we are:
+Just like a file manager, you can navigate through your computers and move around in folders (directories) using
+the terminal. Let's see where we are:
 
 ```bash
 $ pwd
@@ -91,20 +100,10 @@ $ ls
 
 > ls stands for 'list' and it lists the contents of a directory.
 
-Copy the example data folder to your home directory using the following command:
+Let's go into our `Day1` directory and see what we copied there. Type:
 
 ```bash
-$ cp -r /data/unix_lesson .
-```
-> 'cp' is the command for copy. This command required you to specify the location of the item
-you want to copy (/data/unix_lesson/) and the location of the destination (.); please note 
-the space between the 2 in the command. The "-r" is an option that modifies the copy command
-to do something slightly different than usual. You could have also used "~" which means "/home/USERNAME" which is also called home directory
-
-Let's go into our unix_lessons directory and see what we copied there. Type:
-
-```bash
-$ cd unix_lesson
+$ cd Day1
 
 $ ls
 ```
@@ -136,27 +135,27 @@ $ ls -l
 to see whether items in a directory are files or directories. `ls -l` gives a lot more information too.
 ```
 total 44
--rw-r--r-- 1 shahin shahin   377 Oct 19 02:20 README.txt
-drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 R_data
-drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 genomics_data
--rwxr-xr-x 1 shahin shahin 16840 Oct 19 02:20 hello
-drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 other
-drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 raw_fastq
-drwxr-xr-x 2 shahin shahin  4096 Oct 19 02:20 reference_data
+-rw-r--r-- 1 shahin shahin   377 Mar 19 10:20 README.txt
+drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 R_data
+drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 genomics_data
+-rwxr-xr-x 1 shahin shahin 16840 Mar 19 10:20 hello
+drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 other
+drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 raw_fastq
+drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 reference_data
 ```
 
-Let's go into the raw_fastq directory and see what is in there.
+Let's go into the raw\_fastq directory and see what is in there.
 
 ```bash
 $ cd raw_fastq/
 
 $ ls -F
 
-Irrel_kd_1.subset.fq  Irrel_kd_3.subset.fq  Mov10_oe_2.subset.fq
-Irrel_kd_2.subset.fq  Mov10_oe_1.subset.fq  Mov10_oe_3.subset.fq
+Irrel_kd_1.subset.fastq  Irrel_kd_3.subset.fastq  Mov10_oe_2.subset.fastq
+Irrel_kd_2.subset.fastq  Mov10_oe_1.subset.fastq  Mov10_oe_3.subset.fastq
 ```
 
-All six items in this directory have no trailing slashes, so they are all files, not folders or programs.
+The six items in this directory have no trailing slashes, so they are all files, not folders or programs.
 
 
 #### Arguments
@@ -186,9 +185,9 @@ As you've already just seen, you can move around in different directories or fol
 
 Let's practice moving around a bit.
 
-We're going to work in that `unix_lesson` directory.
+We're going to work in that `Day1` directory.
 
-First we did something like go to the folder of our username. Then we opened `unix_lesson` then `raw_fastq`
+First we did something like go to the folder of our username. Then we opened `Day1` then `raw_fastq`
 
 Like on any computer you have used before the file structure within unix is hierarchical, like an upside down tree with root (/) as the starting point of the tree-like structure:
 
@@ -208,20 +207,20 @@ Type:
 $ cd ~
 ```
 
-> This puts you in your home directory. No matter where you are in the directory system, `cd ~` will always bring you back to your home directory.
+> No matter where you are in the directory system, `cd ~` will always bring you back to your home directory. `cd /home/USERNAME`
 
 
 **Exercise 1**
-Now using `cd` and `ls`, go in to the `unix_lesson` directory and list its contents. Now go into the `raw_fastq` directory, and list its contents.
+Now using `cd` and `ls`, go in to the `Day1` directory and list its contents. From there, go into the `raw_fastq` directory, and list its contents.
 
-Let's also check to see where we are. Sometimes when we're wandering around in the file system, it's easy to lose track of where we are. The command that tells you this is:
+Let's also check to see where we are. Sometimes when we're wandering around in the file system, it's easy to lose track of the directory structure. The command that tells you this is:
 
 ```bash
 $ pwd
 ```
 
 
-What if we want to move back up and out of the `raw_fastq` directory? Can we just type `cd unix_lesson`? Try it and see what happens.
+What if we want to move back up and out of the `raw_fastq` directory? Can we just type `cd Day1`? Try it and see what happens.
 
 To go 'back up a level' we can use `..`
 
@@ -231,14 +230,14 @@ Type:
 $ cd ..
 ```
 
-Now do `ls` and `pwd`. 
+Use `pwd` to fidn out where you are and `ls` to list the content of the current directory. 
 
 > `..` denotes parent directory, and you can use it anywhere in the system to go back to the parent directory. Can you think of an example when this won't work?
 
 Finally, there is handy command that can help you see the structure of any directory, namely `tree`.
 
 ```bash
-# Ensure that you are in your unix_lesson directory and run the following command
+# Ensure that you are in your Day1 directory, then run the following command
 
 $ tree
 ```
@@ -252,15 +251,15 @@ Type:
 Then enter the command:
 
 ```bash
-$ ls unix_lesson/
+$ ls Day1/
 ```
 
-This will list the contents of the `unix_lesson` directory without you having to navigate there.
+This will list the contents of the `Day1` directory without you having to navigate there.
 
 The `cd` command works in a similar way.
 
 ```bash
-$ cd unix_lesson/raw_fastq/
+$ cd Day1/raw_fastq/
 $ pwd
 ```
 
@@ -273,7 +272,7 @@ You should now be in `raw_fastq` and you got there without having to go through 
 
 **Exercise 2**
 
-List the `Mov10_oe_1.subset.fq` file from your home directory without changing directories
+List the `Mov10_oe_1.subset.fastq` file from your home directory without changing directories
 
 ****
 
@@ -286,7 +285,7 @@ $ pwd
 ```
 
 ```
-/home/username
+/home/USERNAME
 ```
 
 which is the full path for your home directory. This tells you that you are in a directory called `username`, which sits inside a directory called `home` which sits inside the very top directory in the hierarchy, the *root directory*. So, to summarize: `username` is a directory in `home` which is a directory in `/`.
@@ -294,17 +293,17 @@ which is the full path for your home directory. This tells you that you are in a
 Now enter the following command:
 
 ```bash
-$ cd /home/username/unix_lesson/raw_fastq/
+$ cd /home/USERNAME/Day1/raw_fastq/
 ```
 
 This jumps to `raw_fastq`. Now go back to the home directory (`cd ~`). We saw
 earlier that the command:
 
 ```bash
-$ cd unix_lesson/raw_fastq/
+$ cd Day1/raw_fastq/
 ```
 
-had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/Day1/unix_lesson/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
+had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/Day1/Day1/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
 
 **A full path always starts with a `/`, a relative path does not.**
 
@@ -318,7 +317,7 @@ Over time, it will become easier for you to keep a mental note of the structure 
 
 **Exercise 3**
 
-Change directories to `/home/username/unix_lesson/raw_fastq/`, and list the contents of `unix_lesson/other` without changing directories again.
+Change directories to `/home/username/Day1/raw_fastq/`, and list the contents of `Day1/other` without changing directories again.
 
 ***
 
@@ -329,10 +328,10 @@ Change directories to `/home/username/unix_lesson/raw_fastq/`, and list the cont
 Navigate to the home directory. Typing out directory names can waste a lot of time. When you start typing out the name of a directory, then hit the tab key, the shell will try to fill in the rest of the directory name. For example, type `cd` to get back to your home directly, then enter:
 
 ```bash
-$ cd uni<tab>
+$ cd Da<tab>
 ```
 
-The shell will fill in the rest of the directory name for `unix_lesson`. Now go to `unix_lesson/raw_fastq` and 
+The shell will fill in the rest of the directory name for `Day1`. Now go to `Day1/raw_fastq` and 
 
 ```bash
 $ ls Mov10_oe_<tab><tab>
@@ -346,15 +345,15 @@ Tab completion can also fill in the names of commands. For example, enter `e<tab
 
 #### Wild cards
 
-Navigate to the `~/unix_lesson/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
+Navigate to the `~/Day1/raw_fastq` directory. This directory contains FASTQ files from a next-generation sequencing dataset. 
 
 The '*' character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
 
 ```bash
-$ ls *fq
+$ ls *fastq
 ```
 
-This lists every file that ends with a `fq`. This command:
+This lists every file that ends with a `fastq`. This command:
 
 ```bash
 $ ls /usr/bin/*.sh
@@ -363,10 +362,10 @@ $ ls /usr/bin/*.sh
 Lists every file in `/usr/bin` that ends in the characters `.sh`.
 
 ```bash
-$ ls Mov10*fq
+$ ls Mov10*.fastq
 ```
 
-> lists only the files that begin with 'Mov10' and end with 'fq'
+> lists only the files that begin with 'Mov10' and end with 'fastq'
 
 So how does this actually work? The shell (bash) considers an asterisk "*" to be a wildcard character that can be used to substitute for any other single character or a string of characters. 
 
@@ -400,7 +399,7 @@ $ cd
 ```
 
 ```bash
-$ cd unix_lesson/raw_fastq
+$ cd Day1/raw_fastq
 ```
 
 Then enter the command:
@@ -417,7 +416,7 @@ Another shortcut is the "..":
 $ ls ..
 ```
 
-The shortcut `..` always refers to the directory above your current directory. So, it prints the contents of the `unix_lesson`. You can chain these together, so:
+The shortcut `..` always refers to the directory above your current directory. So, it prints the contents of the `Day1`. You can chain these together, so:
 
 ```bash
 $ ls ../..
@@ -457,10 +456,10 @@ We now know how to move around the file system and look at the
 contents of directories, but how do we look at the contents of files?
 
 The easiest way to examine a file is to just print out all of the
-contents using the command `cat`. Print the contents of `unix_lesson/other/sequences.fa` by entering the following command:
+contents using the command `cat`. Print the contents of `Day1/other/sequences.fa` by entering the following command:
 
 ```bash
-$ cat ~/unix_lesson/other/sequences.fa
+$ cat ~/Day1/other/sequences.fa
 ```
 
 This prints out the all the contents of `sequences.fa` to the screen.
@@ -474,7 +473,7 @@ In practice, when you are running your analyses on the command-line you will mos
 The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
 
 ```bash
-ls -lh ~/unix_lesson/raw_fastq
+ls -lh ~/Day1/raw_fastq
 ```
 
 > The `ls` command has a modifier `-h` when paired with `-l`, will print sizes of files in human readable format 
@@ -484,26 +483,26 @@ In the fourth column you see the size of each of these files, and you can see th
 Move back to our `raw_fastq` directory and enter the following command:
 
 ```bash
-less Mov10_oe_1.subset.fq
+less Mov10_oe_1.subset.fastq
 ```
 
 We will explore FASTQ files in more detail later, but notice that FASTQ files have four lines of data associated with every sequence read. Not only is there a header line and the nucleotide sequence, similar to a FASTA file, but FASTQ files also contain quality information for each nucleotide in the sequence. 
 
 
 ```bash
-$ head Mov10_oe_1.subset.fq
+$ head Mov10_oe_1.subset.fastq
 ```
 
 ```bash
-$ tail Mov10_oe_1.subset.fq
+$ tail Mov10_oe_1.subset.fastq
 ```
 
 The `-n` option to either of these commands can be used to print the first or last `n` lines of a file. To print the first/last line of the file use:
 
 ```bash
-$ head -n 1 Mov10_oe_1.subset.fq
+$ head -n 1 Mov10_oe_1.subset.fastq
 
-$ tail -n 1 Mov10_oe_1.subset.fq
+$ tail -n 1 Mov10_oe_1.subset.fastq
 ```
 
 ## Creating, moving, copying, and removing
@@ -515,12 +514,12 @@ Our raw data in this case is fastq files. We don't want to change the original f
 Lets copy the file using the copy `cp` command. Navigate to the `raw_fastq` directory and enter:
 
 ```bash
-$ cp Mov10_oe_1.subset.fq Mov10_oe_1.subset-copy.fq
+$ cp Mov10_oe_1.subset.fastq Mov10_oe_1.subset-copy.fastq
 
 $ ls -l
 ```
 
-Now `Mov10_oe_1.subset-copy.fq` has been created as a copy of `Mov10_oe_1.subset.fq`
+Now `Mov10_oe_1.subset-copy.fastq` has been created as a copy of `Mov10_oe_1.subset.fastq`
 
 Let's make a 'backup' directory where we can put this file.
 
@@ -536,13 +535,13 @@ $ mkdir backup
 We can now move our backed up file in to this directory. We can move files around using the command `mv`. Enter this command:
 
 ```bash
-$ mv *copy.fq backup
+$ mv *copy.fastq backup
 ```
 
 ```bash
 $ ls -l backup
 
--rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 Mov10_oe_1.subset-copy.fq
+-rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 Mov10_oe_1.subset-copy.fastq
 ```
 
 The `mv` command is also how you rename files. Since this file is so
@@ -551,11 +550,11 @@ important, let's rename it:
 ```bash
 $ cd backup
 
-$ mv Mov10_oe_1.subset-copy.fq Mov10_oe_1.subset-backup.fq
+$ mv Mov10_oe_1.subset-copy.fastq Mov10_oe_1.subset-backup.fastq
 
 $ ls
 
-Mov10_oe_1.subset-backup.fq
+Mov10_oe_1.subset-backup.fastq
 ```
 
 Finally, we decided this was silly and want to start over.

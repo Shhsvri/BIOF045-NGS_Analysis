@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Loops & Scripts"
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "Mar 2021"
 ---
 
 Approximate time: 60 minutes
@@ -46,7 +46,7 @@ Then type in the following lines in the `listing.sh` file:
 ```bash
 # This is my first shell script
 # Shahin
-# 10/19/2020
+# 03/22/2021
 echo "Your current working directory is:"
 pwd
 echo "These are the contents of this directory:"
