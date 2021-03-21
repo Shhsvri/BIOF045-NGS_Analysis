@@ -82,45 +82,20 @@ console, file manager, and even more in the same window.
 
 ### 3.1 Viewing your working directory
 
-```bash
-mkdir ~/Intro_to_R
-```
-**Optional Exercise**
-
-1. Create a file using `vim` in that directory named 'first\_Rscript.R'
-2. Enter the following text
-
-```
-# Intro to R Lesson
-# March 22th, 2021
-
-# Interacting with R
-    
-## I am adding 3 and 5
-3+5
-```
-
-3. Save the file and exit
-
----
-
 let's go back to the Console (R interpreter):
 
 ```r
 getwd()
 ```
 
-> **NOTE** Every new programming language has its own commands. `getwd()` is the equivalent of terminal's pwd.
+> **NOTE** Every new programming language has its own commands. `getwd()` is the equivalent of terminal's `pwd`.
 
-Let's go into that *Intro_to_R* directory we created.
+Let's go into the *Intro_to_R* directory.
 
 ```r
-setwd("~/Intro_to_R")
+setwd("~/Day1/Intro_to_R")
 ```
 
-### 3.2 Setting up 
-
-In the lower right quadrant, find the "first\_Rscript.R" text file we created, and click on it.
 
 ## 4. Interacting with R
 
@@ -129,21 +104,20 @@ Now that we have our interface and directory structure set up, let's start playi
 ### 4.1 Console window
 The **console window** (in RStudio, the bottom left panel) is the place where R is waiting for you to tell it what to do, and where it will show the results of a command.  You can type commands directly into the console, but they will be forgotten when you close the session. 
 
-Let's test it out:
-
-```r
-3 + 5
-```
-
 ![Running in the console](../img/console.png)
 
 ### 4.2 Script editor
 
-Best practice is to enter the commands in the **script editor**, and save the script. You are encouraged to comment liberally to describe the commands you are running using `#`. This way, you have a complete record of what you did, you can easily show others how you did it and you can do it again later on if needed. 
+Best practice is to enter the commands in the **script editor**, and save the script.
+
+Open a script in the left upper quadrant of your RStudio session:
+
+<img src="../img/rscript.png">
+
 
 **The Rstudio script editor allows you to 'send' the current line or the currently highlighted text to the R console by clicking on the `Run` button in the upper-right hand corner of the script editor**. Alternatively, you can run by simply pressing the `Ctrl` and `Enter` keys at the same time as a shortcut.
 
-If you didn't previously write this file, you can enter them in the **script editor** and use the comments character `#` to add descriptions and highlighting the text to run:
+Enter the following in your **script editor** and use the comments character `#` to add descriptions and highlighting the text to run:
 	
 	# Intro to R Lesson
 	# Mar 22, 2021
@@ -151,6 +125,7 @@ If you didn't previously write this file, you can enter them in the **script edi
 	## I am adding 3 and 5
 	3+5
 
+You are encouraged to comment liberally to describe the commands you are running using `#`. This way, you have a complete record of what you did, you can easily show others how you did it and you can do it again later on if needed.
 ![Running in the script editor](../img/script_editor.png)
 
 You should see the command run in the console and output the result.
@@ -187,17 +162,17 @@ If R is still waiting for you to enter more data because it isn't complete yet,
 the console will show a `+` prompt. It means that you haven't finished entering
 a complete command. Often this can be due to you having not 'closed' a parenthesis or quotation. 
 
-**Escaping a command and getting a new prompt**: `esc`
+**Escaping a command and getting a new prompt**: `Esc`
 
 If you're in Rstudio and you can't figure out why your command isn't running, you can click inside the console window and press `esc` to escape the command and bring back a new prompt `>`.
 
 
-***
+---
 **Exercise**
 
 1. Try highlighting only `3 +` from your script editor and running it. Find a way to bring back the command prompt `>` in the console.
 
-***
+---
 
 ## 5. Interacting with data in R
 
@@ -209,10 +184,16 @@ R is particularly good for working with large tabular dataset (dataframes). Late
 
 <img src="../img/counts_view.png" width="900"> 
 
-### 5.3 The metadata
+### 5.2 The metadata
+
 We have another file in which we identify **information about the data** or **metadata**. Our metadata is also stored in a CSV file. In this file, each row corresponds to a sample and each column contains some information about each sample. 
 
-The first column contains the row names, and **note that these are identical to the column names in our expression data file above** (albeit, in a slightly different order). The next few columns contain information about our samples that allow us to categorize them. For example, the second column contains genotype information for each sample. Each sample is classified in one of two categories: Wt (wild type) or KO (knockout). *What types of categories do you observe in the remaining columns?*
+The first column contains the row names, and **note that these are identical to the column names
+in our expression data file above** (albeit, in a slightly different order). The next few columns
+contain information about our samples that allow us to categorize them. For example, the second
+column contains genotype information for each sample. Each sample is classified in one of two
+categories: Wt (wild type) or KO (knockout). *What types of categories do you observe in the
+remaining columns?*
 
 <img src="../img/metadata_view.png" width="400"> 
 

@@ -66,14 +66,6 @@ Try assigning the results of this operation to another variable called `number`.
 number <- x + y
 ```
 
----
-**Exercises**
-
-1. Try changing the value of the variable `x` to 5. What happens to `number`?
-2. Now try changing the value of variable `y` to contain the value 10. What do you need to do, to update the variable `number`?
-
----
-
 ### Tips on variable names
 Variables can be given almost any name, such as `x`, `current_temperature`, or
 `subject_id`. However, there are some rules / suggestions you should keep in mind:
@@ -99,9 +91,6 @@ Variables can contain values of specific types within R. The six **data types** 
 * `"character"` for text values, denoted by using quotes ("") around value   
 * `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's an integer)
 * `"logical"` for `TRUE` and `FALSE` (the Boolean data type)
-* `"complex"` to represent complex numbers with real and imaginary parts (e.g.,
-  `1+4i`) and that's all we're going to say about them
-* `"raw"` that we won't discuss further
 
 The table below provides examples of each of the commonly used data types:
 
@@ -109,7 +98,7 @@ The table below provides examples of each of the commonly used data types:
 | -----------:|:-------------------------------:|
 | Numeric:  | 1, 1.5, 20, pi|
 | Character:  | “anytext”, “5”, “TRUE”|
-| Integer:  | 2L, 500L, -17L|
+| Integer:  | 2, 500, -17|
 | Logical:  | TRUE, FALSE, T, F|
 
 ## Data Structures
@@ -117,7 +106,7 @@ The table below provides examples of each of the commonly used data types:
 We know that variables are like buckets, and so far we have seen that bucket filled with a single value. Even when `number` was created, the result of the mathematical operation was a single value. **Variables can store more than just a single value, they can store a multitude of different data structures.** These include, but are not limited to, vectors (`c`), factors (`factor`), matrices (`matrix`), data frames (`data.frame`) and lists (`list`).
 
 
-### Vectors
+### Vectors and Dataframes
 
 A vector is the most common and basic data structure in R, and is pretty much the workhorse of R. It's basically just a collection of values, mainly either numbers,
 
@@ -151,7 +140,7 @@ Each element of this vector contains a single numeric value, and three values wi
 
 
 ```r
-glengths <- c(4.6, 3000, 50000)
+glengths_Mb <- c(4.6, 3100, 2500)
 glengths
 ```
 *Note your environment shows the `glengths` variable is numeric and tells you the `glengths` vector starts at element 1 and ends at element 3 (i.e. your vector contains 3 values).*
@@ -160,8 +149,26 @@ glengths
 A vector can also contain characters. Create another vector called `species` with three elements, where each element corresponds with the genome sizes vector (in Mb).
 
 ```r
-species <- c("ecoli", "human", "corn")
+species <- c("ecoli", "human", "mouse")
 species
 ```
+
+Next, we will combine these two vectors to create a *dataframe*:
+
+```r
+data.frame(glengths_Mb, species)
+```
+
+### Reading Data from Files
+
+Most times, the genomics data that we analyze are generated in the shell and transferred into R for the very last steps. Thus, we will need to learn how to read data from files.
+There are a variety of commands you have have learned in the past such as `read_tsv()` or `read_csv()` from the tidyverse package.
+Here, we will stick with base R since most of the bioinformatics packages require base R functions. the base R function for reading from files is `read.table()`.
+
+```r
+read.table(file="/path/to/file", sep="\t", header=T, rows=1)
+```
+
+
 
 ---
