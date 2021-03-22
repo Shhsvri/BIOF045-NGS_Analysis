@@ -477,14 +477,14 @@ In practice, when you are running your analyses on the command-line you will mos
 The command, `less`, is useful for this case. Let's take a look at the list of raw_fastq files and add the `-h` modifier:
 
 ```bash
-ls -lh ~/Day1/raw_fastq
+ls -l -h ~/Day1/raw_fastq
 ```
 
 > The `ls` command has a modifier `-h` when paired with `-l`, will print sizes of files in human readable format 
 
 In the fourth column you see the size of each of these files, and you can see they are quite large, so we probably do not want to use the `cat` command to look at them. Instead, we can use the `less` command. 
 
-Move back to our `raw_fastq` directory and enter the following command:
+Move back to our `raw\_fastq` directory and enter the following command:
 
 ```bash
 less treated_1.subset.fastq
@@ -515,7 +515,7 @@ Now we can move around in the file structure, look at files, search files, redir
 
 Our raw data in this case is fastq files. We don't want to change the original files, so let's make a copy to work with.
 
-Lets copy the file using the copy `cp` command. Navigate to the `raw_fastq` directory and enter:
+Lets copy the file using the copy `cp` command. Navigate to the `raw\_fastq` directory and enter:
 
 ```bash
 $ cp treated_1.subset.fastq treated_1.subset-copy.fastq
@@ -523,7 +523,7 @@ $ cp treated_1.subset.fastq treated_1.subset-copy.fastq
 $ ls -l
 ```
 
-Now `treated_1.subset-copy.fastq` has been created as a copy of `treated_1.subset.fastq`
+Now `treated\_1.subset-copy.fastq` has been created as a copy of `treated\_1.subset.fastq`
 
 Let's make a 'backup' directory where we can put this file.
 
@@ -539,11 +539,11 @@ $ mkdir backup
 We can now move our backed up file in to this directory. We can move files around using the command `mv`. Enter this command:
 
 ```bash
-$ mv *copy.fastq backup
+$ mv *copy.fastq backup/
 ```
 
 ```bash
-$ ls -l backup
+$ ls -l backup/
 
 -rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 treated_1.subset-copy.fastq
 ```
@@ -566,7 +566,7 @@ Finally, we decided this was silly and want to start over.
 ```bash
 $ cd ..
 
-$ rm backup/Mov*
+$ rm backup/treated*.fastq
 ```
 
 > The `rm` file permanently removes the file. Be careful with this command. The shell doesn't
@@ -574,14 +574,13 @@ just nicely put the files in the Trash. They're really gone.
 >
 > Same with moving and renaming files. It will **not** ask you if you are sure that you want to "replace existing file". You can use `rm -i` if you want it to ask before deleting the file(s).
 
-We really don't need these backup directories, so, let's delete both. By default, `rm`, will NOT delete directories, but you use the `-r` flag if you are sure that you want to delete the directories and everything within them. To be safe, let's use it with the `-i` flag.
+We really don't need these backup directories, so, let's delete both. By default, `rm`, will NOT delete directories, but you use the `-r` flag if you are sure that you want to delete the directories and everything within them.
 
 ```bash
-$ rm -ri backup/ 
+$ rm -r backup/ 
 ```
 
 - `-r`: recursive, commonly used as an option when working with directories, e.g. with `cp`. 
-- `-i`: prompt before every removal.
 
 ## Commands, options, and keystrokes covered
 

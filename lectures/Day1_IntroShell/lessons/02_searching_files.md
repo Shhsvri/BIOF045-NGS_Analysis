@@ -25,26 +25,26 @@ is associated with four lines of output, with the first line (header line) alway
 symbol. A whole fastq record for a single read should appear similar to the following:
 
 ```bash
-	@HWI-ST330:304:H045HADXX:1:1101:1111:61397
-	CACTTGTAAGGGCAGGCCCCCTTCACCCTCCCGCTCCTGGGGGANNNNNNNNNNANNNCGAGGCCCTGGGGTAGAGGGNNNNNNNNNNNNNNGATCTTGG
-	+
-	@?@DDDDDDHHH?GH:?FCBGGB@C?DBEGIIIIAEF;FCGGI#########################################################
+@HWI-ST330:304:H045HADXX:1:1101:1111:61397
+CACTTGTAAGGGCAGGCCCCCTTCACCCTCCCGCTCCTGGGGGANNNNNNNNNNANNNCGAGGCCCTGGGGTAGAGGGNNNNNNNNNNNNNNGATCTTGG
++
+@?@DDDDDDHHH?GH:?FCBGGB@C?DBEGIIIIAEF;FCGGI#########################################################
 ```
 
-Suppose we want to see how many reads in our file `Mov10_oe_1.subset.fastq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
+Suppose we want to see how many reads in our file `treated_1.subset.fastq` are "bad", with 10 consecutive Ns (`NNNNNNNNNN`).
 
 ```
 $ cd ~/Day1/raw_fastq
 
-$ grep NNNNNNNNNN Mov10_oe_1.subset.fastq
+$ grep NNNNNNNNNN treated_1.subset.fastq
 ```
 
 We get back a lot of lines.  What if we want to see the whole fastq record for each of these reads? 
 
-We can use the `-B` and `-A` arguments for grep to return the matched line plus one before (`-B1`) and two lines after (`-A2`). Since each record is four lines and the second line is the sequence, this should return the whole record.
+We can use the `-B` and `-A` arguments for grep to return the matched line plus one before (`-B 1`) and two lines after (`-A 2`). Since each record is four lines and the second line is the sequence, this should return the whole record.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq
+$ grep -B 1 -A 2 NNNNNNNNNN treated_1.subset.fastq
 ```
 
 ```
@@ -59,17 +59,17 @@ CACAAATCGGCTCAGGAGGCTTGTAGAAAAGCTCAGCTTGACANNNNNNNNNNNNNNNNNGNGNACGAAACNNNNGNNNN
 ?@@DDDDDB1@?:E?;3A:1?9?E9?<?DGCDGBBDBF@;8DF#########################################################
 ```
 
-***
+---
 
 **Exercises**
 
-1. Search for the sequence CTCAATGA in `Mov10_oe_1.subset.fastq`.
+1. Search for the sequence CTCAATGA in `treated_1.subset.fastq`.
 In addition to finding the sequence, have your search also return
 the name of the sequence.
 
-2. Search for that sequence in all Mov10 replicate fastq files.
+2. Search for that sequence in all treated replicate fastq files.
 
-***
+---
 
 ## Redirection
 
@@ -89,7 +89,7 @@ Let's try it out and put all the sequences that contain 'NNNNNNNNNN'
 from all the files into another file called `bad_reads.txt`.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq > bad_reads.txt
+$ grep -B 1 -A 2 NNNNNNNNNN treated_1.subset.fastq > bad_reads.txt
 ```
 
 The prompt takes some time to complete, and then it should look like nothing
@@ -107,7 +107,7 @@ Take a look at the file and see if it contains what you think it should. *NOTE: 
 If we use `>>`, it will append to rather than overwrite a file.  This can be useful for saving more than one search, for example.
     
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_2.subset.fastq >> bad_reads.txt
+$ grep -B 1 -A 2 NNNNNNNNNN treated_2.subset.fastq >> bad_reads.txt
 
 $ ls -l
 ```
@@ -125,7 +125,7 @@ There's one more useful redirection command that we're going to show, and that's
 It's probably not a key on your keyboard you use very much. What `|` does is take the output that went scrolling by on the terminal and runs it through another command. When it was all whizzing by before, we wished we could just slow it down and look at it, like we can with `less`. Well it turns out that we can! We pipe the `grep` command to `less` or to `head` to just see the first few lines.
 
 ```bash
-$ grep -B 1 -A 2 NNNNNNNNNN Mov10_oe_1.subset.fastq | less
+$ grep -B 1 -A 2 NNNNNNNNNN treated_1.subset.fastq | less
 ```
 
 Now we can use the arrows to scroll up and down and use `q` to get out.
@@ -133,7 +133,7 @@ Now we can use the arrows to scroll up and down and use `q` to get out.
 We can also do count the number of lines using the `wc` command. `wc` stands for *word count*. It counts the number of lines, words or characters. So, we can use it to count the number of lines we're getting back from our `grep` command using the `-l` argument. And that will magically tell us how many bad sequences we have in the file.
 
 ```bash
-$ grep NNNNNNNNNN Mov10_oe_1.subset.fastq | wc -l
+$ grep NNNNNNNNNN treated_1.subset.fastq | wc -l
 ```
 
 This command when used without any arguments would tell us the number of lines, words and characters in the file; the `-l` flag specifies that we only want the number of lines. Try it out without the `-l` to see the full output.
@@ -197,7 +197,7 @@ We will define the uniqueness of an exon by its genomic coordinates. Therefore, 
 'cut' is a command that will extract columns from files.  It is a very good command to know.  Let's first try out the 'cut' command on a just the exonic lines to make sure we have the command correct by using multiple piped commands and looking at the first 10 lines:
 
 ```bash
-$ grep exon chr1-hg19_genes.gtf | cut -f1,4,5,7  | head
+$ grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7  | head
 ```
    
 `-f1,4,5,7` means to cut these fields (columns) from the dataset.  
@@ -217,7 +217,7 @@ Our output looks good, so let's keep going...
 Now, we need to remove those exons that show up multiple times for different transcripts. For this, we can use a new tool, `sort`, to remove exons that show up more than once. We can use the `sort` command with the `-u` option to return only unique lines.
 
 ```bash
-$ grep exon chr1-hg19_genes.gtf | cut -f1,4,5,7 | sort -u | head 
+$ grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7 | sort -u | head 
 ```
 
 Do you see a change in how the sorting has changed? By default the `sort` command will sort and what you can't see here is that it has removed the duplicates. How do we check this?
@@ -227,13 +227,13 @@ Do you see a change in how the sorting has changed? By default the `sort` comman
 First, let's check how many lines we would have without using `sort -u` by piping the output to `wc -l`.
 
 ```bash
-grep exon chr1-hg19_genes.gtf | cut -f1,4,5,7 | wc -l
+grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7 | wc -l
 ```
 
 Now, to count how many unique exons are on chromosome 1, we will add back the `sort -u` and pipe the output to `wc -l`
 
 ```bash
-$ grep exon chr1-hg19_genes.gtf | cut -f1,4,5,7 | sort -u | wc -l
+$ grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7 | sort -u | wc -l
 ```
 
 What we did in one command up here, we could have done it in multiple steps by saving the output of each command to a file, but that would not be as efficient if all we needed was a number to work with. The intermediate files are not useful and they occupy precious space on the computer and add clutter to the file system. 
