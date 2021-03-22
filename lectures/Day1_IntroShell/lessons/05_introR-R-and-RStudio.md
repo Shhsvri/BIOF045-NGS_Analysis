@@ -104,7 +104,7 @@ Now that we have our interface and directory structure set up, let's start playi
 ### 4.1 Console window
 The **console window** (in RStudio, the bottom left panel) is the place where R is waiting for you to tell it what to do, and where it will show the results of a command.  You can type commands directly into the console, but they will be forgotten when you close the session. 
 
-![Running in the console](../img/console.png)
+<img src="../img/console.png" width="600">
 
 ### 4.2 Script editor
 
@@ -112,7 +112,7 @@ Best practice is to enter the commands in the **script editor**, and save the sc
 
 Open a script in the left upper quadrant of your RStudio session:
 
-<img src="../img/rscript.png">
+<img src="../img/rscript.png" width="600">
 
 
 **The Rstudio script editor allows you to 'send' the current line or the currently highlighted text to the R console by clicking on the `Run` button in the upper-right hand corner of the script editor**. Alternatively, you can run by simply pressing the `Ctrl` and `Enter` keys at the same time as a shortcut.
@@ -126,11 +126,11 @@ Enter the following in your **script editor** and use the comments character `#`
 	3+5
 
 You are encouraged to comment liberally to describe the commands you are running using `#`. This way, you have a complete record of what you did, you can easily show others how you did it and you can do it again later on if needed.
-![Running in the script editor](../img/script_editor.png)
+<img src="../img/script_editor.png" width="600">
 
 You should see the command run in the console and output the result.
 
-![Script editor output](../img/script_editor_output.png)
+<img src="../img/script_editor_output.png" width="600">
 
 What happens if we do that same command without the comment symbol `#`? Re-run the command after removing the # sign in the front:
 
