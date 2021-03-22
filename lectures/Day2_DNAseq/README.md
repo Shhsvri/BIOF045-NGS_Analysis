@@ -1,13 +1,12 @@
-#
-Schedule for Day2
+# Schedule for Day2
 
 ## DNAseq and Variant Calling
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 09:00 - 10:00 | [Day 1 Review](lessons/review.md) |
-| 10:00 - 10:30 | [Introduction to Next Generation Sequencing]() |
-| 10:30 - 10:45 | break |
+| 10:00 - 10:30 | [Day 1 Review](lessons/review.md) |
+| 10:30 - 11:00 | [Introduction to Next Generation Sequencing]() |
+| 11:00 - 11:10 | break |
 | 10:45 - 12:15 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
 | 12:15 - 13:15 | Lunch |
 | 13:15 - 14:00 | [Alignment (BWA-mem)](lessons/01_alignment.md) |

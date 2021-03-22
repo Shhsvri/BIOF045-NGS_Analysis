@@ -111,7 +111,7 @@ $ ls
 You will see:
 
 ```
-README.txt  R_data  genomics_data  hello  other  raw_fastq  reference_data
+Intro_to_R  README.txt  genomics_data  hello  other  raw_fastq  reference_data
 ```
 
 There are seven items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
@@ -151,8 +151,8 @@ $ cd raw_fastq/
 
 $ ls -F
 
-Irrel_kd_1.subset.fastq  Irrel_kd_3.subset.fastq  Mov10_oe_2.subset.fastq
-Irrel_kd_2.subset.fastq  Mov10_oe_1.subset.fastq  Mov10_oe_3.subset.fastq
+treated_1.subset.fastq  treated_3.subset.fastq  untreated_2.fastq
+treated_2.subset.fastq  untreated_1.fastq       untreated_3.fastq
 ```
 
 The six items in this directory have no trailing slashes, so they are all files, not folders or programs.
@@ -209,9 +209,13 @@ $ cd ~
 
 > No matter where you are in the directory system, `cd ~` will always bring you back to your home directory. `cd /home/USERNAME`
 
+---
 
 **Exercise 1**
+
 Now using `cd` and `ls`, go in to the `Day1` directory and list its contents. From there, go into the `raw_fastq` directory, and list its contents.
+
+---
 
 Let's also check to see where we are. Sometimes when we're wandering around in the file system, it's easy to lose track of the directory structure. The command that tells you this is:
 
@@ -268,13 +272,13 @@ You should now be in `raw_fastq` and you got there without having to go through 
 > If you are aware of the directory structure, you can string together as long a list as you like.
 
 
-****
+---
 
 **Exercise 2**
 
-List the `Mov10_oe_1.subset.fastq` file from your home directory without changing directories
+List the `treated_1.subset.fastq` file from your home directory without changing directories
 
-****
+---
 
 ## Full vs. Relative Paths
 
@@ -313,13 +317,13 @@ You can usually use either a full path or a relative path depending on what is m
 
 Over time, it will become easier for you to keep a mental note of the structure of the directories that you are using and how to quickly navigate among them.
 
-***
+---
 
 **Exercise 3**
 
 Change directories to `/home/username/Day1/raw_fastq/`, and list the contents of `Day1/other` without changing directories again.
 
-***
+---
 
 ### Saving time with tab completion, wildcards and other shortcuts 
 
@@ -334,10 +338,10 @@ $ cd Da<tab>
 The shell will fill in the rest of the directory name for `Day1`. Now go to `Day1/raw_fastq` and 
 
 ```bash
-$ ls Mov10_oe_<tab><tab>
+$ ls treated<tab><tab>
 ```
 
-When you hit the first tab, nothing happens. The reason is that there are multiple directories in the home directory which start with `Mov10_oe_`. Thus, the shell does not know which one to fill in. When you hit tab again, the shell will list the possible choices.
+When you hit the first tab, nothing happens. The reason is that there are multiple directories in the home directory which start with `treated_`. Thus, the shell does not know which one to fill in. When you hit tab again, the shell will list the possible choices.
 
 Tab completion can also fill in the names of commands. For example, enter `e<tab><tab>`. You will see the name of every command that starts with an `e`. One of those is `echo`. If you enter `ech<tab>` you will see that tab completion works. 
 
@@ -350,7 +354,7 @@ Navigate to the `~/Day1/raw_fastq` directory. This directory contains FASTQ file
 The '*' character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
 
 ```bash
-$ ls *fastq
+$ ls treated*
 ```
 
 This lists every file that ends with a `fastq`. This command:
@@ -362,10 +366,10 @@ $ ls /usr/bin/*.sh
 Lists every file in `/usr/bin` that ends in the characters `.sh`.
 
 ```bash
-$ ls Mov10*.fastq
+$ ls treated*.fastq
 ```
 
-> lists only the files that begin with 'Mov10' and end with 'fastq'
+> lists only the files that begin with 'treated' and end with 'fastq'
 
 So how does this actually work? The shell (bash) considers an asterisk "*" to be a wildcard character that can be used to substitute for any other single character or a string of characters. 
 
@@ -483,26 +487,26 @@ In the fourth column you see the size of each of these files, and you can see th
 Move back to our `raw_fastq` directory and enter the following command:
 
 ```bash
-less Mov10_oe_1.subset.fastq
+less treated_1.subset.fastq
 ```
 
 We will explore FASTQ files in more detail later, but notice that FASTQ files have four lines of data associated with every sequence read. Not only is there a header line and the nucleotide sequence, similar to a FASTA file, but FASTQ files also contain quality information for each nucleotide in the sequence. 
 
 
 ```bash
-$ head Mov10_oe_1.subset.fastq
+$ head treated_1.subset.fastq
 ```
 
 ```bash
-$ tail Mov10_oe_1.subset.fastq
+$ tail treated_1.subset.fastq
 ```
 
 The `-n` option to either of these commands can be used to print the first or last `n` lines of a file. To print the first/last line of the file use:
 
 ```bash
-$ head -n 1 Mov10_oe_1.subset.fastq
+$ head -n 1 treated_1.subset.fastq
 
-$ tail -n 1 Mov10_oe_1.subset.fastq
+$ tail -n 1 treated_1.subset.fastq
 ```
 
 ## Creating, moving, copying, and removing
@@ -514,12 +518,12 @@ Our raw data in this case is fastq files. We don't want to change the original f
 Lets copy the file using the copy `cp` command. Navigate to the `raw_fastq` directory and enter:
 
 ```bash
-$ cp Mov10_oe_1.subset.fastq Mov10_oe_1.subset-copy.fastq
+$ cp treated_1.subset.fastq treated_1.subset-copy.fastq
 
 $ ls -l
 ```
 
-Now `Mov10_oe_1.subset-copy.fastq` has been created as a copy of `Mov10_oe_1.subset.fastq`
+Now `treated_1.subset-copy.fastq` has been created as a copy of `treated_1.subset.fastq`
 
 Let's make a 'backup' directory where we can put this file.
 
@@ -541,7 +545,7 @@ $ mv *copy.fastq backup
 ```bash
 $ ls -l backup
 
--rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 Mov10_oe_1.subset-copy.fastq
+-rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 treated_1.subset-copy.fastq
 ```
 
 The `mv` command is also how you rename files. Since this file is so
@@ -550,11 +554,11 @@ important, let's rename it:
 ```bash
 $ cd backup
 
-$ mv Mov10_oe_1.subset-copy.fastq Mov10_oe_1.subset-backup.fastq
+$ mv treated_1.subset-copy.fastq treated_1.subset-backup.fastq
 
 $ ls
 
-Mov10_oe_1.subset-backup.fastq
+treated_1.subset-backup.fastq
 ```
 
 Finally, we decided this was silly and want to start over.

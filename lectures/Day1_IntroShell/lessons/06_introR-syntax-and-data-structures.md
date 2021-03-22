@@ -156,7 +156,8 @@ species
 Next, we will combine these two vectors to create a *dataframe*:
 
 ```r
-data.frame(glengths_Mb, species)
+genomes_df <- data.frame(glengths_Mb, species)
+View(genomes_df)
 ```
 
 ### Reading Data from Files
@@ -166,9 +167,16 @@ There are a variety of commands you have have learned in the past such as `read_
 Here, we will stick with base R since most of the bioinformatics packages require base R functions. the base R function for reading from files is `read.table()`.
 
 ```r
-read.table(file="/path/to/file", sep="\t", header=T, rows=1)
+counts <- read.table(file="/path/to/file", sep="\t")
+View(counts)
 ```
 
+With columnar files, we should keep in mind how the column values are separated. For example, in a **csv** file values are separated by commas `","`. We read this in using:
+
+```r
+counts <- read.table(file="counts.rpkm.csv", sep=",")
+View(counts)
+```
 
 
 ---

@@ -2,7 +2,7 @@
 
 | Audience | Computational skills required | Duration |
 :----------|:-------------|:----------|
-| Biologists | None | 5-day workshop |
+| Biologists | Basic R | 5-day workshop |
 
 
 ### Description

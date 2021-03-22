@@ -135,7 +135,7 @@ You should see the command run in the console and output the result.
 What happens if we do that same command without the comment symbol `#`? Re-run the command after removing the # sign in the front:
 
 ```r
-I am adding 3 and 5. R is fun!
+I am adding 3 and 5
 3+5
 ```
 
