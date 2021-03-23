@@ -44,8 +44,8 @@ We will be using the following softwares. These have been already installed on o
 
 1. [bwa](https://github.com/lh3/bwa)
 2. [samtools](https://github.com/samtools/samtools)
-3. [freebayes](https://github.com/ekg/freebayes)
-4. [sambamba](https://github.com/lomereiter/sambamba)
+3. [PICARD](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-)
+4. [freebayes](https://github.com/ekg/freebayes)
 5. [IGV](https://software.broadinstitute.org/software/igv/download)
 
 Depending on the software, you can download and compile the source code using this kind of pattern:
@@ -117,6 +117,7 @@ Let's view this file first
 
 ```bash
 $ cd ~/Day2/reference_test
+$ cat test_genome.fa
 $ bwa index test_genome.fa
 $ ls -l -h
 ```
@@ -169,8 +170,8 @@ $ bwa mem -t 2 \
 It may take some time for the process to complete. When alignment is over, you can view the content of your sam file.
 
 ```bash
-$ cd ~/Day2
-$ head -n 200 ptA.sam
+$ cd ~/Day2/results
+$ head -n 500 ptA.sam
 ```
 
 > Every sam file starts with a header. It contains the reference chromosomes, command that was used to generate it and more. Sam header lines start with "@"
@@ -201,7 +202,7 @@ $ samtools view -b ptA.sam > ptA.bam
 
 The next step is to sort all the aligned records by their chromosomal location.
 There are a variety of tools for this task and they all perform the same task. Some are faster than
-others. We will use `sambamba` which is very fast and generates all the needed downstream files.
+others. We will use `samtools` which is very fast and generates all the needed downstream files.
 
 ```bash
 $ samtools sort ptA.bam > ptA.sorted.bam
@@ -231,14 +232,14 @@ and CIGAR string:
 
 ![dedup1](../img/dedup_begin.png)
 
-Marking duplicates with tools such as sambamba will result in the variant caller ignoring these PCR-based errors, and instead seeing:
+Marking duplicates with tools such as samtools will result in the variant caller ignoring these PCR-based errors, and instead seeing:
 
 ![dedup1](../img/dedup_end.png)
 
 The variant caller will be more likely to discard the error, instead of calling it as a variant.
 
 ```bash
-$ samtools markdup ptA.sorted.bam ptA.markdup.sorted.bam
+$ PicardCommandLine MarkDuplicates I=ptA.sorted.bam O=ptA.markdup.sorted.bam M=ptA_markdup_metrics.txt
 ```
 
 
@@ -288,14 +289,14 @@ bwa mem -t 2 genome/hg38.fa raw_data/ptA_R1.fastq raw_data/ptA_R2.fastq > result
 samtools view -b results/ptA.sam > results/ptA.bam
 
 
-## 3. Sort your bam file using sambamba
+## 3. Sort your bam file using samtools
 
 samtools sort results/ptA.bam > results/ptA.sorted.bam
 
 
-## 4. markduplicates with 2 threads
+## 4. markduplicates with PICARD
 
-samtools markdup results/ptA.sorted.bam results/ptA.markdup.sorted.bam
+PicardCommandLine MarkDuplicates I=ptA.sorted.bam O=ptA.markdup.sorted.bam M=ptA_md_metrics.txt
 ```
 
 ---

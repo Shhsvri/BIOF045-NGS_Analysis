@@ -37,9 +37,7 @@ Some of the more popular tools for calling variants include [bcftools mpileup](h
 ### Running the FreeBayes Variant Caller
 
 ```bash
-$ cd ~
-$ mkdir ~/var_calling/results/variants
-$ cd ~/var_calling/results/variants/
+$ cd ~/Day2/results/
 ```
 
 Let's check the freebayes options:
@@ -49,14 +47,14 @@ $ freebayes -h
 ```
 
 ```bash
-$ freebayes -f /data/DNAseq/BWAIndex/genome.fa ~/var_calling/results/bwa/08008.sorted.markdup.bam > ~/var_calling/results/variants/08008.vcf
+$ freebayes -f ~/Day2/genome/hg38.fa 08008.sorted.markdup.bam > ptA.vcf
 ```
 
 #### Running the bcftools Variant Caller (Alternative)
 
 ```bash
-$ cd ~/var_calling/results/variants
-$ bcftools mpileup -f /data/DNAseq/BWAIndex/genome.fa ../bwa/08008.sorted.marked.bam | bcftools call -mv -Ob -o 08008.bcf
+$ cd ~/Day2/results
+$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.sorted.markdup.bam | bcftools call -mv -Ob -o ptA.bcf
 $ bcftools index 08008.bcf
 $ bcftools view 08008.bcf
 ```
