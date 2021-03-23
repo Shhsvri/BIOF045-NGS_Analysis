@@ -47,16 +47,16 @@ $ freebayes -h
 ```
 
 ```bash
-$ freebayes -f ~/Day2/genome/hg38.fa 08008.sorted.markdup.bam > ptA.vcf
+$ freebayes -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam > ptA.vcf
 ```
 
 #### Running the bcftools Variant Caller (Alternative)
 
 ```bash
 $ cd ~/Day2/results
-$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.sorted.markdup.bam | bcftools call -mv -Ob -o ptA.bcf
-$ bcftools index 08008.bcf
-$ bcftools view 08008.bcf
+$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ov -o ptA.bcf
+$ bcftools index ptA.bcf
+$ bcftools view ptA.bcf
 ```
 
 ## _Optional Steps_

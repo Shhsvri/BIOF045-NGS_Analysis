@@ -239,7 +239,10 @@ Marking duplicates with tools such as samtools will result in the variant caller
 The variant caller will be more likely to discard the error, instead of calling it as a variant.
 
 ```bash
-$ PicardCommandLine MarkDuplicates I=ptA.sorted.bam O=ptA.markdup.sorted.bam M=ptA_markdup_metrics.txt
+$ PicardCommandLine MarkDuplicates \
+	I=ptA.sorted.bam \
+	O=ptA.markdup.sorted.bam \
+	M=ptA_markdup_metrics.txt
 ```
 
 
@@ -262,10 +265,10 @@ tool for the visualiztion of sorted bam files.
 > **NOTE** BAM files must be indexed before viewing in IGV. Ensure a bam index file exists in the same directory alongside your BAM file.
 
 ```
-$ la -l
+$ ls -l ptA.markdup*
 
--rw-rw-r-- 1 shahin shahin 56382104 Mar 20 17:21 ptA.markdup.sorted.bam
--rw-rw-r-- 1 shahin shahin  1534200 Mar 20 17:54 ptA.markdup.sorted.bam.bai
+-rw-rw-r-- 1 shahin shahin 67082465 Mar 20 17:21 ptA.markdup.sorted.bam
+-rw-rw-r-- 1 shahin shahin  1590232 Mar 20 17:54 ptA.markdup.sorted.bam.bai
 ```
 
 ##Create a script
@@ -296,7 +299,10 @@ samtools sort results/ptA.bam > results/ptA.sorted.bam
 
 ## 4. markduplicates with PICARD
 
-PicardCommandLine MarkDuplicates I=ptA.sorted.bam O=ptA.markdup.sorted.bam M=ptA_md_metrics.txt
+PicardCommandLine MarkDuplicates \
+	I=ptA.sorted.bam \
+	O=ptA.markdup.sorted.bam \
+	M=ptA_md_metrics.txt
 ```
 
 ---
