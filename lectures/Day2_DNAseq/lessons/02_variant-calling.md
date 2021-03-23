@@ -1,7 +1,7 @@
 ---
 title: "Variant calling with Freebayes"
 author: "Shahin Shahsavari"
-date: October 2020
+date: March 2021
 duration: 45
 ---
 

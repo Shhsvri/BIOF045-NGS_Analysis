@@ -1,7 +1,7 @@
 ---
 title: "Variant annotation with snpEff"
 author: "Shahin Shahsavari"
-date: "October 2020"
+date: "March 2021"
 ---
 
 
@@ -103,7 +103,7 @@ To run the snpEff command we will need to specify two things:
 
 1. The appropriate genome
 2. The VCF file we want to annotate
-	
+
 An additional parameter to add to our command is `Xmx8G`, a Java parameter to define available memory. Since we are in an interactive session with 8GB, if we had requested more before starting the session we could increase the number here.
 
 The final command will look like this:

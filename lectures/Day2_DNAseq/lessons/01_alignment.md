@@ -1,8 +1,8 @@
 ---
 title: Alignment with BWA
 author: Shahin Shahsavari
-date: October 2020
-duration: 90
+date: March 2021
+duration: 120
 ---
 
 ## Learning Objectives:
@@ -22,33 +22,21 @@ The variant calling workflow begins with quality control and alignment, similar 
 
 To start with variant calling, we need to set-up our directory structure, and ensure we have all the softwares that we need.
 
-Create the following directory structure for the variant calling project in your home directory:
+In order to remain organized, I always prepare my directory as follows
 
 ```bash
-~/var_calling/
-    ├── logs/
-    ├── meta/
+~/Day2/
     ├── raw_data/
-    ├── scripts/
-    ├── quality_control
+    ├── quality_control/
     ├── results/
-        ├── bwa/
+    ├── genome/
 ```
 
-```bash
-$ mkdir ~/var_calling
-$ cd ~/var_calling
+This has already been prepared for you using the `mkdir` function.
 
-$ mkdir -p quality_control raw_data scripts logs meta results/bwa
-$ ls -l
-```
 
-Now that we have the directory structure created, let's copy over the raw data (fastq) to perform quality control and alignment:
+Then I always copy the raw fastq data into this folder using the `cp` command
 
-```bash
-$ cp /data/DNAseq/human/*.fq ~/var_calling/raw_data
-$ ls -l ~/var_calling/raw_data
-```
 
 ## Part0: executables and tools Setup
 
@@ -56,13 +44,9 @@ We will be using the following softwares. These have been already installed on o
 
 1. [bwa](https://github.com/lh3/bwa)
 2. [samtools](https://github.com/samtools/samtools)
-3. [htslib](https://github.com/samtools/htslib)
-5. [freebayes](https://github.com/ekg/freebayes)
-6. [vcflib](https://github.com/ekg/vcflib/)
-7. [sambamba](https://github.com/lomereiter/sambamba)
-8. [seqtk](https://github.com/lh3/seqtk)
-9. [mutatrix](https://github.com/ekg/mutatrix)
-10. [sra-tools](https://github.com/ncbi/sra-tools/wiki/HowTo:-Binary-Installation)
+3. [freebayes](https://github.com/ekg/freebayes)
+4. [sambamba](https://github.com/lomereiter/sambamba)
+5. [IGV](https://software.broadinstitute.org/software/igv/download)
 
 Depending on the software, you can download and compile the source code using this kind of pattern:
 
@@ -83,10 +67,11 @@ serious problems with our samples such as the presence of vector contamination o
 In general, bwa mem doesn't need trimming.
 
 ```bash
-$ cd ~/var_calling/raw_data
+$ cd ~/Day2/raw_data
 $ ls -l
-$ fastqc 08008_r1.fq
-$ mv *fastqc* ~/var_calling/quality_control
+$ fastqc ptA_R1.fastq
+$ fastqc ptA_R2.fastq
+$ ls -l
 ```
 
 #### Viewing the result of fastqc
@@ -95,19 +80,26 @@ The fastqc command creates an html file that could be opened using your web brow
 On the server, we have _firefox_ installed.
 
 ```bash
-cd ~/var_calling/quality_control
-firefox 08008_r1_fastqc.html
+$ firefox ptA_R1_fastqc.html
+```
+
+When you are done viewing the fastqc results, move those to the quality\_control
+folder.
+
+```bash
+$ mv *fastqc* ~/Day2/quality_control
 ```
 
 ### 1.2 Alignment
 
 Choice of alignment tool is often determined by the type of NGS application being conducted.
 For variant calling we will use [BWA (Burrows-Wheeler Aligner)](http://bio-bwa.sourceforge.net).
-It may be slower than Bowtie2 or some other alternatives, though it is generally considered to be more accurate.
+It may be slower than `Bowtie2` or some other alternatives, though it is generally considered to be
+more accurate.
 
 #### BWA Modes
 
-Depending on read length, BWA has different modes optimized for different sequence lengths:
+Depending on your read length, BWA has different modes optimized for different sequence lengths:
 
 - BWA-backtrack: designed for Illumina sequence reads up to 100bp (3-step)
 - BWA-SW: designed for longer sequences ranging from 70bp to 1Mbp, long-read support and split alignment
@@ -118,33 +110,37 @@ BWA-backtrack for ≥70 bp Illumina reads.
 ### 1.2.1 Creating BWA-MEM index
 
 The BWA aligner needs to create an index of our reference genome to process our data faster.
-We are going to copy our hg38 human reference genome and its bwa index in our reference directory
+I have obtained the latest major assembly of the human reference genome (GRCh38).
+
+In order to practice and see how this works, I created a small reference into the `reference_test` folder.
+Let's view this file first
+
+```bash
+$ cd ~/Day2/reference_test
+$ bwa index test_genome.fa
+$ ls -l -h
+```
 
 > **NOTE** The human reference genome contains 3 billion base pairs. Indexing is a computationally intensive process.
 I already generated the BWA index which took about an hour.
 Your institution's High Performance Computing server admin may have most likely generating these for you.
 On NIH Biowulf, these references are in `/fdb/igenomes/Homo_Sapiens/UCSC/hg38/Sequence/BWAIndex/genome.fa*`
 
-```bash
-$ cd /data/DNAseq/BWAIndex/
-$ ls -l genome.fa*
-```
 
-Let's explore this fasta reference file before alignment.
+Let's explore the hg38 fasta reference file at `~/Day2/genome/` before alignment.
 
 ---
 **Exercise**
-1. How large (Bytes) is this fasta reference?
-2. View the top 20 lines of your fasta reference
-3. Count the number of lines in your fasta reference
-4. Count the number of characters in your fasta reference
-4. Find all the lines that contain ">"
-5. Find all the lines that contain ">" and in addition to 3 more lines after each hit.
+1. How large (Bytes) is this fasta reference? `ls`
+2. View the top 20 lines of your fasta reference. `head`
+3. Count the number of lines in your fasta reference `wc`
+4. Find all the lines that contain ">" `grep '>'`
+5. Find all the lines that contain ">" and in addition to 3 more lines after each hit. `grep -A 3 '>'`
 ---
 
 ### 1.2.2 Aligning reads with BWA-MEM
 
-Now that we have our indexes, let's perform alignment in our paired-end reads for sample 08008.
+Now that we have our indexes, let's perform alignment on our paired-end reads for ptA (patient A).
 
 > We will find out what disease this individual has later today.
 
@@ -159,28 +155,29 @@ One of the most used options for aligning reads to a reference genome using BWA-
 Additionally, we will specify:
 
 - the path to genome indexes including prefix
-- FASTQ files for paired-end reads (r1 and r2)
-- `2>`: save standard error to file
+- FASTQ files for paired-end reads (R1 and R2)
 - `>`: save alignment output to a SAM(Sequence Alignment Map) file. aka standard output
 
 ```bash
-$ cd ~/var_calling
+$ cd ~/Day2
 $ bwa mem -t 2 \
-	/data/DNAseq/BWAIndex/genome.fa \
-	raw_data/08008_r1.fq raw_data/08008_r2.fq \
-	2> logs/bwa.err \
-	> results/bwa/08008.sam
+	genome/hg38.fa \
+	raw_data/ptA_R1.fastq raw_data/ptA_R2.fastq \
+	> results/ptA.sam
 ```
 
 It may take some time for the process to complete. When alignment is over, you can view the content of your sam file.
 
 ```bash
-$ cd results/bwa
-$ head -n 200 08008.sam
-$ grep -v "@" 08008.sam | head
+$ cd ~/Day2
+$ head -n 200 ptA.sam
 ```
 
 > Every sam file starts with a header. It contains the reference chromosomes, command that was used to generate it and more. Sam header lines start with "@"
+
+```bash
+$ grep -v "@" ptA.sam | head
+```
 
 > -v option for `grep` indicates that we want to exclude all the lines that containt our character.
 
@@ -189,13 +186,15 @@ $ grep -v "@" 08008.sam | head
 1. Is the output of our aligner sorted?
 2. What are the columns in a sam file?
 
+<img src="../img/sam_bam.png" size=300>
+
 ### 1.3 Convert your sam file to bam
 
-SAM files are pure text files which take too much space. Common practice is to compress these files
-using samtools into bam files.
+SAM (Sequence Alignment Map) files are pure text files which take too much space. Common practice
+is to compress these files using `samtools` into BAM (Binary Alignment Map) files.
 
 ```bash
-$ samtools view -b 08008.sam > 08008.bam
+$ samtools view -b ptA.sam > ptA.bam
 ```
 
 ### 1.4 Sorting your alignment bam file
@@ -205,15 +204,19 @@ There are a variety of tools for this task and they all perform the same task. S
 others. We will use `sambamba` which is very fast and generates all the needed downstream files.
 
 ```bash
-$ sambamba sort 08008.bam
+$ samtools sort ptA.bam > ptA.sorted.bam
 ```
 
 This will generate the sorted bam file in the same directory.
 
+---
 **Exercise**
+
+We currently have 3 files. `ptA.sam`, `ptA.bam`, and `ptA.sorted.bam`
 
 1. How much smaller is that BAM file compared with the SAM?
 2. How does the size of the sorted BAM file compare with our unsorted BAM file?
+---
 
 ### 1.5 Marking duplicates
 
@@ -235,14 +238,18 @@ Marking duplicates with tools such as sambamba will result in the variant caller
 The variant caller will be more likely to discard the error, instead of calling it as a variant.
 
 ```bash
-$ sambamba markdup -t 2 08008.sorted.bam 08008.sorted.markdup.bam
+$ samtools markdup ptA.sorted.bam ptA.markdup.sorted.bam
 ```
 
 
 ### 1.6 Creating an index for the final bam file
 
 Now that we have a sorted BAM file that has duplicates marked, we need to ensure the index file
-for it exist. sambamba creates the index by default.
+for it exist. Just like a book that needs a table of contents, a bam file needs an index.
+
+```bash
+samtools index ptA.markdup.sorted.bam
+```
 
 This file is now ready for visualization in IGV or any other visualization tool.
 
@@ -256,8 +263,8 @@ tool for the visualiztion of sorted bam files.
 ```
 $ la -l
 
--rw-rw-r-- 1 shahin shahin 56382104 Oct 20 17:21 08008.sorted.markdup.bam
--rw-rw-r-- 1 shahin shahin  1534200 Oct 20 17:54 08008.sorted.markdup.bam.bai
+-rw-rw-r-- 1 shahin shahin 56382104 Mar 20 17:21 ptA.markdup.sorted.bam
+-rw-rw-r-- 1 shahin shahin  1534200 Mar 20 17:54 ptA.markdup.sorted.bam.bai
 ```
 
 ##Create a script
@@ -271,42 +278,25 @@ Use vim to write the following into a shell script named "DNA\_alignment.sh":
 
 # This is for DNA alignment, sorting, and indexing
   
-i=08008
-## Set up the variables for reference and raw data 
-
-### Assign the full path of your reference genome
-### the input fastq files
-### and the output directory you would like to save the end result in
-
-ref=/data/DNAseq/BWAIndex/genome.fa
-fastq1=~/var\_calling/raw\_data/"$i"\_r1.fq
-fastq2=~/var\_calling/raw\_data/"$i"\_r2.fq
-outdir=~/var\_calling/results/
-
-
 ## 1. BWA MEM alignment with 2 threads
 
-bwa mem -t 2 $ref $fastq1 $fastq2 2> $outdir/bwa.err > $outdir/bwa/"$i".sam
+bwa mem -t 2 genome/hg38.fa raw_data/ptA_R1.fastq raw_data/ptA_R2.fastq > results/ptA.sam
 
 
 ## 2. Convert sam to bam
 
-samtools view -b $outdir/bwa/"$i".sam > $outdir/bwa/"$i".bam
+samtools view -b results/ptA.sam > results/ptA.bam
 
 
 ## 3. Sort your bam file using sambamba
 
-sambamba sort $outdir/bwa/"$i".bam
+samtools sort results/ptA.bam > results/ptA.sorted.bam
 
 
 ## 4. markduplicates with 2 threads
 
-sambamba markdup -t 2 $outdir/bwa/"$i".sorted.bam "$i".sorted.marked.bam
+samtools markdup results/ptA.sorted.bam results/ptA.markdup.sorted.bam
 ```
-
-For future alignments, you could change the variables (ref, fastq, and outdir), and
-run this alignment script using `source DNA_alignment.sh`
-
 
 ---
 
