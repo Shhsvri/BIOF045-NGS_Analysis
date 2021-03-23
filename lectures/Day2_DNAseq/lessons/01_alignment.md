@@ -163,8 +163,8 @@ Additionally, we will specify:
 $ cd ~/Day2
 $ bwa mem -t 2 \
 	genome/hg38.fa \
-	raw_data/ptA_R1.fastq raw_data/ptA_R2.fastq \
-	> results/ptA.sam
+	raw_data/ptA_R1.fastq \
+	raw_data/ptA_R2.fastq > results/ptA.sam
 ```
 
 It may take some time for the process to complete. When alignment is over, you can view the content of your sam file.
@@ -177,6 +177,7 @@ $ head -n 500 ptA.sam
 > Every sam file starts with a header. It contains the reference chromosomes, command that was used to generate it and more. Sam header lines start with "@"
 
 ```bash
+$ clear
 $ grep -v "@" ptA.sam | head
 ```
 
@@ -213,7 +214,7 @@ This will generate the sorted bam file in the same directory.
 ---
 **Exercise**
 
-We currently have 3 files. `ptA.sam`, `ptA.bam`, and `ptA.sorted.bam`
+We currently have 3 alignment files. `ptA.sam`, `ptA.bam`, and `ptA.sorted.bam`
 
 1. How much smaller is that BAM file compared with the SAM?
 2. How does the size of the sorted BAM file compare with our unsorted BAM file?
@@ -271,7 +272,7 @@ $ ls -l ptA.markdup*
 -rw-rw-r-- 1 shahin shahin  1590232 Mar 20 17:54 ptA.markdup.sorted.bam.bai
 ```
 
-##Create a script
+## Create a script
 
 For the final step, we would like to create a shell script that can run all commands we have used today in one go. As always, it is good practice to leave comments in your shell scripts.
 
@@ -284,7 +285,10 @@ Use vim to write the following into a shell script named "DNA\_alignment.sh":
   
 ## 1. BWA MEM alignment with 2 threads
 
-bwa mem -t 2 genome/hg38.fa raw_data/ptA_R1.fastq raw_data/ptA_R2.fastq > results/ptA.sam
+bwa mem -t 2 \
+	genome/hg38.fa \
+	raw_data/ptA_R1.fastq \
+	raw_data/ptA_R2.fastq > results/ptA.sam
 
 
 ## 2. Convert sam to bam
