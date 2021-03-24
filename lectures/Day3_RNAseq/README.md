@@ -1,7 +1,6 @@
-#
-Schedule for Day2
+# Schedule for Day 3
 
-## DNAseq and Variant Calling
+## RNA-seq alignment and differential gene expression
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
