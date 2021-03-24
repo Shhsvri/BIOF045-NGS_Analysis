@@ -204,9 +204,9 @@ mat <- mat - rowMeans(mat)
 rownames(mat)<-sapply(rownames(mat),findGene)
 pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](gene_explr_heatmap.png)
+![alt text](../img/gene_explr_heatmap.png)
 
 Querying the genes in GO and finding the resulting pathways with the PANTHAR database. 
-![alt text](go_frontpage.png)
-![alt text](panther.png)
+![alt text](../img/go_frontpage.png)
+![alt text](../img/panther.png)
 
