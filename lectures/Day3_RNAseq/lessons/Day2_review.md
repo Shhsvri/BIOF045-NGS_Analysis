@@ -112,7 +112,7 @@ gedit DNAseq.sh
 ```bash
 #!/bin/bash
 
-# 03/23/2021
+# BIOF045: 03/23/2021
 # This script for DNA alignment, sorting, and indexing
 
 ## 0. set up the file structure change your directory
@@ -124,18 +124,18 @@ cd ~/Day2
 
 bwa mem -t 2 \
 	genome/hg38.fa \
-	raw_data/ptA_R1.fastq \
-	raw_data/ptA_R2.fastq > results/ptA.sam
+	raw_data/ptB_R1.fastq \
+	raw_data/ptB_R2.fastq > results/ptB.sam
 
 
 ## 2. Convert sam to bam
 
-samtools view -b results/ptA.sam > results/ptA.bam
+samtools view -b results/ptB.sam > results/ptB.bam
 
 
 ## 3. Sort your bam file using samtools
 
-samtools sort results/ptA.bam > results/ptA.sorted.bam
+samtools sort results/ptB.bam > results/ptB.sorted.bam
 
 
 ## 4. markduplicates with PICARD
@@ -143,20 +143,24 @@ samtools sort results/ptA.bam > results/ptA.sorted.bam
 cd results
 
 PicardCommandLine MarkDuplicates \
-	I=ptA.sorted.bam \
-	O=ptA.markdup.sorted.bam \
-	M=ptA_md_metrics.txt
+	I=ptB.sorted.bam \
+	O=ptB.markdup.sorted.bam \
+	M=ptB_md_metrics.txt
 
 
 ## 5. Index the bam file
 ###	after this step you could view the bam file in IGV
 
-samtools index ptA.markdup.sorted.bam
+samtools index ptB.markdup.sorted.bam
 
 
 ## 6. Generate the VCF file using bcftools
 
-bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ov -o ptA.vcf
+bcftools mpileup -f ~/Day2/genome/hg38.fa ptB.markdup.sorted.bam | bcftools call -mv -Ov -o ptB.vcf
+
+## 7. Remove the unneeded files that were generated during the alignment
+
+rm ptA.sam ptB.bam ptB.sorted.bam
 ```
 ---
 
