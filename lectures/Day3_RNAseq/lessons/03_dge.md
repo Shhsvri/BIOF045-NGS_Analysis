@@ -1,9 +1,9 @@
-—
+---
 title: Differential gene expression
 author: Jonathan Vi Perrie
 date: 03/23/2021
 duration: ~2-3h 
-—
+---
 
 
 ### Analysis of RNA-seq in R
