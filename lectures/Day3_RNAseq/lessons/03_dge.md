@@ -59,6 +59,10 @@ replicates<-c(1,2,3,1,2,3)
 # Two conditions (
 treatment<-c(rep(1,3),rep(2,3))
 
+meta<-data.frame(matrix(c(experiments,treatment,replicates),6,3))
+rownames(meta)<-meta[,1]
+colnames(meta)<-c("experiment","treatment","replicate")
+
 meta$experiment<-as.factor(meta$experiment)
 meta$treatment<-as.factor(meta$treatment)
 meta$replicate<-as.factor(meta$replicate)
