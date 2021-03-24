@@ -1,8 +1,8 @@
 ---
 title: Day2 Review
 author: Shahin Shahsavari
-date: October 2020
-duration: 60 minutes
+date: March 2021
+duration: 30 minutes
 ---
 
 ## DNAseq Alignment Review
@@ -36,7 +36,7 @@ $ bwa index genome.fa
 2. Align your raw data
 
 ```bash
-bwa mem -t $threads $ref $fastq_r1 $fastq_r2 > aln.sam
+bwa mem -t $threads $genome $fastq_r1 $fastq_r2 > aln.sam
 ```
 
 3. Convert (compress) your sam file to bam
@@ -48,23 +48,33 @@ samtools view -b aln.sam > aln.bam
 4. Sort your bam file
 
 ```bash
-sambamba sort aln.bam
+samtools sort aln.bam > aln.sorted.bam
 ```
 
 5. mark PCR duplicates (recommended for variant calling)
 
 ```bash
-sambamba markdup -t 2 aln.sorted.bam aln.sorted.markdup.bam
+PicardCommandLine MarkDuplicates \
+	I=aln.sorted.bam \
+	O=aln.markdup.sorted.bam \
+	M=aln_markdup_metrics.txt
 ```
 
-> You could view this in IGV. Make sure the index is present in the same directory.
+6. generate the index
 
-6. Variant Calling
+```bash
+samtools index aln.markdup.sorted.bam
+```
+
+> This generates the index file that ends with `.bai`. You could then view the bam file in IGV.
+Make sure the index is present in the same directory.
+
+7. Variant Calling
 
 ##### freebayes
 
 ```bash
-freebayes -f ref.fa aln.sorted.markdup.bam > var.vcf
+freebayes -f ref.fa aln.markdup.sorted.bam > var.vcf
 ```
 
 OR
@@ -86,41 +96,68 @@ OR
 gatk HaplotypeCaller -f ref.fa -I aln.bam -O var.vcf
 ```
 
-## BASH
+## Create a script
 
-Let's look at a few text file:
+You could use any text editor to write a script that contains all the steps required
+for DNAseq analysis
+
+A good option for a text editor is `gedit`. It only works on X2go. We will cover the `vim`
+text editor tomorrow morning.
 
 ```bash
-cd /data/review
+gedit DNAseq.sh
 ```
 ---
 
-**Exercise**
+```bash
+#!/bin/bash
 
-- print the content of `file1.tsv` to your terminal
-- print the values in the second column of `files.tsv`
-- view the content of `file2.csv`
-- can you print the values in the second column of `file2.csv` using the same command?
-- does the file extention matter bash?
+# 03/23/2021
+# This script for DNA alignment, sorting, and indexing
+
+## 0. set up the file structure change your directory
+
+cd ~/Day2 
+
+
+## 1. BWA MEM alignment with 2 threads
+
+bwa mem -t 2 \
+	genome/hg38.fa \
+	raw_data/ptA_R1.fastq \
+	raw_data/ptA_R2.fastq > results/ptA.sam
+
+
+## 2. Convert sam to bam
+
+samtools view -b results/ptA.sam > results/ptA.bam
+
+
+## 3. Sort your bam file using samtools
+
+samtools sort results/ptA.bam > results/ptA.sorted.bam
+
+
+## 4. markduplicates with PICARD
+
+cd results
+
+PicardCommandLine MarkDuplicates \
+	I=ptA.sorted.bam \
+	O=ptA.markdup.sorted.bam \
+	M=ptA_md_metrics.txt
+
+
+## 5. Index the bam file
+###	after this step you could view the bam file in IGV
+
+samtools index ptA.markdup.sorted.bam
+
+
+## 6. Generate the VCF file using bcftools
+
+bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ov -o ptA.vcf
+```
 ---
 
-## Text File Delimiters
-
-We are working with 4 text files in the `/data/review` directory. What are the data columns separated by in each file?
-
-The most common delimiter in a text file would be `\t` or <kbd>tab</kbd>. These files are frequently given the extention `.tsv`
-However, it is also common to see `, ; :` used as delimiters.
-
-If you want to view the second column of `file4.txt`, you can specify a delimiter using cut -d:
-
-```bash
-cut -d ";" -f 2 file4.txt 
-```
-
-**Exercise1**
-
-- View the content of `cars.csv`?
-- What is the delimiter?
-- Find all the lines that contain "US" and print only the first and fourth and ninth columns
-
-****
+After you create the script, you could run it using `source DNAseq.sh`.
