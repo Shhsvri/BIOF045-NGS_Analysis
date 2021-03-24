@@ -114,13 +114,13 @@ Aligning reads using STAR is a two step process:
 
 
 ```bash
-$ ls -l genome/
+$ ls -l STAR_chr2_genome/
 ```
 
-This is a good time to also explore the RNAseq reference file types:
+This is a good time to also explore the reference file types we are using for RNAseq:
 
 ```bash
-$ cd ~/Day3/STAR_genome/
+$ cd ~/Day3/STAR_chr2_genome/
 $ ls -l -h
 $ head GRCh38_chr2.gtf
 $ head GRCh38_chr2.fa
@@ -133,8 +133,8 @@ $ head GRCh38_chr2.fa
 
 **Exercise**
 
-* count the number of lines in this fasta file
-* confirm that you only have one chromosome in this file
+* count the number of lines in `GRCh38_chr2.fa`
+* confirm that you only have one chromosome in it
 * What is the size of the chromosome2 fasta file?
 * What is the size of the complete hg38 human reference? **hint:** use the Day2 reference at `~/Day2/genome`
 ---
@@ -200,8 +200,21 @@ STAR	--runThreadN 2 \
 	--genomeDir STAR_chr2_genome/ \
 	--readFilesIn raw_data/sample1.fastq \
 	--quantMode GeneCounts \
-	--outFileNamePrefix results/STAR/sample1_
+	--outFileNamePrefix results/sample1_
 ```
+
+
+---
+**Exercise**
+
+- In order to view this file, we need to
+	1. convert it to bam
+	2. sort
+	3. Index
+
+Process the output sam file to prepare it for viewing in IGV.
+
+---
 
 ---
 *This lesson has been developed by Shahin Shahsavari adapted from [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
