@@ -12,7 +12,7 @@
 | 13:30 - 14:00 | [RNA_seq Alignment Quality and Visualization](02_alignment_quality.md)
 | 14:00 - 14:30 | [Introduction to Differential Gene Expression](lessons/day_3b_RNA_seq.pdf) |
 | 14:30 - 14:45 | break |
-| 14:45 - 16:00 | [DGE in R](lessons/02_dge.md) |
+| 14:45 - 16:00 | [DGE in R](lessons/03_dge.md) |
 
 ---
 

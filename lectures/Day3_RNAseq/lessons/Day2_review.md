@@ -160,8 +160,9 @@ bcftools mpileup -f ~/Day2/genome/hg38.fa ptB.markdup.sorted.bam | bcftools call
 
 ## 7. Remove the unneeded files that were generated during the alignment
 
-rm ptA.sam ptB.bam ptB.sorted.bam
+rm ptB.sam ptB.bam ptB.sorted.bam
 ```
----
 
 After you create the script, you could run it using `source DNAseq.sh`.
+
+---

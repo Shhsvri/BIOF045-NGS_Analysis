@@ -1,5 +1,5 @@
 ---
-title: "Alignment with STAR"
+title: "RNAseq Alignment with STAR"
 author: "Shahin Shahsavari"
 date: March 2021
 ---
@@ -29,7 +29,7 @@ In order to remain organized, I always prepare my directory as follows using `mk
     ├── quality_control/
     ├── results/
     ├── STAR_chr2_genome/
-    ├── counts/
+    ├── combined_counts/
 ```
 
 ## Part0: executables and tools Setup
@@ -125,6 +125,9 @@ $ ls -l -h
 $ head GRCh38_chr2.gtf
 $ head GRCh38_chr2.fa
 ```
+### GTF (Gene Transfer Format) file
+
+![STAR\_step4](../img/GTF.png)
 
 ---
 
@@ -133,10 +136,10 @@ $ head GRCh38_chr2.fa
 * count the number of lines in this fasta file
 * confirm that you only have one chromosome in this file
 * What is the size of the chromosome2 fasta file?
-* What is the size of the complete hg38 human reference? **hint:** use the Day2 reference
+* What is the size of the complete hg38 human reference? **hint:** use the Day2 reference at `~/Day2/genome`
 ---
 
-STAR is a very memory intensive software. For the human genome, it requires more than 40GB of RAM. Thus, we are mapping our reads to the chromosome2 reference which is much shorter than the full GRCh38 genome.
+STAR is memory intensive aligner. For the human genome, it requires more than 40GB of RAM. Thus, we are mapping our reads to the chromosome2 reference which is smaller in size than the complete GRCh38 genome.
 
 ### Creating a genome index
 
