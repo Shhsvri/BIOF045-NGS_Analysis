@@ -29,7 +29,7 @@ Here, we're not working directly with the full count matrix. Instead, we're taki
 As such, it has some extra columns. 
 ```R
 setwd("Day3/combined_counts/")
-cts <- read.table("GSE153310_Raw_gene_counts_matrix.txt",header=TRUE)
+cts <- read.table("counts.tsv",header=TRUE,sep="\t")
 ```
 Output
 ```R
