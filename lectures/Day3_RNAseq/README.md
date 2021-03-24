@@ -9,7 +9,7 @@
 | 11:00 - 11:15 | break |
 | 11:15 - 12:30 | [RNA-seq Alignment](lessons/01_rna_seq_alignment.md) |
 | 12:30 - 13:30 | Lunch |
-| 13:30 - 14:00 | [Introduction to Differential Gene Expression](lessons/) |
+| 13:30 - 14:00 | [Introduction to Differential Gene Expression](lessons/day_3b_RNA_seq.pdf) |
 | 14:00 - 14:30 | [DGE in R](lessons/02_dge.md) |
 | 14:30 - 14:45 | break |
 | 14:45 - 16:00 | [DGE in R](lessons/02_dge.md) |
