@@ -39,7 +39,7 @@ Output
 [19] "average_read_count_NC"
 ```
 We want the read counts, as DESeq2 works with count data, so lets select columns
-```
+```R
 # headers 
 exp_headers <- colnames(cts)[4:9]
 # row names
@@ -50,7 +50,7 @@ rownames(cts) <-row_data
 ```
 ### Design matrix 
 We need to specify where our replicates and treatments/controls are.
-```
+```R
 # There are six experiments
 experiments<-seq(6)
 # Three replicates per condition
@@ -65,7 +65,7 @@ meta$replicate<-as.factor(meta$replicate)
 meta
 ```
 Output
-```
+```R
 > meta
   experiment treatment replicate
 1          1         1         1
@@ -79,23 +79,23 @@ Not every gene will be high quality and by removing some genes with low counts, 
 Here, we filter out some genes. This is a much bigger problem in scRNA-seq where dropout is common. 
 
 First, we look at the distribution of gene counts summed across all experiments. 
-```
+```R
 hist(log(rowSums(cts)),breaks=100)
 quantile(rowSums(cts),probs=c(0.01,0.05,0.10,0.20))
 cts <- cts[rowSums(cts)>=36,]
 ```
-![alt text](tmp.png)
+![alt text](../img/hist.png)
 
 Okay, now we load the data into DESeq2. The design of this experiment is pretty simply as we are just comparing two populations. 
 But more complex designs could be considered in temporal experiments. e.g. `design= ~ treatment + time`
-```
+```R
 dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = meta,
                               design= ~ treatment)
 ```
 
 We can then run DESeq2 and order the results by adjusted p-value. 
-```
+```R
 dds <- DESeq(dds)
 res <- results(dds)
 res <- res[order(res$padj),]
@@ -108,7 +108,7 @@ Output, the DESeq2 data structure has 6 columns with each row corresponding to a
 4. stat: Wald statistic
 5. pvalue: Wald test p-value
 6. padj: Behnjamini-Hochberg p-value = p-value rank / # of tests * FDR and find largest p-value smaller than critical value
-```
+```R
 > head(res)
 log2 fold change (MLE): treatment 2 vs 1 
 Wald test p-value: treatment 2 vs 1 
@@ -123,12 +123,12 @@ DataFrame with 6 rows and 6 columns
 101928589    11.1888       6.922034  1.367017   5.06360 4.11405e-07 9.13731e-04
 ```
 The count matrix we have has all ENTREZID and gene symbol, but there is a many-to-one relationship between the two. 
-```
+```R
 db <- org.Hs.eg.db
 columns(db)
 ```
 Output
-```
+```R
 > columns(db)
  [1] "ACCNUM"       "ALIAS"        "ENSEMBL"      "ENSEMBLPROT"  "ENSEMBLTRANS" "ENTREZID"     "ENZYME"       "EVIDENCE"    
  [9] "EVIDENCEALL"  "GENENAME"     "GO"           "GOALL"        "IPI"          "MAP"          "OMIM"         "ONTOLOGY"    
@@ -143,19 +143,19 @@ that maximize variability in one's data and are orthoganal to each other.
 
 What sort of inference could we draw about this data?
 
-```
+```R
 rld <- rlog(dds, blind=FALSE)
 plotPCA(rld, intgroup="treatment")
 pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=meta,
          number_format='%.4f',cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](tmp.png)
+![alt text](../img/pca.png)
 
-![alt text](tmp.png)
+![alt text](../img/batch_cor.png)
 
 We likelu want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
 in a 2x2 plot. 
-```
+```R
 par(mfrow=c(2,2))
 plotCounts(dds,gene=mapIds(db,keys="SLC35E2A",column="ENTREZID",keytype="SYMBOL"),intgroup="treatment",main="SLC35E2A")
 plotCounts(dds,gene=mapIds(db,keys="IL1RL1",column="ENTREZID",keytype="SYMBOL"),intgroup="treatment",main="IL1RL1")
@@ -163,7 +163,7 @@ plotCounts(dds,gene=mapIds(db,keys="IL18R1",column="ENTREZID",keytype="SYMBOL"),
 plotCounts(dds,gene=mapIds(db,keys="SLC1A4",column="ENTREZID",keytype="SYMBOL"),intgroup="treatment",main="SLC1A4")
 par(mfrow=c(1,1))
 ```
-![alt text](tmp.png)
+![alt text](../img/scatter_plot.png)
 
 Another common approach for visaulization is to use a volcano plot where fold change is on the x-axis and adjusted p-value is
 on the y-axis. 
@@ -176,18 +176,37 @@ We load our data into ggplot except for genes that had no p-value computed (due 
 
 Finally, we plot data as a scatter `geom_point()` and add two vertical lines `geom_vline()` and a horizontal line `geom_hline()`
 
-```
+```R
 threshold <- as.numeric((res$padj<0.05) & (abs(res$log2FoldChange))>2) + 1 
 volc_colors <- rainbow_hcl(2)
 g<-ggplot(data.frame(res[!is.na(res$padj),]),aes(x=log2FoldChange,y=-log10(padj),colour=volc_colors[threshold[!is.na(res$padj)]]))
 g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline(yintercept = abs(log10(0.05)))+theme_bw()+labs(color="")
 
 ```
-![alt text](tmp.png)
+![alt text](../img/volcano.png)
 
-We previously plotted a heatmap showing correlations between batches, but we can also look at the correlation between genes.
-By doing this, we can curate a set of genes that have similar expression patterns across experiments, and then we can look at 
-what pathways 
+We previously plotted a heatmap showing correlations between batches, but we can also use a heatmap to show the difference
+in expression between experiments. By doing this, we can curate a set of genes that have similar expression patterns across 
+experiments and then we can look at what pathways are enriched by the genes. 
 
+Here, we define a function that will accept an ENTREZID and output a gene symbol. 
 
+We then find the top 20 most variable genes.
+
+```
+findGene <- function(x) {
+    return(tryCatch(mapIds(db,keys=as.character(x),column="SYMBOL",keytype="ENTREZID"), error=function(e) NULL))
+}
+
+topVarGenes <- head(order(-rowVars(assay(rld))),20)
+mat <- assay(rld)[ topVarGenes, ]
+mat <- mat - rowMeans(mat)
+rownames(mat)<-sapply(rownames(mat),findGene)
+pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
+```
+![alt text](gene_explr_heatmap.png)
+
+Querying the genes in GO and finding the resulting pathways with the PANTHAR database. 
+![alt text](go_frontpage.png)
+![alt text](panther.png)
 
