@@ -5,7 +5,7 @@
 | Time            |   Topic  |
 |:------------------------:|:----------:|
 | 10:00 - 10:30 | [Day 2 Review](lessons/Day2_review.md) |
-| 10:30 - 11:00 | [Introduction to RNA-seq](lessons/) |
+| 10:30 - 11:00 | [Introduction to RNA-seq](lessons/day_3a_RNA_seq.pdf) |
 | 11:00 - 11:15 | break |
 | 11:15 - 12:30 | [RNA-seq Alignment](lessons/01_rna_seq_alignment.md) |
 | 12:30 - 13:30 | Lunch |
