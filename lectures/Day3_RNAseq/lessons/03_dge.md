@@ -1,9 +1,9 @@
-—
+---
 title: Differential gene expression
 author: Jonathan Vi Perrie
 date: 03/23/2021
 duration: ~2-3h 
-—
+---
 
 
 ### Analysis of RNA-seq in R
@@ -28,7 +28,8 @@ Here, we're not working directly with the full count matrix. Instead, we're taki
 
 As such, it has some extra columns. 
 ```R
-cts <- read.table("GSE153310_Raw_gene_counts_matrix.txt",header=TRUE)
+setwd("Day3/combined_counts/")
+cts <- read.table("counts.tsv",header=TRUE,sep="\t")
 ```
 Output
 ```R
@@ -57,6 +58,10 @@ experiments<-seq(6)
 replicates<-c(1,2,3,1,2,3)
 # Two conditions (
 treatment<-c(rep(1,3),rep(2,3))
+
+meta<-data.frame(matrix(c(experiments,treatment,replicates),6,3))
+rownames(meta)<-meta[,1]
+colnames(meta)<-c("experiment","treatment","replicate")
 
 meta$experiment<-as.factor(meta$experiment)
 meta$treatment<-as.factor(meta$treatment)
