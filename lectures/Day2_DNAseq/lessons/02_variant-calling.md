@@ -54,7 +54,7 @@ $ freebayes -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam > ptA.vcf
 
 ```bash
 $ cd ~/Day2/results
-$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ov -o ptA.bcf
+$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ou -o ptA.bcf
 $ bcftools index ptA.bcf
 $ bcftools view ptA.bcf
 ```
@@ -90,53 +90,15 @@ Below is another example with slightly different fields in the INFO column:
 Now, let's take a look at the one we just generated:
 
 ```bash
-$ head 08008.vcf
+$ bcftools view ptA.bcf
 ```
 
 How does this compare to the 2 examples we have seen so far? How does the ID column compare?
 
-## Filtering VCFs
+---
+# Optional Steps
+## Generating a summary of VCF files
 
-It is very important to filter out low-quality variants before moving to the assessment and annotation steps. Low quality variants usually represent sequencing errors (low quality bases). Freebayes variant quality determination is done as described here: [https://github.com/ekg/freebayes#observation-qualities](https://github.com/ekg/freebayes#observation-qualities).
-
-Today we are going to use `vcftools` to remove entries that have calls with a quality score of lower than 20.
-
-The manual for `vcftools` is [available here](https://vcftools.github.io/man_latest.html), let's take a quick look at it.
-
-So the most basic options you need to specify are input `--vcf <name>` and output `--out <name-filtered>`. There are many different criteria that can be used for filtering the input vcf, below are a few examples.
-
-> Include/exclude specific sites by chromosome:
-
-	--chr 20 
-	--not-chr 20
-	
-> No two sites are within specified distance to one another:
-
-	--thin 5
-	
-> Specify minimum depth for each site:
-
-	--minDP 10
-	
-> Filter by variant type:
-
-	--keep-only-indels 
-	--remove-indels 
-	
-> Include SNPs with specific ID (i.e. dbSNP, this is information we will be adding in the annotation section):
-
-	--snps <string>
-
-We are going to stick with using only the quality score for today's class:
-	
 ```bash
-$ vcftools --vcf 08008.vcf --minQ 20 --recode --recode-INFO-all --out 08008_q20  
+bcftools stats ptA.bcf
 ```
-
-> "`--recode` : These options are used to generate a new file in either VCF or BCF from the input VCF or BCF file after applying the filtering options specified by the user. The output file has the suffix ".recode.vcf" or ".recode.bcf". By default, the INFO fields are removed from the output file, as the INFO values may be invalidated by the recoding (e.g. the total depth may need to be recalculated if individuals are removed). This behavior may be overriden by the following options. By default, BCF files are written out as BGZF compressed files."
-> 
-> "`--recode-INFO-all` : These options can be used with the above recode options to define an INFO key name to keep in the output file. This option can be used multiple times to keep more of the INFO fields. The second option is used to keep all INFO values in the original file."
-> 
-> Information about `recode` adapted from the [VCFtools manual](https://vcftools.github.io/man_latest.html).
-
-Now we are *(almost)* ready to annotate this VCF with known information from dbSNP, and add functional annotation information to enable variant prioritization.

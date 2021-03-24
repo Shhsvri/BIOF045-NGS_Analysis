@@ -46,7 +46,8 @@ We will be using the following softwares. These have been already installed on o
 2. [samtools](https://github.com/samtools/samtools)
 3. [PICARD](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-)
 4. [freebayes](https://github.com/ekg/freebayes)
-5. [IGV](https://software.broadinstitute.org/software/igv/download)
+5. [bcftools](http://samtools.github.io/bcftools/bcftools.html)
+6. [IGV](https://software.broadinstitute.org/software/igv/download)
 
 Depending on the software, you can download and compile the source code using this kind of pattern:
 
