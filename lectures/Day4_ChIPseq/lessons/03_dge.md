@@ -89,7 +89,7 @@ hist(log(rowSums(cts)),breaks=100)
 quantile(rowSums(cts),probs=c(0.01,0.05,0.10,0.20))
 cts <- cts[rowSums(cts)>=36,]
 ```
-![alt text](../Day3_RNAseq/img/hist.png)
+![alt text](../../Day3_RNAseq/img/hist.png)
 
 Okay, now we load the data into DESeq2. The design of this experiment is pretty simply as we are just comparing two populations. 
 But more complex designs could be considered in temporal experiments. e.g. `design= ~ treatment + time`
