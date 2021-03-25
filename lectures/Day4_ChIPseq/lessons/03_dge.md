@@ -69,14 +69,14 @@ cts <- round(cts[,10:15])
 rownames(cts) <-row_data
 ```
 ### Design matrix 
-We need to specify where our replicates and treatments/controls are.
+We need to specify where our replicates and treatments/controls are. A note on experimental design. Since the treatments are labeled as 1 in this case, DESeq2 will measure the fold change from treatment to the control. One could reorder the matrices or assign 2s to the treatments and 1s to the controls to have DESeq2 run from control to treatment. 
 ```R
 # There are six experiments
 experiments<-paste0("experiment",seq(6))
 # Three replicates per condition
 replicates<-rep(paste0("replicate",seq(3)),2)
-# Two conditions (
-treatment<-c(rep(1,3),rep(2",3))
+# Two conditions 
+treatment<-c(rep(1,3),rep(2,3))
 
 meta<-data.frame(matrix(c(experiments,treatment,replicates),6,3))
 rownames(meta)<-meta[,1]
