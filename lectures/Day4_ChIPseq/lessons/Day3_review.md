@@ -112,6 +112,7 @@ After you create the script, you could run it using `source RNAseq_sample2.sh`.
 
 Lastly, we will created a gene matrix using the count tables we obtained from STAR output of sample1 and sample2.
 
+```
 cut -f1,2 sample1_ReadsPerGene.out.tab > count1.txt
 cut -f2 sample2_ReadsPerGene.out.tab > count2.txt
 
