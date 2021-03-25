@@ -8,14 +8,32 @@ duration: ~2-3h
 
 ### Analysis of RNA-seq in R
 
+### Reading in a count matrix constructed with `cut` and `paste`
+```R
+setwd("~/Day4")
+
+# we can see that the first four lines are informative, but are not gene counts 
+sample_counts <- read.table("results/combined_count.tsv",sep="\t",header=FALSE)
+head(sample_counts)
+
+# we can skip those rows either by reassigning sample_counts to its fifth row or skipping 
+# option 1
+sample_counts<-sample_counts[5:dim(sample_counts)[1],]
+# option 2
+sample_counts <- read.table("results/combined_count.tsv",sep="\t",header=FALSE,skip=4)
+
+colnames(sample_counts)<-c("gene","treatment1","control1")
+head(sample_counts)
+```
+
+
 ### Libraries
 ```R
-if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-if (!require("DESeq2")) BiocManager::install("DESeq2")
-if (!require("ggplot2")) install.packages("ggplot2")
-if (!require("colorspace")) install.packages("pheatmap")
-if (!require("pheatmap")) install.packages("colorspace")
-if (!require("org.Hs.eg.db")) BiocManager::install("org.Hs.eg.db")
+library(DESeq2)
+library(ggplot2)
+library(colorspace)
+library(pheatmap)
+library(org.Hs.eg.db)
 ```
 
 ### DESeq2
@@ -28,8 +46,9 @@ Here, we're not working directly with the full count matrix. Instead, we're taki
 
 As such, it has some extra columns. 
 ```R
-setwd("Day3/combined_counts/")
+setwd("~/Day4/combined_counts/")
 cts <- read.table("counts.tsv",header=TRUE,sep="\t")
+colnames(cts)
 ```
 Output
 ```R
@@ -53,11 +72,11 @@ rownames(cts) <-row_data
 We need to specify where our replicates and treatments/controls are.
 ```R
 # There are six experiments
-experiments<-seq(6)
+experiments<-paste0("experiment",seq(6))
 # Three replicates per condition
-replicates<-c(1,2,3,1,2,3)
+replicates<-rep(paste0("replicate",seq(3)),2)
 # Two conditions (
-treatment<-c(rep(1,3),rep(2,3))
+treatment<-c(rep("ASMSCs",3),rep("HDMSCs",3))
 
 meta<-data.frame(matrix(c(experiments,treatment,replicates),6,3))
 rownames(meta)<-meta[,1]
@@ -72,13 +91,13 @@ meta
 Output
 ```R
 > meta
-  experiment treatment replicate
-1          1         1         1
-2          2         1         2
-3          3         1         3
-4          4         2         1
-5          5         2         2
-6          6         2         3
+             experiment treatment  replicate
+experiment1 experiment1    ASMSCs replicate1
+experiment2 experiment2    ASMSCs replicate2
+experiment3 experiment3    ASMSCs replicate3
+experiment4 experiment4    HDMSCs replicate1
+experiment5 experiment5    HDMSCs replicate2
+experiment6 experiment6    HDMSCs replicate3
 ```
 Not every gene will be high quality and by removing some genes with low counts, we can improve DESeq2's statistical power. 
 Here, we filter out some genes. This is a much bigger problem in scRNA-seq where dropout is common. 
@@ -102,7 +121,7 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
 We can then run DESeq2 and order the results by adjusted p-value. 
 ```R
 dds <- DESeq(dds)
-res <- results(dds)
+res <- results(dds,alpha=0.05)
 res <- res[order(res$padj),]
 head(res)
 ```
@@ -158,7 +177,7 @@ pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=m
 
 ![alt text](../../Day3_RNAseq/img/batch_cor.png)
 
-We likelu want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
+We likely want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
 in a 2x2 plot. 
 ```R
 par(mfrow=c(2,2))
@@ -190,6 +209,8 @@ g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline
 ```
 ![alt text](../../Day3_RNAseq/img/volcano.png)
 
+### Pathway enrichment 
+
 We previously plotted a heatmap showing correlations between batches, but we can also use a heatmap to show the difference
 in expression between experiments. By doing this, we can curate a set of genes that have similar expression patterns across 
 experiments and then we can look at what pathways are enriched by the genes. 
@@ -211,7 +232,6 @@ pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
 ```
 ![alt text](../../Day3_RNAseq/img/gene_expr_heatmap.png)
 
-Querying the genes in GO and finding the resulting pathways with the PANTHAR database. 
+One way to find enriched pathways is by compiling a list of genes and then using a browser ontology to find important genes. e.g. querying the genes in GO and finding the resulting pathways with the PANTHAR database. 
 ![alt text](../../Day3_RNAseq/img/go_frontpage.png)
-![alt text](../../Day3_RNAseq/img/panther.png)
-
+![alt text](../../Day3_RNAseq/img/panther.png) 
