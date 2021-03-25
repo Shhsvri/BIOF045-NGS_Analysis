@@ -1,5 +1,5 @@
 ---
-title: Day2 Review
+title: Day3 Review
 author: Shahin Shahsavari
 date: March 2021
 duration: 30 minutes
@@ -37,21 +37,21 @@ $ STAR	--runThreadN 2 \
 3. Convert (compress) your sam file to bam
 
 ```bash
-$ cd results
+$ cd ~/Day4/results
 $ samtools view -b sample1_Aligned.out.sam > sample1.bam
 ```
 
 4. Sort your bam file
 
 ```bash
-samtools sort sample1.bam > sample1.sorted.bam
+$ samtools sort sample1.bam > sample1.sorted.bam
 ```
 
 
-6. generate the index
+5. Index the bam file
 
 ```bash
-samtools index sample1.sorted.bam
+$ samtools index sample1.sorted.bam
 ```
 
 > This generates the index file that ends with `.bai`. You could then view the bam file in IGV.
@@ -66,7 +66,7 @@ A good option for a text editor is `gedit`. It only works on X2go. We will cover
 text editor tomorrow morning.
 
 ```bash
-gedit RNAseq_sample2.sh
+$ gedit RNAseq_sample2.sh
 ```
 ---
 
@@ -76,41 +76,47 @@ gedit RNAseq_sample2.sh
 # BIOF045: 03/25/2021
 # This script for RNA alignment, sorting, indexing, and gene count prep
 
-## 0. set up the file structure change your directory
+## 0. set up the file structure and change your directory
 
-```
-$ cd ~/Day4
-```
+cd ~/Day4
 
 ## 1. STAR alignment with 2 threads
-```
-$ STAR  --runThreadN 2 \
+
+STAR  --runThreadN 2 \
         --genomeDir STAR_chr2_genome/ \
-        --readFilesIn raw_data/sample1.fastq \
+        --readFilesIn raw_data/sample2.fastq \
         --quantMode GeneCounts \
         --outFileNamePrefix results/sample2_
-```
 
 ## 2. Convert sam to bam
-```
-$ samtools view -b results/sample1_Aligned.out.sam > results/sample2.bam
-```
+
+cd ~/Day4/results
+samtools view -b sample2_Aligned.out.sam > sample2.bam
 
 ## 3. Sort your bam file using samtools
-```
-$ samtools sort results/sample2.bam > results/sample2.sorted.bam
-```
+
+samtools sort sample2.bam > sample2.sorted.bam
 
 
 ## 4. Index the bam file
 ###	after this step you could view the bam file in IGV
 
-```
 samtools index sample2.sorted.bam
+
 ```
 
 ---
 
 After you create the script, you could run it using `source DNAseq.sh`.
+
+
+Lastly, we will created a gene matrix using the count tables we obtained from STAR output of sample1 and sample2.
+
+cut -f1,2 sample1_ReadsPerGene.out.tab > count1.txt
+cut -f2 sample2_ReadsPerGene.out.tab > count2.txt
+
+paste count1.txt count2.txt > combined_count.tsv
+
+rm count1.txt count2.txt
 
 ---
