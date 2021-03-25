@@ -120,4 +120,4 @@ paste count1.txt count2.txt > combined_count.tsv
 
 rm count1.txt count2.txt
 
----
+
