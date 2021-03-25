@@ -107,7 +107,7 @@ samtools index sample2.sorted.bam
 
 ---
 
-After you create the script, you could run it using `source DNAseq.sh`.
+After you create the script, you could run it using `source RNAseq_sample2.sh`.
 
 
 Lastly, we will created a gene matrix using the count tables we obtained from STAR output of sample1 and sample2.
