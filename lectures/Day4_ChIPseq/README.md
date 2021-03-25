@@ -1,6 +1,6 @@
 # Schedule for Day 4
 
-## differential gene expression and ChIP-seq introduction
+## Differential gene expression and ChIP-seq introduction
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
