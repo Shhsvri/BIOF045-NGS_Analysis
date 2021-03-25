@@ -76,7 +76,7 @@ experiments<-paste0("experiment",seq(6))
 # Three replicates per condition
 replicates<-rep(paste0("replicate",seq(3)),2)
 # Two conditions (
-treatment<-c(rep("ASMSCs",3),rep("HDMSCs",3))
+treatment<-c(rep(1,3),rep(2",3))
 
 meta<-data.frame(matrix(c(experiments,treatment,replicates),6,3))
 rownames(meta)<-meta[,1]
