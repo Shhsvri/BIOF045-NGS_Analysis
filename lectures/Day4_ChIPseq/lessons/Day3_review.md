@@ -107,7 +107,9 @@ samtools index sample2.sorted.bam
 
 ---
 
-After you create the script, you could run it using `source RNAseq_sample2.sh`.
+After you create the script, you could run it using `source RNAseq_sample2.sh`. This is how you run a script for one STAR alignment, but in reality, multiple alignments are often run at the same time.
+
+[!alt text](../img/how_star_is_run.png)
 
 
 Lastly, we will created a gene matrix using the count tables we obtained from STAR output of sample1 and sample2.
@@ -120,4 +122,4 @@ paste count1.txt count2.txt > combined_count.tsv
 
 rm count1.txt count2.txt
 
-
+```
