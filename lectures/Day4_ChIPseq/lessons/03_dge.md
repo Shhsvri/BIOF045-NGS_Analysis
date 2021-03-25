@@ -154,9 +154,9 @@ plotPCA(rld, intgroup="treatment")
 pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=meta,
          number_format='%.4f',cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](../Day3_RNAseq/img/pca.png)
+![alt text](../../Day3_RNAseq/img/pca.png)
 
-![alt text](../Day3_RNAseq/img/batch_cor.png)
+![alt text](../../Day3_RNAseq/img/batch_cor.png)
 
 We likelu want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
 in a 2x2 plot. 
@@ -168,7 +168,7 @@ plotCounts(dds,gene=mapIds(db,keys="IL18R1",column="ENTREZID",keytype="SYMBOL"),
 plotCounts(dds,gene=mapIds(db,keys="SLC1A4",column="ENTREZID",keytype="SYMBOL"),intgroup="treatment",main="SLC1A4")
 par(mfrow=c(1,1))
 ```
-![alt text](../Day3_RNAseq/img/scatter_plot.png)
+![alt text](../../Day3_RNAseq/img/scatter_plot.png)
 
 Another common approach for visaulization is to use a volcano plot where fold change is on the x-axis and adjusted p-value is
 on the y-axis. 
@@ -188,7 +188,7 @@ g<-ggplot(data.frame(res[!is.na(res$padj),]),aes(x=log2FoldChange,y=-log10(padj)
 g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline(yintercept = abs(log10(0.05)))+theme_bw()+labs(color="")
 
 ```
-![alt text](../Day3_RNAseq/img/volcano.png)
+![alt text](../../Day3_RNAseq/img/volcano.png)
 
 We previously plotted a heatmap showing correlations between batches, but we can also use a heatmap to show the difference
 in expression between experiments. By doing this, we can curate a set of genes that have similar expression patterns across 
@@ -209,9 +209,9 @@ mat <- mat - rowMeans(mat)
 rownames(mat)<-sapply(rownames(mat),findGene)
 pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](../Day3_RNAseq/img/gene_expr_heatmap.png)
+![alt text](../../Day3_RNAseq/img/gene_expr_heatmap.png)
 
 Querying the genes in GO and finding the resulting pathways with the PANTHAR database. 
-![alt text](../Day3_RNAseq/img/go_frontpage.png)
-![alt text](../Day3_RNAseq/img/panther.png)
+![alt text](../../Day3_RNAseq/img/go_frontpage.png)
+![alt text](../../Day3_RNAseq/img/panther.png)
 
