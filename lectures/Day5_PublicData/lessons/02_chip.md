@@ -68,21 +68,12 @@ MACS3 generates various peak sets, summit sets, and bedGraph files. What we are 
 awk 'FNR > 30 { print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_6h_IFNa_peaks.xls > STAT1_6h_IFNa_peaks.bed
 awk 'FNR > 30 { print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_30m_IFNa_peaks.xls > STAT1_30m_IFNa_peaks.bed
 ```
-Next, we need to install HOMER. We will do so in your Day5 folder.
-```
-mkdir homer
-cd homer
-wget http://homer.ucsd.edu/homer/configureHomer.pl
-perl configureHomer.pl -install
-PATH=~/homer/bin/:$PATH
-cd ~
-```
-We need to install the genome hg38
-```
-perl /home/jperrie/day5/homer/.//configureHomer.pl -install hg38
-```
-Finally, we run annotatePeaks.pl
-```
-findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg38 output -size 200 -mask
-```
+Next, we need to install HOMER's genome to the path, create some output directories, and run a HOMER command to find genomes
+hg38 is the reference genome, output_1 is the output directory, size is the window for finding motifs (see http://homer.ucsd.edu/homer/ngs/peakMotifs.html), mask is used to ignore repeat sequences, p is for processors, and bg is for background peaks to constrast with  
 
+```
+PATH=~/homer/:$PATH
+mkdir -p output_1 output_2
+findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg38 output_1 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
+findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg38 output_2 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
+```
