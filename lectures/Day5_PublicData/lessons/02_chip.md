@@ -61,7 +61,28 @@ samtools view -b $1 > tmp
 samtools sort tmp > $baseSam.bam
 samtools index $baseSam.bam
 ```
+After saving this as `samToBam.sh`, it could be run like this:
+```
+./samToBam norm_STAT1_30m_IFNa.sam
+```
+Remember that permissions need to be changed in some cases. 
 
-### Peak calling 
-Finally we covered peak calling 
+### Peak calling (Run again)
+Finally we covered peak calling with MACS3, which uses multiple Possion models to model counts across the genome.
+
+Arguments for MACS3
+```
+# -t treatment
+# -c control
+# -n name prefix
+# --outdir output directory
+# -g human sample
+# --bdg generate bedGraph
+```
+
+Commands for MACS
+```Bash
+macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
+macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
+```
 
