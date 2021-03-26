@@ -80,9 +80,23 @@ Arguments for MACS3
 # --bdg generate bedGraph
 ```
 
-Commands for MACS
+Commands for MACS3 
 ```Bash
 macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
 macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
 ```
-
+MACS3 generates various peak sets, summit sets, and bedGraph files. What we are after is the `*.xls` files as they have the peaks, but they also have some junk at the beginning, so we use `awk` to skip the first 30 lines and select 6 columns in a specification that HOMER wants. 
+```Bash
+awk 'FNR > 30 { print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_6h_IFNa_peaks.xls > STAT1_6h_IFNa_peaks.bed
+awk 'FNR > 30 { print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_30m_IFNa_peaks.xls > STAT1_30m_IFNa_peaks.bed
+```
+Next, we need to install HOMER. We will do so in your Day5 folder.
+```
+mkdir homer
+cd homer
+wget http://homer.ucsd.edu/homer/configureHomer.pl
+perl configureHomer.pl -install
+PATH=$PATH:~/homer/bin/
+source ~/.bash_profile
+cd ~
+```
