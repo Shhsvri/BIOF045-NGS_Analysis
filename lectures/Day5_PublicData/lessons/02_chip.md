@@ -82,8 +82,8 @@ Arguments for MACS3
 
 Commands for MACS3 
 ```Bash
-macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
-macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir ../peaks -g hs --bdg -q 0.05 -f BAM
+macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
+macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
 ```
 MACS3 generates various peak sets, summit sets, and bedGraph files. What we are after is the `*.xls` files as they have the peaks, but they also have some junk at the beginning, so we use `awk` to skip the first 30 lines and select 6 columns in a specification that HOMER wants. 
 ```Bash
