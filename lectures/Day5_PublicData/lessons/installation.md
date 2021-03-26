@@ -15,7 +15,7 @@ wget https://github.com/alexdobin/STAR/archive/2.7.8a.tar.gz
 # Decompress the file using tar
 tar -xzf 2.7.8a.tar.gz
 # Move into the folder you just downloaded
-cd STAR-2.7.8a
+cd STAR-2.7.8a/source
 ```
 
 Depending on the programming language used to create the software, you need a different approach. But with STAR, bwa and most other programs written in `C` and `C++`, you need to run the following:
@@ -35,7 +35,7 @@ echo $PATH
 If you want to have STAR be availabe from any directory, you need to add its installation folder to $PATH as follows:
 
 ```
-PATH=~/Day5/installation/STAR-2.7.8a:$PATH
+PATH=~/Day5/installation/STAR-2.7.8a:source:$PATH
 ```
 
 
