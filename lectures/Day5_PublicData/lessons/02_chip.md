@@ -26,29 +26,7 @@ The reads in the counts for the TFs must be the same as each other, and the read
 Duplicates only need to be removed if there is a lot of low quality reads (nonredundant fraction is high).  Otherwise, you may be removing some of your signal.
 
 I showed you a script you could write for normalizing reads. The script takes in two arguments, the SAM file and the number of reads to downsample to. 
-```Bash
-# filter out mitochondrial DNA and other things from file $1
-sed '/chrM/d/;/random/d;/chrUn/d;/XS:/d' < $1 > filtered_$1
 
-# get the SAM headers
-grep ^@ $1 > header_$1
-
-# get everything but the SAM headers
-sed '/^@/ d' filtered_$1 > noheader_$1
-
-# downsample reads to arg $2
-shuf -n $2 noheader_$1 > noheader_$2
-
-cat header_$1 noheader_$2 > norm_$1
-rm filtered_$1
-rm header_$1
-rm noheader_$1
-rm noheader_$2
-```
-After saving as `normalize_sam.sh`, the script could be run like the following:
-```Bash
-./normalize_sam.sh STAT1_30m_IFNa.sam 11000000
-```
 Note that permissions sometimes have to be changed to run scripts; `chmod 777 normalize_sam` should work. The above command would downsample STAT1_30m_IFNa.sam to 11M reads. 
 
 These downsampled SAM files could then be sorted and indexed in another script:
