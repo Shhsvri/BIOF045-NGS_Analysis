@@ -35,7 +35,7 @@ echo $PATH
 If you want to have STAR be availabe from any directory, you need to add its installation folder to $PATH as follows:
 
 ```
-PATH=~/Day5/installation/STAR-2.7.8a:source:$PATH
+PATH=~/Day5/installation/STAR-2.7.8a/source:$PATH
 ```
 
 
