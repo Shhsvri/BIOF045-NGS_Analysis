@@ -96,7 +96,15 @@ mkdir homer
 cd homer
 wget http://homer.ucsd.edu/homer/configureHomer.pl
 perl configureHomer.pl -install
-PATH=$PATH:~/homer/bin/
-source ~/.bash_profile
+PATH=~/homer/bin/:$PATH
 cd ~
 ```
+We need to install the genome hg38
+```
+perl /home/jperrie/day5/homer/.//configureHomer.pl -install hg38
+```
+Finally, we run annotatePeaks.pl
+```
+findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg38 output -size 200 -mask
+```
+
