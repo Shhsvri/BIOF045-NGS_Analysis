@@ -27,23 +27,6 @@ Duplicates only need to be removed if there is a lot of low quality reads (nonre
 
 I showed you a script you could write for normalizing reads. The script takes in two arguments, the SAM file and the number of reads to downsample to. 
 
-Note that permissions sometimes have to be changed to run scripts; `chmod 777 normalize_sam` should work. The above command would downsample STAT1_30m_IFNa.sam to 11M reads. 
-
-These downsampled SAM files could then be sorted and indexed in another script:
-```Bash
-# get the base name of the SAM file
-baseSam=basename $1 .sam
-
-# convert to BAM, sort, and index
-samtools view -b $1 > tmp
-samtools sort tmp > $baseSam.bam
-samtools index $baseSam.bam
-```
-After saving this as `samToBam.sh`, it could be run like this:
-```
-./samToBam norm_STAT1_30m_IFNa.sam
-```
-Remember that permissions need to be changed in some cases. 
 
 ### Peak calling (Run again)
 Finally we covered peak calling with MACS3, which uses multiple Possion models to model counts across the genome.
