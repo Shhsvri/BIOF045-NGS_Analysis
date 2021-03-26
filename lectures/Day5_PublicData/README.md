@@ -8,4 +8,4 @@
 | 12:30 - 13:30 | Lunch |
 | 13:30 - 14:30 | [Software Installaion](lessons/installation.md) |
 | 14:30 - 14:45 | break |
-| 14:45 - 16:00 | [ChIPSeq](lessons/04_peaks.md) |
+| 14:45 - 16:00 | [ChIPSeq](lessons/02_chip.md) |
