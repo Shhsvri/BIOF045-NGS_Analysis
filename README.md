@@ -18,8 +18,8 @@ RNA sequencing, ChIP sequencing and the use of publicly available datasets.
 
 1.	Understand the necessity for, and use of, the command line interface (bash/shell).
 2.	Perform DNA sequencing alignment and variant detection
-3.	Perform RNA sequencing alignment and differential expression analysis.
-4.	Perform ChIP sequencing and motif analysis
+3.	Perform ChIP sequencing and motif analysis
+4.	Perform RNA sequencing alignment and differential expression analysis.
 5.	Access and use publicly available datasets.
 
 
@@ -29,8 +29,8 @@ RNA sequencing, ChIP sequencing and the use of publicly available datasets.
 |:------------------------:|:----------:|
 | Day1 | [Introduction to Shell and Cloud Computing](lectures/Day1_IntroShell) |
 | Day2 | [DNA Sequencing and Variant Calling](lectures/Day2_DNAseq) |
-| Day3 | [RNA Sequencing and Transcriptomics](lectures/Day3_RNAseq) |
-| Day4 | [ChIP Sequencing and Shell Scripting](lectures/Day4_ChIPseq)
+| Day3 | [ChIP Sequencing and Shell Scripting](lectures/Day3_ChIPseq)
+| Day4 | [RNA Sequencing and Transcriptomics](lectures/Day4_RNAseq) |
 | Day5 | [Accessing Public Data and Capstone Project](lectures/Day5_PublicData) |
 
 
