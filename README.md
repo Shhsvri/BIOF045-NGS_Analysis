@@ -11,7 +11,7 @@ This repository has teaching materials for a 5-day Introduction to Next Generati
 workshop focuses on teaching basic skills to use the command line interface, specifically `bash`, DNA sequencing,
 RNA sequencing, ChIP sequencing and the use of publicly available datasets.
 
-- [Syllabus](Syllabus_Mar21.pdf)
+- [Syllabus](Syllabus_Jul21.pdf)
 
 
 ### Learning Objectives
