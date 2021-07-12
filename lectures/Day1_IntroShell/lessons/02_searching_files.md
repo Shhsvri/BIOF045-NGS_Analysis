@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Searching and Redirection"
 author: "Shahin Shahsavari"
-date: "March 2021"
+date: "July 2021"
 ---
 
 Approximate time: 60 minutes

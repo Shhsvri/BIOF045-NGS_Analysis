@@ -1,7 +1,7 @@
 ---
 title: "Intro to R and Rstudio"
 author: "Shahin Shahsavari"
-date: "Mar 2021"
+date: "July 2021"
 ---
 
 ## Learning Objectives
@@ -57,7 +57,7 @@ To access the RStudio on the FAES Server:
 
 1. Close your X2Go Session.
 2. Open your Web Browser (Chrome, Firefox, etc).
-3. Search for: **3.235.24.141:8787**
+3. Search for: **3.236.171.249:8787**
 4. Insert your Username and Password
 
 <img src="../img/RStudio_Server_login.png" width="600">

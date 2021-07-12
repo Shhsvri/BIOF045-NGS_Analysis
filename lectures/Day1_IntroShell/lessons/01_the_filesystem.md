@@ -1,7 +1,7 @@
 ---
 title: "The Shell"
 author: "Shahin Shahsavari"
-date: "March 2021"
+date: "July 2021"
 ---
 
 ## Learning Objectives
@@ -111,7 +111,7 @@ $ ls
 You will see:
 
 ```
-R_data README.txt  genomics_data  hello  other  raw_fastq  reference_data
+README.txt  R_data  genomics_data  hello  other  raw_fastq  reference_data
 ```
 
 There are seven items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
@@ -135,13 +135,13 @@ $ ls -l
 to see whether items in a directory are files or directories. `ls -l` gives a lot more information too.
 ```
 total 44
--rw-r--r-- 1 shahin shahin   377 Mar 19 10:20 README.txt
-drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 R_data
-drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 genomics_data
--rwxr-xr-x 1 shahin shahin 16840 Mar 19 10:20 hello
-drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 other
-drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 raw_fastq
-drwxr-xr-x 2 shahin shahin  4096 Mar 19 10:20 reference_data
+-rw-r--r-- 1 shahin shahin 379 Jul 11 11:31 README.txt
+drwxr-xr-x 2 shahin shahin 4096 Jul 11 11:31 R_data
+drwxr-xr-x 2 shahin shahin 4096 Jul 11 11:31 genomics_data
+-rwxr-xr-x 1 shahin shahin 16840 Jul 11 11:31 hello
+drwxr-xr-x 2 shahin shahin 4096 Jul 11 11:31 other
+drwxr-xr-x 2 shahin shahin 4096 Jul 11 11:31 raw_fastq
+drwxr-xr-x 2 shahin shahin 4096 Jul 11 11:31 reference_data
 ```
 
 Let's go into the raw\_fastq directory and see what is in there.
@@ -484,7 +484,7 @@ ls -l -h ~/Day1/raw_fastq
 
 In the fourth column you see the size of each of these files, and you can see they are quite large, so we probably do not want to use the `cat` command to look at them. Instead, we can use the `less` command. 
 
-Move back to our `raw\_fastq` directory and enter the following command:
+Move back to our `raw_fastq` directory and enter the following command:
 
 ```bash
 less treated_1.subset.fastq
@@ -523,7 +523,7 @@ $ cp treated_1.subset.fastq treated_1.subset-copy.fastq
 $ ls -l
 ```
 
-Now `treated\_1.subset-copy.fastq` has been created as a copy of `treated\_1.subset.fastq`
+Now `treated_1.subset-copy.fastq` has been created as a copy of `treated_1.subset.fastq`
 
 Let's make a 'backup' directory where we can put this file.
 
