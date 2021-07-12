@@ -51,7 +51,7 @@ To further explore Linux, we are going to log into our teaching server that runs
 1. open the **X2Go Client**
 2. click on session -> New Session
 3. Enter the following:
-	* Host: 3.235.24.141
+	* Host: 3.236.171.249
 	* Login: USERNAME
 	* Session type: XFCE
 
@@ -64,13 +64,13 @@ You should see the content of your Desktop in a new window.
 
 ## 3. Getting started with the Command Line (Terminal/Bash Shell)
 
-In your *Applications*, open the terminal emulator.
+In the *Applications* drop down menu, open the terminal emulator.
 
 <img src="../img/terminal_emulator.png" width="600">
 
 This new window is referred to as the terminal or the shell. If you learn some basic commands, you can get some complicated jobs done with them.
 
-The command prompt will have some characters before it, something like `shahin@172-1-263-6 $`, this is telling what your username and the internal address of the cloud instance you are working on is.
+The command prompt will have some characters before it, something like `shahin@ip-172-31-75-209:~$ `, this is telling what your username and the internal address of the cloud instance you are working on is.
 
 Let's try a few commands:
 
@@ -111,7 +111,7 @@ $ ls
 You will see:
 
 ```
-Intro_to_R  README.txt  genomics_data  hello  other  raw_fastq  reference_data
+R_data README.txt  genomics_data  hello  other  raw_fastq  reference_data
 ```
 
 There are seven items listed. What types of files are they? We can use a "modifier" with `ls` to get more information; this modifier is called an argument (more below).
