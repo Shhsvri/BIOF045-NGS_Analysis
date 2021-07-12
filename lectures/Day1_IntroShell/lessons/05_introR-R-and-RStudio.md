@@ -90,10 +90,10 @@ getwd()
 
 > **NOTE** Every new programming language has its own commands. `getwd()` is the equivalent of terminal's `pwd`.
 
-Let's go into the *Intro_to_R* directory.
+Let's go into the *R_data* directory.
 
 ```r
-setwd("~/Day1/Intro_to_R")
+setwd("~/Day1/R_data")
 ```
 
 
