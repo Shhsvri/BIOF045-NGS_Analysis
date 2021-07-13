@@ -1,7 +1,7 @@
 ---
 title: "Variant calling with Freebayes"
 author: "Shahin Shahsavari"
-date: March 2021
+date: July 2021
 duration: 45
 ---
 
@@ -46,9 +46,12 @@ Let's check the freebayes options:
 $ freebayes -h
 ```
 
+> **DO NOT RUN THIS**
+
 ```bash
 $ freebayes -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam > ptA.vcf
 ```
+Freebayes is a very popular variant caller, however, it takes a long time for it to create vcf files.
 
 #### Running the bcftools Variant Caller (Alternative)
 

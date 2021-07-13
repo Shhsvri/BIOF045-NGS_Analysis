@@ -51,9 +51,8 @@ We will be using the following softwares. These have been already installed on o
 
 Depending on the software, you can download and compile the source code using this kind of pattern:
 
-> **DO NOT RUN THIS**
-
 ```bash
+$ cd ~/Day2/installation
 $ git clone https://github.com/lh3/bwa
 $ cd bwa
 $ make
@@ -172,7 +171,7 @@ It may take some time for the process to complete. When alignment is over, you c
 
 ```bash
 $ cd ~/Day2/results
-$ head -n 500 ptA.sam
+$ head -n 300 ptA.sam
 ```
 
 > Every sam file starts with a header. It contains the reference chromosomes, command that was used to generate it and more. Sam header lines start with "@"
@@ -254,7 +253,7 @@ Now that we have a sorted BAM file that has duplicates marked, we need to ensure
 for it exist. Just like a book that needs a table of contents, a bam file needs an index.
 
 ```bash
-samtools index ptA.markdup.sorted.bam
+$ samtools index ptA.markdup.sorted.bam
 ```
 
 This file is now ready for visualization in IGV or any other visualization tool.
@@ -277,7 +276,7 @@ $ ls -l ptA.markdup*
 
 For the final step, we would like to create a shell script that can run all commands we have used today in one go. As always, it is good practice to leave comments in your shell scripts.
 
-Use vim to write the following into a shell script named "DNA\_alignment.sh":
+Use gedit/vim to write the following into a shell script named "DNA\_alignment.sh":
 
 ```
 #!/bin/bash
