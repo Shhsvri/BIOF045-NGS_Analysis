@@ -98,7 +98,7 @@ $ ls -l backup
 Finally, we decided that we are running out of space on our server and need to remove some files.
 
 ```
-rm backup/*copy.fastq backup
+rm backup/*copy.fastq
 ```
 
 > The `rm` file permanently removes the file. Be careful with this command. The shell doesn't
