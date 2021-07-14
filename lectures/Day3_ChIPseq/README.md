@@ -1,11 +1,11 @@
-# Schedule for Day 4
+# Schedule for Day 3
 
-## Differential gene expression and ChIP-seq introduction
+## Review and ChIP-seq Analysis
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
 | 10:00 - 10:30 | [Day 3 Review](lessons/Day3_review.md) |
-| 10:30 - 11:00 | [Introduction to ChIP-seq and motif analysis](lessons/day_4_ChIP_seq.pdf) |
+| 10:30 - 11:00 | [Introduction to ChIP-seq and motif analysis](lessons/day_3_ChIP_seq_071321.pdf) |
 | 11:00 - 11:15 | break |
 | 11:15 - 12:30 | [Peak calling](lessons/04_peaks.md) |
 | 12:30 - 13:30 | Lunch |
