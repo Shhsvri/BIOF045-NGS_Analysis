@@ -9,6 +9,6 @@
 | 11:15 - 11:30 | break |
 | 11:30 - 13:00 | [Peak calling](lessons/04_peaks.md) |
 | 13:00 - 14:00 | Lunch |
-| 14:00 - 14:45 | [Motif analysis](lessons/02_chip.md)  |
+| 14:00 - 14:45 | [Peak calling](lessons/04_peaks.md) |
 | 14:45 - 15:00 | break |
 | 15:00 - 16:00 | [Motif analysis](lessons/02_chip.md) |
