@@ -1,22 +1,22 @@
-### UCSC genome browser
+## UCSC genome browser
 Now, we want to work with the .bdg files. We need to add metadata to them, so the genome browser can distinguish them. This is a one-liner that does adds the metadata, but you can just manually do this with a text editor.  
 
-```
+```Bash
 echo "$(echo 'track type=bedGraph name=STAT1_30m_IFNa' | cat - STAT1_30m_IFNa_treat_pileup.bdg )" > STAT1_30m_IFNa_treat_pileup.bdg 
 echo "$(echo 'track type=bedGraph name=STAT1_6h_IFNa' | cat - STAT1_6h_IFNa_treat_pileup.bdg )" > STAT1_6h_IFNa_treat_pileup.bdg 
 ```
 Now, we use the browser in X2Go to upload these bedGraph files to the UCSC genome browser at the url: https://genome.ucsc.edu/. 
 
-#### Step 1: go to custom tracks
+### Step 1: go to custom tracks
 ![alt text](../img/p1.png)
-#### Step 2: change genome to hg19 and upload tracks
+### Step 2: change genome to hg19 and upload tracks
 ![alt text](../img/p2.png)
-#### Step 3: go to genome browser
+### Step 3: go to genome browser
 ![alt text](../img/p3.png)
-#### Step 4: change view to chr2:121,538,887-121,660,486
+### Step 4: change view to chr2:121,538,887-121,660,486
 ![alt text](../img/p4.png)
 
-### Motif discovery
+## Motif discovery
 Before we run HOMER, we need to find the differentiable peaks between the sets. We use bedtools to find the distinct peak sets between the two treatments. 
 
 ```Bash
@@ -37,7 +37,7 @@ The general command follows the format: findMotifsGenome.pl <peak/BED file> <gen
 | -mask  | ignore repeats |
 | -bg | background peaks |
 
-```
+```Bash
 mkdir -p output_1 output_2
 findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg19 output_1 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
 findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg19 output_2 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
