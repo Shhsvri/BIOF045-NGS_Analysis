@@ -7,12 +7,13 @@ echo "$(echo 'track type=bedGraph name=STAT1_6h_IFNa' | cat - STAT1_6h_IFNa_trea
 ```
 Now, we use the browser in X2Go to upload these bedGraph files to the UCSC genome browser at the url: https://genome.ucsc.edu/. 
 
+#### Step 1: go to custom tracks
 ![alt text](../img/p1.png)
-
+#### Step 2: change genome to hg19 and upload tracks
 ![alt text](../img/p2.png)
-
+#### Step 3: go to genome browser
 ![alt text](../img/p3.png)
-
+#### Step 4: change view to chr2:121,538,887-121,660,486
 ![alt text](../img/p4.png)
 
 ### Motif discovery
