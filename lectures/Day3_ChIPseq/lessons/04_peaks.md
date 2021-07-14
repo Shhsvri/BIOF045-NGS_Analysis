@@ -114,3 +114,9 @@ cd ../sam_data
 macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
 macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
 ```
+Of interest to us are the .xls and .bedGraph files. The .xls files will be converted to BED files, and in the next section, we will show how the bedGraph files can be displayed on the UCSC genome browser. We use the UNIX utility awk to convert the .xls file into BED files. We want to skip all lines that are not of the BED format. 
+![alt text](../img/macs_output.png)
+```
+awk '$1 ~ /chr/ {print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_30m_IFNa_peaks.xls > STAT1_30m_IFNa_peaks.bed
+awk '$1 ~ /chr/ {print $1"\t"$2"\t"$3"\t"$10"\t"$7"\t."}' STAT1_6h_IFNa_peaks.xls > STAT1_6h_IFNa_peaks.bed
+```
