@@ -82,7 +82,7 @@ OR
 ##### bcftools
 
 ```bash
-bcftools mpileup -Ou -f ref.fa aln.bam | bcftools call -mv -Ob -o var.bcf
+bcftools mpileup -Ob -f ref.fa aln.bam | bcftools call -mv -Ob -o var.bcf
 bcftools index var.bcf
 ```
 
@@ -112,7 +112,7 @@ gedit DNAseq.sh
 ```bash
 #!/bin/bash
 
-# BIOF045: 03/23/2021
+# BIOF045: 07/14/2021
 # This script for DNA alignment, sorting, and indexing
 
 ## 0. set up the file structure change your directory
