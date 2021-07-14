@@ -44,45 +44,73 @@ Normally, we would go right ahead and turn it into a bam file, but we need to no
 
 ```
 cd results
-less STAT1_6h_IFNa.sam # q to exit less 
-
-
-
-
-
+less STAT1_6h_IFNa.sam
 ```
-Lets make a script for downsampling reads 
+Lets make a script for downsampling reads and getting rid of reads mapped to non-standard chromosomes 
 ```
-# filter out mitochondrial DNA and other things from file $1
-sed '/chrM/d/;/random/d;/chrUn/d;/XS:/d' < $1 > filtered_$1
+#!/bin/bash
+# filter out mitochondrial DNA, random chromosomes, clone contigs, other alignments and headers from SAM file $1
+grep -v ^@ $1 | grep -v 'chrM' | grep -v 'random' | grep -v 'chrUn' | grep -v 'XS' > no_header_$1
 
-# get the SAM headers
+# get headers from SAM file $1
 grep ^@ $1 > header_$1
 
-# get everything but the SAM headers
-sed '/^@/ d' filtered_$1 > noheader_$1
+# downsample reads to integer argument $2
+shuf -n $2 no_header_$1 > no_header_$2_$1
 
-# downsample reads to arg $2
-shuf -n $2 noheader_$1 > noheader_$2
+# append downsampled reads with header
+cat header_$1 no_header_$2_$1 > norm_$1
 
-cat header_$1 noheader_$2 > norm_$1
-rm filtered_$1
+# remove temporary files
 rm header_$1
-rm noheader_$1
-rm noheader_$2
+rm no_header_$1
+rm no_header_$2_$1
 ```
-
-Okay now lets play a script for converting SAM to indexed BAM
+When we run the script, we create a new file with 11,000,000 reads named norm_STAT1_6h_IFNa.sam
 ```
-baseSam=basename $1 .sam
+bash downsample_reads.sh STAT1_6h_IFNa.sam 11000000
+wc -l *.sam
+```
+![alt text](../img/wcl_sam.png)
 
+Okay now lets write a script for converting the SAM file to an indexed BAM file using Samtools
+```
+#!/bin/bash
+# get base name of file
+baseSam=`basename $1 .sam`
+
+# convert to BAM file
 samtools view -b $1 > tmp
+
+# sort by leftmost coordinates (start)
 samtools sort tmp > $baseSam.bam
+
+# generate index for BAM file
 samtools index $baseSam.bam
+
+# remove tempoary files
+rm tmp
 ```
+After running this script, we will have a similar type of file to those in ~/Day3/sam_data
+```
+bash sam_to_bam.sh norm_STAT1_6h_IFNa.sam
+```
+While we don't do this here, reads can be QC'd by removing duplicates, blacklist regions, and computing the fraction of reads in peaks. 
+![alt text](../img/mappable.png)
 
 ### Calling peaks with macs 
+| arguments  | definition |
+| ------------- | ------------- |
+| -t | treatment |
+| -c | control |
+| -n | name |
+| --outdir | output directory | 
+| -g hs | human species genome |
+| --bgd | generate bedGraph files of piled up fragments | 
+| -q 0.05 | q-value cutoff | 
+| -f BAM | input file type | 
 ```
+cd ../sam_data
 macs3 callpeak -t norm_STAT1_30m_IFNa.bam -c norm_INP_30m_IFNa.bam -n STAT1_30m_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
 macs3 callpeak -t norm_STAT1_6h_IFNa.bam -c norm_INP_6h_IFNa.bam -n STAT1_6h_IFNa --outdir . -g hs --bdg -q 0.05 -f BAM
 ```
