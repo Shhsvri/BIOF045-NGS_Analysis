@@ -1,7 +1,7 @@
 ---
 title: "RNAseq Alignment with STAR"
 author: "Shahin Shahsavari"
-date: March 2021
+date: July 2021
 ---
 
 Approximate time: 90 minutes
@@ -47,16 +47,16 @@ The following softwares are installed on the course server for bulk RNAseq:
 
 ### 1.1 QC
 
-Similar to what we did yesterday, we will start off with the quality step. We will make use of the `fastqc` command to generate an **html** file which we could view in a browser.
+Similar to what we did for DNAseq and ChiPseq, we will start off with the quality step. We will make use of the `fastqc` command to generate an **html** file which we could view in a browser.
 
 ```bash
-$ cd ~/Day3/raw_data
+$ cd ~/Day4/raw_data
 $ fastqc sample1.fastq
 $ firefox sample1_fastqc.html
 $ mv sample1_fastqc.html ~/Day2/quality_control
 ```
 
-> **NOTE:** Most of the times, we won't be able to run a Graphical Interface on the server computer. In that case, you could transfer the files to your local computer using *FileZilla*.
+> **NOTE:** Most of the times, we won't be able to run a Graphical Interface on the server computer. In that case, you could transfer the files to your local computer using *FileZilla* or `scp`.
 
 Now that we have explored the quality of our raw reads, we can move on to read alignment. We perform read alignment or mapping to determine where in the genome the reads originated from. The alignment process consists of choosing an appropriate reference genome to map our reads against and performing the read alignment using one of several splice-aware alignment tools such as [STAR](http://bioinformatics.oxfordjournals.org/content/early/2012/10/25/bioinformatics.bts635) or [HISAT2](http://ccb.jhu.edu/software/hisat2/index.shtml). The choice of aligner is often a personal preference and also dependent on the computational resources that are available to you.
 

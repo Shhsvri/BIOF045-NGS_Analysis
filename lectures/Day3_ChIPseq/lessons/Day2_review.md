@@ -1,7 +1,7 @@
 ---
 title: Day2 Review
 author: Shahin Shahsavari
-date: March 2021
+date: July 2021
 duration: 30 minutes
 ---
 
