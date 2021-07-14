@@ -5,7 +5,11 @@ Now, we want to work with the .bdg files. We need to add metadata to them, so th
 echo "$(echo 'track type=bedGraph name=STAT1_30m_IFNa' | cat - STAT1_30m_IFNa_treat_pileup.bdg )" > STAT1_30m_IFNa_treat_pileup.bdg 
 echo "$(echo 'track type=bedGraph name=STAT1_6h_IFNa' | cat - STAT1_6h_IFNa_treat_pileup.bdg )" > STAT1_6h_IFNa_treat_pileup.bdg 
 ```
-Now, we use the browser in X2Go to upload these bedGraph files to the UCSC genome browser at the url: https://genome.ucsc.edu/. 
+Now, we use the browser in X2Go to upload these bedGraph files to the UCSC genome browser at the url: https://genome.ucsc.edu/. If you are not using the X2Go browser, you can transfer these files to your local computer.
+```Bash
+USER=`echo jonathan`
+scp $USER@3.236.171.249:/home/$USER/Day3/sam_data/*.bdg .
+```
 
 ### Step 1: go to custom tracks
 ![alt text](../img/p1.png)
@@ -45,4 +49,20 @@ findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg19 output_2 -size 200 -m
 
 If you navigate to the output_1 folder, you can find the known and novel Motifs that HOMER generates in knownResults.html and homerResults.html files respectively, but in our case, there are no known motifs that are identified. 
   
+If you are not on X2Go, then tar the output folders and pass them to your local computer.
+  
+#### Within server
+```Bash
+tar czvf output_1.tar.gz output_1
+tar czvf output_2.tar.gz output_2
+```
+#### On local computer
+```
+USER=`echo jonathan`
+scp $USER@3.236.171.249:/home/$USER/Day3/sam_data/*.tar.gz .  
+tar xzvf output_1.tar.gz
+tar xzvf output_2.tar.gz
+```
+  
 ![alt text](../img/homer_output.png)
+  
