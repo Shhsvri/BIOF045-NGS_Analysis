@@ -1,5 +1,21 @@
-# UCSC genome browser
-We are working with the same data as before. 
+### UCSC genome browser
+Now, we want to work with the .bdg files. We need to add metadata to them, so the genome browser can distinguish them. This is a one-liner that does adds the metadata, but you can just manually do this with a text editor.  
+
+```
+echo "$(echo 'track type=bedGraph name=STAT1_30m_IFNa' | cat - STAT1_30m_IFNa_treat_pileup.bdg )" > STAT1_30m_IFNa_treat_pileup.bdg 
+echo "$(echo 'track type=bedGraph name=STAT1_6h_IFNa' | cat - STAT1_6h_IFNa_treat_pileup.bdg )" > STAT1_6h_IFNa_treat_pileup.bdg 
+```
+Now, we use the browser in X2Go to upload these bedGraph files to the UCSC genome browser at the url: https://genome.ucsc.edu/. 
+
+![alt text](../img/p1.png)
+
+![alt text](../img/p2.png)
+
+![alt text](../img/p3.png)
+
+![alt text](../img/p4.png)
+
+### Motif discovery
 
 Then, we run bedtools to exclude the common peaks between the two files and obtain the sets of distinct peaks per sample.
 
