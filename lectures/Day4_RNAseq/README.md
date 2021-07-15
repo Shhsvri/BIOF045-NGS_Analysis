@@ -13,5 +13,6 @@
 | 14:00 - 14:30 | [Introduction to Differential Gene Expression](lessons/RNAseq_B.pdf) |
 | 14:30 - 14:45 | break |
 | 14:45 - 16:00 | [DGE in R](lessons/03_dge.md) |
+| extra         | [VIM text editor](lessons/extra_vim.md) |
 
 ---
