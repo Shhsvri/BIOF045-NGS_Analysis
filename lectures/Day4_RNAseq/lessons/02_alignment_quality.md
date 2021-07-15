@@ -1,7 +1,7 @@
 ---
 title: "Assessing the output of STAR"
 author: "Shahin Shahsavari"
-date: "March 2021"
+date: "July 2021"
 ---
 
 Approximate time: 30 minutes
@@ -27,7 +27,7 @@ $ samtools index sample1.sorted.bam
 Then let's take a quick look at some of the files that were generated and explore the content of some of them. 
 
 ```bash
-$ cd ~/Day3/results	
+$ cd ~/Day4/results	
 $ ls -l -h
 ```
 
@@ -53,18 +53,6 @@ The log file provides information on reads that 1) mapped uniquely, 2) reads tha
 
 > NOTE: The thresholds suggested above will vary depending on the organism that you are working with. Much of what is discussed here is in the context of working with human or mouse data. For example, 75% of mapped reads holds true only if the genome is good or mature. For badly assembled genomes we may not observe a high mapping rate, even if the actual sequence sample is good.
 
----
-
-**Exercise**
-
-Using the `head` or `less` command take a look at `sample1_Log.final.out` and answer the following questions:
-
-1. How many reads map to more than 10 locations on the genome?
-2. How many reads are unmapped due to read length?
-3. What is the average mapped length per read?
-
----
-
 
 ## Other quality checks
 
@@ -86,7 +74,7 @@ By default, `samtools view` excludes the header lines.`samtools view -h` writes 
 
 ```
 $ samtools view -H
-$ samtools view -h Mov10_oe_1_Aligned.sortedByCoord.out.bam | less
+$ samtools view -h sample1.sorted.bam | less
 
 ``` 
 
@@ -95,7 +83,7 @@ $ samtools view -h Mov10_oe_1_Aligned.sortedByCoord.out.bam | less
 > Now we know that we have all of this information for each of the reads -- wouldn't it be useful to summarize and filter based on selected criteria? Suppose we wanted to set a **threshold on mapping quality**. For example, we want to know how many reads aligned with a quality score higher than 30. To do this, we can combine the `view` command with additional flags `q 30` and `-c` (to count):
 > 
 > ```
-> $ samtools view -q 30 sample1_Aligned.sortedByCoord.out.bam
+> $ samtools view -q 30 sample1.sorted.bam
 > 
 > ```
 > *How many of reads have a mapping quality of 30 or higher?*
@@ -107,14 +95,12 @@ $ samtools view -h Mov10_oe_1_Aligned.sortedByCoord.out.bam | less
 > 
 > ```
 > ## This will tell us how many reads are unmapped
-> $ samtools view -f 4 -c Mov10_oe_1_Aligned.sortedByCoord.out.bam
+> $ samtools view -f 4 -c sample1.sorted.bam
 > 
 > ## This should give us the remaining reads that do not have this flag set (i.e reads that are mapped)
-> $ samtools view -F 4 -c Mov10_oe_1_Aligned.sortedByCoord.out.bam
+> $ samtools view -F 4 -c sample1.sorted.bam
 > ```
 
-
-This will create an index in the same directory as the BAM file, which will be identical to the input file in name but with an added extension of `.bai`.
 
 ****
 

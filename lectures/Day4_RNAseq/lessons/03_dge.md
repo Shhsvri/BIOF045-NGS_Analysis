@@ -47,10 +47,10 @@ First, we look at the distribution of gene counts summed across all experiments.
 ```R
 > rowSums(counts) %>% log() %>% hist(breaks=100)
 > rowSums(counts) %>% quantile(probs=c(0.01,0.05,0.10,0.20))
-> counts_filtered <- counts[rowSums(counts)>=10,]
+> filter(counts, rowSums(counts) >= 36)
 ```
 
-![alt text](../../Day3_RNAseq/img/hist.png)
+![alt text](../../Day4_RNAseq/img/hist.png)
 
 Okay, now we load the data into DESeq2. The design of this experiment is pretty simply as we are just comparing two populations. 
 
@@ -100,9 +100,9 @@ plotPCA(rld, intgroup="treatment")
 pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=meta,
          number_format='%.4f',cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](../../Day3_RNAseq/img/pca.png)
+![alt text](../../Day4_RNAseq/img/pca.png)
 
-![alt text](../../Day3_RNAseq/img/batch_cor.png)
+![alt text](../../Day4_RNAseq/img/batch_cor.png)
 
 We likely want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
 in a 2x2 plot. 
@@ -114,7 +114,7 @@ plotCounts(dds,gene="IL18R1",intgroup="treatment",main="IL18R1")
 plotCounts(dds,gene="SLC1A4",intgroup="treatment",main="SLC1A4")
 par(mfrow=c(1,1))
 ```
-![alt text](../../Day3_RNAseq/img/scatter_plot.png)
+![alt text](../../Day4_RNAseq/img/scatter_plot.png)
 
 Another common approach for visaulization is to use a volcano plot where fold change is on the x-axis and adjusted p-value is
 on the y-axis. 
@@ -134,7 +134,7 @@ g<-ggplot(data.frame(res[!is.na(res$padj),]),aes(x=log2FoldChange,y=-log10(padj)
 g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline(yintercept = abs(log10(0.05)))+theme_bw()+labs(color="")
 
 ```
-![alt text](../../Day3_RNAseq/img/volcano.png)
+![alt text](../../Day4_RNAseq/img/volcano.png)
 
 ### Pathway enrichment 
 
@@ -149,8 +149,8 @@ mat <- assay(rld)[ topVarGenes, ]
 mat <- mat - rowMeans(mat)
 pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-![alt text](../../Day3_RNAseq/img/gene_expr_heatmap.png)
+![alt text](../../Day4_RNAseq/img/gene_expr_heatmap.png)
 
 One way to find enriched pathways is by compiling a list of genes and then using a browser ontology to find important genes. e.g. querying the genes in GO and finding the resulting pathways with the PANTHER database. 
-![alt text](../../Day3_RNAseq/img/go_frontpage.png)
-![alt text](../../Day3_RNAseq/img/panther.png) 
+![alt text](../../Day4_RNAseq/img/go_frontpage.png)
+![alt text](../../Day4_RNAseq/img/panther.png) 

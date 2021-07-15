@@ -24,7 +24,7 @@ To start with variant calling, we need to set-up our directory structure, and en
 In order to remain organized, I always prepare my directory as follows using `mkdir`:
 
 ```
-~/Day3/
+~/Day4/
     ├── raw_data/
     ├── quality_control/
     ├── results/
@@ -53,7 +53,7 @@ Similar to what we did for DNAseq and ChiPseq, we will start off with the qualit
 $ cd ~/Day4/raw_data
 $ fastqc sample1.fastq
 $ firefox sample1_fastqc.html
-$ mv sample1_fastqc.html ~/Day2/quality_control
+$ mv *fastqc* ~/Day2/quality_control
 ```
 
 > **NOTE:** Most of the times, we won't be able to run a Graphical Interface on the server computer. In that case, you could transfer the files to your local computer using *FileZilla* or `scp`.
@@ -120,7 +120,7 @@ $ ls -l STAR_chr2_genome/
 This is a good time to also explore the reference file types we are using for RNAseq:
 
 ```bash
-$ cd ~/Day3/STAR_chr2_genome/
+$ cd ~/Day4/STAR_chr2_genome/
 $ ls -l -h
 $ head GRCh38_chr2.gtf
 $ head GRCh38_chr2.fa
@@ -158,7 +158,7 @@ The basic options to **generate genome indices** using STAR are as follows:
 
 
 ```bash
-cd ~/Day3/reference_test
+cd ~/Day4/reference_test
 STAR	--runThreadN 2 \
 	--runMode genomeGenerate \
 	--genomeDir . \
@@ -194,7 +194,7 @@ We can access the software by simply using the STAR command followed by the basi
 
 
 ```bash
-cd ~/Day3
+cd ~/Day4
 
 STAR	--runThreadN 2 \
 	--genomeDir STAR_chr2_genome/ \

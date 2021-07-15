@@ -44,7 +44,7 @@ The general command follows the format: findMotifsGenome.pl <peak/BED file> <gen
 ```Bash
 mkdir -p output_1 output_2
 findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg19 output_1 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
-findMotifsGenome.pl STAT1_30m_IFNa_distinct_peaks.bed hg19 output_2 -size 200 -mask -p 2 -bg STAT1_6h_IFNa_distinct_peaks.bed 
+findMotifsGenome.pl STAT1_6h_IFNa_distinct_peaks.bed  hg19 output_2 -size 200 -mask -p 2 -bg STAT1_30m_IFNa_distinct_peaks.bed
 ```
 
 If you navigate to the output_1 folder, you can find the known and novel Motifs that HOMER generates in knownResults.html and homerResults.html files respectively, but in our case, there are no known motifs that are identified. 

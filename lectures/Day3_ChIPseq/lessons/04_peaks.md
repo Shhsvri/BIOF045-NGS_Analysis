@@ -9,7 +9,7 @@ This is a time course experiment for binding at STAT1 sites across the hg19 geno
 The other files have been processed as downsampled BAM files. They have already been aligned and processed. We are looking at STAT1_6h_IFNa.fastq
 ```Bash
 cd ~/Day3
-mkdir -p results 
+mkdir results 
 cd raw_data
 head STAT1_6h_IFNa.fastq
 ```
@@ -30,6 +30,7 @@ BACA=C<,?B(%%<*CB8BCC/C9,A<
 | --no-unal | supress output for records that didn't align | 
 
 ```Bash
+cd ~/Day3
 bowtie2 -q -p 2 -k 1 --local --no-unal -x genome/hg19 raw_data/STAT1_6h_IFNa.fastq > results/STAT1_6h_IFNa.sam
 ```
 
@@ -44,52 +45,50 @@ Normally, we would go right ahead and turn it into a bam file, but we need to no
 
 ```Bash
 cd results
-less STAT1_6h_IFNa.sam
+head -n 200 STAT1_6h_IFNa.sam
 ```
 Lets make a script for downsampling reads and getting rid of reads mapped to non-standard chromosomes 
 ```Bash
 #!/bin/bash
-# filter out mitochondrial DNA, random chromosomes, clone contigs, other alignments and headers from SAM file $1
-grep -v ^@ $1 | grep -v 'chrM' | grep -v 'random' | grep -v 'chrUn' | grep -v 'XS' > no_header_$1
+# filter out mitochondrial DNA, random chromosomes, clone contigs, other alignments and headers from SAM file STAT1_6h_IFNa.sam
+grep -v '^@' STAT1_6h_IFNa.sam | grep -v 'chrM' | grep -v 'random' | grep -v 'chrUn' | grep -v 'XS' > no_header_STAT1_6h_IFNa.sam
 
-# get headers from SAM file $1
-grep ^@ $1 > header_$1
+# get headers from SAM file STAT1_6h_IFNa.sam
+grep @ STAT1_6h_IFNa.sam > header_STAT1_6h_IFNa.sam
 
 # downsample reads to integer argument $2
-shuf -n $2 no_header_$1 > no_header_$2_$1
+shuf -n 11000000 no_header_STAT1_6h_IFNa.sam > no_header_11000000_STAT1_6h_IFNa.sam
 
 # append downsampled reads with header
-cat header_$1 no_header_$2_$1 > norm_$1
+cat header_STAT1_6h_IFNa.sam no_header_11000000_STAT1_6h_IFNa.sam > norm_STAT1_6h_IFNa.sam
 
 # remove temporary files
-rm header_$1
-rm no_header_$1
-rm no_header_$2_$1
+rm header_STAT1_6h_IFNa.sam
+rm no_header_STAT1_6h_IFNa.sam
+rm no_header_11000000_STAT1_6h_IFNa.sam
 ```
-When we run the script, we create a new file with 11,000,000 reads named norm_STAT1_6h_IFNa.sam
 ```Bash
-bash downsample_reads.sh STAT1_6h_IFNa.sam 11000000
 wc -l *.sam
 ```
 ![alt text](../img/wcl_sam.png)
 
 Okay now lets write a script for converting the SAM file to an indexed BAM file using Samtools
+
 ```Bash
 #!/bin/bash
-# get base name of file
-baseSam=`basename $1 .sam`
 
+cd ~/Day3/results
 # convert to BAM file
-samtools view -b $1 > tmp
+samtools view -b norm_STAT1_6h_IFNa.sam > norm_STAT1_6h_IFNa.bam
 
 # sort by leftmost coordinates (start)
-samtools sort tmp > $baseSam.bam
+samtools sort norm_STAT1_6h_IFNa.bam > norm_STAT1_6h_IFNa.sorted.bam
 
 # generate index for BAM file
-samtools index $baseSam.bam
+samtools index norm_STAT1_6h_IFNa.sorted.bam
 
 # remove tempoary files
-rm tmp
+norm_STAT1_6h_IFNa.bam
 ```
 After running this script, we will have a similar type of file to those in ~/Day3/sam_data
 ```Bash
