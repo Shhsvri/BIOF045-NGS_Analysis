@@ -112,7 +112,6 @@ plotCounts(dds,gene="FZD7",intgroup="treatment",main="FZD7")
 plotCounts(dds,gene="IL1RL1",intgroup="treatment",main="IL1RL1")
 plotCounts(dds,gene="IL18R1",intgroup="treatment",main="IL18R1")
 plotCounts(dds,gene="SLC1A4",intgroup="treatment",main="SLC1A4")
-par(mfrow=c(1,1))
 ```
 ![alt text](../../Day4_RNAseq/img/scatter_plot.png)
 
