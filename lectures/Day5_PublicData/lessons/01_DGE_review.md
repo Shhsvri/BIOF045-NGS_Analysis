@@ -1,21 +1,10 @@
-test
-
 # DGE Review
 
 ![alt text](..//img/jq1_bet.png)
 
 Here, we will be reviewing the commands we did before, but we will be using a cleaner data set that looks at how BET inhibition affects cancer cells. 
 
-### Data
-Our data can be found on GitHub. It is in the data directory. We want to move it to our server. Now, the command for doing that from your Downloads folder in temrinal would be:
-```Bash
-# scp old_location new location
-scp metadata2.csv username@3.235.24.141:/home/username/day5/combined_counts
-scp counts2.tsv username@3.235.24.141:/home/username/day5/combined_counts
-```
-
-We will cover this more in the retrieval of public data section today. So now, in R, we want to filter low quality counts out. 
-
+## Data
 
 ### Libraries 
 ```R
@@ -58,7 +47,7 @@ res_ordered <- res[order(res$padj),]
 rld <- rlog(dds, blind=FALSE)
 plotPCA(rld, intgroup="treatment")
 
-colnames(rld)<-seq(6)
+colnames(rld) <- rownames(metadata)
 pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=metadata,
          number_format='%.4f',cluster_rows=FALSE,cluster_cols=FALSE)
 ```
@@ -95,9 +84,3 @@ mat <- mat - rowMeans(mat)
 rownames(mat)<-sapply(rownames(mat),findGene)
 pheatmap(mat,annotation_col=design,cluster_rows=FALSE,cluster_cols=FALSE)
 ```
-
- 
-
-
-
-

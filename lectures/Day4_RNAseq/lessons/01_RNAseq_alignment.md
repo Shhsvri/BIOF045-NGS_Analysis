@@ -114,16 +114,16 @@ Aligning reads using STAR is a two step process:
 
 
 ```bash
-$ ls -l STAR_chr2_genome/
+$ ls -l reference_test/
 ```
 
 This is a good time to also explore the reference file types we are using for RNAseq:
 
 ```bash
-$ cd ~/Day4/STAR_chr2_genome/
+$ cd ~/Day4/reference_test/
 $ ls -l -h
-$ head GRCh38_chr2.gtf
-$ head GRCh38_chr2.fa
+$ head GRCh38_chr19.gtf
+$ head GRCh38_chr19.fa
 ```
 ### GTF (Gene Transfer Format) file
 
@@ -133,7 +133,7 @@ $ head GRCh38_chr2.fa
 
 **Exercise**
 
-* count the number of lines in `GRCh38_chr2.fa`
+* count the number of lines in `GRCh38_chr19.fa`
 * confirm that you only have one chromosome in it
 * What is the size of the chromosome2 fasta file?
 * What is the size of the complete hg38 human reference? **hint:** use the Day2 reference at `~/Day2/genome`

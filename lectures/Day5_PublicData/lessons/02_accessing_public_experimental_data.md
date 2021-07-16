@@ -79,7 +79,7 @@ While navigating the GEO website is a perfectly fine way to download data from G
 We will now use the secure shell (`ssh`) command using the 'Terminal' program for Macs or 'Power Shell' for Windows (Use PuTTY if you don't have the latest updates). In the console from these programs, type:
 
 ```bash
-$ ssh username@3.237.4.148
+$ ssh username@3.236.171.249
 ```
 
 You will be prompted to enter your password.
@@ -89,9 +89,7 @@ This is the common way to access most servers in a secure manner.
 Now, we can download our data to an appropriate directory. Good data management practices will ensure we have an organized project directory for our analysis. We can create and change directories to the folder to which we plan to download the data.
 
 ```bash
-$ mkdir -p ~/access_public_data/GEO/counts
-
-$ cd ~/access_public_data/GEO/counts
+$ cd ~/Day5/GEO
 ```
 
 To access the FTP site, return to the [GEO home page](https://www.ncbi.nlm.nih.gov/geo/) and under the "Tools" header, click on "FTP site".
@@ -126,18 +124,18 @@ To download the data associated with the paper, "MOV10 and FMRP Regulate AGO2 As
 
 **Exercises**
 
-1. What command would we use to download the data from this [paper](https://immunology.sciencemag.org/content/5/49/eabd1554.long): 
+1. What command would we use to download the data from this [paper](https://www.nature.com/articles/s41590-020-0607-7): 
 
-	<img src="../img/study_exercise_head.png" width="500">
-	
-	>
-	>_**NOTE:** If you wanted to unpack the `.tar` file and decompress the `.gz` files, you could use the following commands:_
-	>
-	>```bash
-	>$ tar -xvf GSE111889_RAW.tar 
-	>
-	>$ for file in *.gz; do gunzip $all; done
-	>```
+<img src="../img/study_exercise_head.png" width="500">
+
+>
+> _**NOTE:** If you wanted to unpack the `.tar` file and decompress the `.gz` files, you could use the following commands:_
+>
+>```bash
+>$ tar -xvf GSE111889_RAW.tar 
+>
+>
+>```
 
 ---
 
