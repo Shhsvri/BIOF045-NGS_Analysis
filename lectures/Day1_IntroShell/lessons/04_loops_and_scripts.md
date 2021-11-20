@@ -1,7 +1,7 @@
 ---
 title: "The Shell: Loops & Scripts"
 author: "Shahin Shahsavari"
-date: "Mar 2021"
+date: "November 2021"
 ---
 
 Approximate time: 60 minutes

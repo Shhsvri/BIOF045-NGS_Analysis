@@ -1,7 +1,7 @@
 ---
 title: "Intro to R and Rstudio"
 author: "Shahin Shahsavari"
-date: "July 2021"
+date: "November 2021"
 ---
 
 ## Learning Objectives

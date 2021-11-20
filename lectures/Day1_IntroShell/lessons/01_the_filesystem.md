@@ -1,7 +1,7 @@
 ---
 title: "The Shell"
 author: "Shahin Shahsavari"
-date: "July 2021"
+date: "November 2021"
 ---
 
 ## Learning Objectives
@@ -51,7 +51,7 @@ To further explore Linux, we are going to log into our teaching server that runs
 1. open the **X2Go Client**
 2. click on session -> New Session
 3. Enter the following:
-	* Host: 3.236.171.249
+	* Host: 34.238.117.41
 	* Login: USERNAME
 	* Session type: XFCE
 
@@ -151,8 +151,8 @@ $ cd raw_fastq/
 
 $ ls -F
 
-treated_1.subset.fastq  treated_3.subset.fastq  untreated_2.fastq
-treated_2.subset.fastq  untreated_1.fastq       untreated_3.fastq
+treated_1.fastq  treated_3.fastq  untreated_2.fastq
+treated_2.fastq  untreated_1.fastq       untreated_3.fastq
 ```
 
 The six items in this directory have no trailing slashes, so they are all files, not folders or programs.
@@ -276,7 +276,7 @@ You should now be in `raw_fastq` and you got there without having to go through 
 
 **Exercise 2**
 
-List the `treated_1.subset.fastq` file from your home directory without changing directories
+List the `treated_1.fastq` file from your home directory without changing directories
 
 ---
 
@@ -487,26 +487,26 @@ In the fourth column you see the size of each of these files, and you can see th
 Move back to our `raw_fastq` directory and enter the following command:
 
 ```bash
-less treated_1.subset.fastq
+less treated_1.fastq
 ```
 
 We will explore FASTQ files in more detail later, but notice that FASTQ files have four lines of data associated with every sequence read. Not only is there a header line and the nucleotide sequence, similar to a FASTA file, but FASTQ files also contain quality information for each nucleotide in the sequence. 
 
 
 ```bash
-$ head treated_1.subset.fastq
+$ head treated_1.fastq
 ```
 
 ```bash
-$ tail treated_1.subset.fastq
+$ tail treated_1.fastq
 ```
 
 The `-n` option to either of these commands can be used to print the first or last `n` lines of a file. To print the first/last line of the file use:
 
 ```bash
-$ head -n 1 treated_1.subset.fastq
+$ head -n 1 treated_1.fastq
 
-$ tail -n 1 treated_1.subset.fastq
+$ tail -n 1 treated_1.fastq
 ```
 
 ## Creating, moving, copying, and removing
@@ -518,12 +518,12 @@ Our raw data in this case is fastq files. We don't want to change the original f
 Lets copy the file using the copy `cp` command. Navigate to the `raw\_fastq` directory and enter:
 
 ```bash
-$ cp treated_1.subset.fastq treated_1.subset-copy.fastq
+$ cp treated_1.fastq treated_1-copy.fastq
 
 $ ls -l
 ```
 
-Now `treated_1.subset-copy.fastq` has been created as a copy of `treated_1.subset.fastq`
+Now `treated_1-copy.fastq` has been created as a copy of `treated_1.fastq`
 
 Let's make a 'backup' directory where we can put this file.
 
@@ -545,7 +545,7 @@ $ mv *copy.fastq backup/
 ```bash
 $ ls -l backup/
 
--rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 treated_1.subset-copy.fastq
+-rw-rw-r-- 1 shahin shahin 75706556 Oct 11 13:56 treated_1-copy.fastq
 ```
 
 The `mv` command is also how you rename files. Since this file is so
@@ -554,11 +554,11 @@ important, let's rename it:
 ```bash
 $ cd backup
 
-$ mv treated_1.subset-copy.fastq treated_1.subset-backup.fastq
+$ mv treated_1-copy.fastq treated_1-backup.fastq
 
 $ ls
 
-treated_1.subset-backup.fastq
+treated_1-backup.fastq
 ```
 
 Finally, we decided this was silly and want to start over.

@@ -1,7 +1,7 @@
 ---
 title: R Syntax and Data Structures
 authors: Shahin Shahsavari
-date: "Mar 2021"
+date: "November 2021"
 ---
 Approximate time: 75 min
 

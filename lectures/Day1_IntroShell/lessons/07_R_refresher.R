@@ -138,7 +138,7 @@ getwd()
 list.files()
 
 # read.table( file = "PATH")
-counts = read.table(file = "counts.rpkm.csv", sep = ",")
+counts = read.table(file = "counts.csv", sep = ",")
 View(counts)
 
 dim(counts)
