@@ -57,7 +57,7 @@ To access the RStudio on the FAES Server:
 
 1. Close your X2Go Session.
 2. Open your Web Browser (Chrome, Firefox, etc).
-3. Search for: **3.236.171.249:8787**
+3. Search for: **34.238.117.41:8787**
 4. Insert your Username and Password
 
 <img src="../img/RStudio_Server_login.png" width="600">

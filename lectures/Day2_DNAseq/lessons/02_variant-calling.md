@@ -57,9 +57,7 @@ Freebayes is a very popular variant caller, however, it takes a long time for it
 
 ```bash
 $ cd ~/Day2/results
-$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ou -o ptA.bcf
-$ bcftools index ptA.bcf
-$ bcftools view ptA.bcf
+$ bcftools mpileup -f ~/Day2/genome/hg38.fa ptA.markdup.sorted.bam | bcftools call -mv -Ov -o ptA.vcf
 ```
 
 ## _Optional Steps_
@@ -93,7 +91,7 @@ Below is another example with slightly different fields in the INFO column:
 Now, let's take a look at the one we just generated:
 
 ```bash
-$ bcftools view ptA.bcf
+$ cat ptA.vcf
 ```
 
 How does this compare to the 2 examples we have seen so far? How does the ID column compare?
@@ -103,5 +101,5 @@ How does this compare to the 2 examples we have seen so far? How does the ID col
 ## Generating a summary of VCF files
 
 ```bash
-bcftools stats ptA.bcf
+bcftools stats ptA.vcf
 ```

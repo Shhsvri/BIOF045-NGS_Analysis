@@ -151,8 +151,8 @@ $ cd raw_fastq/
 
 $ ls -F
 
-treated_1.fastq  treated_3.fastq  untreated_2.fastq
-treated_2.fastq  untreated_1.fastq       untreated_3.fastq
+treated_1.fastq  treated_3.fastq    untreated_2.fastq
+treated_2.fastq  untreated_1.fastq  untreated_3.fastq
 ```
 
 The six items in this directory have no trailing slashes, so they are all files, not folders or programs.
@@ -292,36 +292,36 @@ $ pwd
 /home/USERNAME
 ```
 
-which is the full path for your home directory. This tells you that you are in a directory called `username`, which sits inside a directory called `home` which sits inside the very top directory in the hierarchy, the *root directory*. So, to summarize: `username` is a directory in `home` which is a directory in `/`.
+	which is the full path for your home directory. This tells you that you are in a directory called `username`, which sits inside a directory called `home` which sits inside the very top directory in the hierarchy, the *root directory*. So, to summarize: `username` is a directory in `home` which is a directory in `/`.
 
-Now enter the following command:
+	Now enter the following command:
 
-```bash
-$ cd /home/USERNAME/Day1/raw_fastq/
-```
+	```bash
+	$ cd /home/USERNAME/Day1/raw_fastq/
+	```
 
-This jumps to `raw_fastq`. Now go back to the home directory (`cd ~`). We saw
-earlier that the command:
+	This jumps to `raw_fastq`. Now go back to the home directory (`cd ~`). We saw
+	earlier that the command:
 
-```bash
-$ cd Day1/raw_fastq/
-```
+	```bash
+	$ cd Day1/raw_fastq/
+	```
 
-had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/username/Day1/Day1/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
+	had the same effect - it took us to the `raw_fastq` directory. But, instead of specifying the full path (`/home/USERNAME/Day1/Day1/raw_fastq`), we specified a *relative path*. In other words, we specified the path **relative to our current working directory**. 
 
-**A full path always starts with a `/`, a relative path does not.**
+	**A full path always starts with a `/`, a relative path does not.**
 
-A relative path is like getting directions from someone on the street. They tell you to "go right at the Stop sign, and then turn left on Main Street". That works great if you're standing there together, but not so well if you're trying to tell someone how to get there from another country. A full path is like GPS coordinates. It tells you exactly where something is no matter where you are right now.
+	A relative path is like getting directions from someone on the street. They tell you to "go right at the Stop sign, and then turn left on Main Street". That works great if you're standing there together, but not so well if you're trying to tell someone how to get there from another country. A full path is like GPS coordinates. It tells you exactly where something is no matter where you are right now.
 
-You can usually use either a full path or a relative path depending on what is most convenient. If we are in the home directory, it is more convenient to just enter the relative path since it involves less typing.
+	You can usually use either a full path or a relative path depending on what is most convenient. If we are in the home directory, it is more convenient to just enter the relative path since it involves less typing.
 
-Over time, it will become easier for you to keep a mental note of the structure of the directories that you are using and how to quickly navigate among them.
+	Over time, it will become easier for you to keep a mental note of the structure of the directories that you are using and how to quickly navigate among them.
 
----
+	---
 
-**Exercise 3**
+	**Exercise 3**
 
-Change directories to `/home/username/Day1/raw_fastq/`, and list the contents of `Day1/other` without changing directories again.
+	Change directories to `/home/USERNAME/Day1/raw_fastq/`, and list the contents of `Day1/other` without changing directories again.
 
 ---
 
@@ -577,7 +577,7 @@ just nicely put the files in the Trash. They're really gone.
 We really don't need these backup directories, so, let's delete both. By default, `rm`, will NOT delete directories, but you use the `-r` flag if you are sure that you want to delete the directories and everything within them.
 
 ```bash
-$ rm -r backup/ 
+$ rm -r backup/
 ```
 
 - `-r`: recursive, commonly used as an option when working with directories, e.g. with `cp`. 

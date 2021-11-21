@@ -227,7 +227,7 @@ Do you see a change in how the sorting has changed? By default the `sort` comman
 First, let's check how many lines we would have without using `sort -u` by piping the output to `wc -l`.
 
 ```bash
-grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7 | wc -l
+$ grep exon chr1-hg19_genes.gtf | cut -f 1,4,5,7 | wc -l
 ```
 
 Now, to count how many unique exons are on chromosome 1, we will add back the `sort -u` and pipe the output to `wc -l`

@@ -27,7 +27,7 @@ $ samtools index sample1.sorted.bam
 Then let's take a quick look at some of the files that were generated and explore the content of some of them. 
 
 ```bash
-$ cd ~/Day4/results	
+$ cd ~/Day3/results	
 $ ls -l -h
 ```
 

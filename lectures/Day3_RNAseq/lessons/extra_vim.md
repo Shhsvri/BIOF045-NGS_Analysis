@@ -1,7 +1,7 @@
 ---
 title: Introduction to Vim
 author: "Shahin Shahsavari"
-date: "July 2021"
+date: "November 2021"
 ---
 
 ## Learning Objectives
@@ -36,7 +36,7 @@ To write and edit files, we're going to use a text editor called 'Vim'. Vim is a
 You can create a document by calling a text editor and providing the name of the document you wish to create. Change directories to the `unix_lesson/other` folder and create a document using `vim` entitled `draft.txt`:
 
 ```bash
-$ cd ~/Day4/text_editor
+$ cd ~/Day3/text_editor
 	
 $ vim draft.txt
 ```

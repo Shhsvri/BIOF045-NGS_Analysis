@@ -1,7 +1,7 @@
 ---
 title: "RNAseq Alignment with STAR"
 author: "Shahin Shahsavari"
-date: July 2021
+date: November 2021
 ---
 
 Approximate time: 90 minutes
@@ -24,7 +24,7 @@ To start with variant calling, we need to set-up our directory structure, and en
 In order to remain organized, I always prepare my directory as follows using `mkdir`:
 
 ```
-~/Day4/
+~/Day3/
     ├── raw_data/
     ├── quality_control/
     ├── results/
@@ -50,10 +50,10 @@ The following softwares are installed on the course server for bulk RNAseq:
 Similar to what we did for DNAseq and ChiPseq, we will start off with the quality step. We will make use of the `fastqc` command to generate an **html** file which we could view in a browser.
 
 ```bash
-$ cd ~/Day4/raw_data
+$ cd ~/Day3/raw_data
 $ fastqc sample1.fastq
 $ firefox sample1_fastqc.html
-$ mv *fastqc* ~/Day2/quality_control
+$ mv *fastqc* ~/Day3/quality_control
 ```
 
 > **NOTE:** Most of the times, we won't be able to run a Graphical Interface on the server computer. In that case, you could transfer the files to your local computer using *FileZilla* or `scp`.
@@ -114,13 +114,13 @@ Aligning reads using STAR is a two step process:
 
 
 ```bash
-$ ls -l reference_test/
+$ ls -l ~/Day3/reference_test/
 ```
 
 This is a good time to also explore the reference file types we are using for RNAseq:
 
 ```bash
-$ cd ~/Day4/reference_test/
+$ cd ~/Day3/reference_test/
 $ ls -l -h
 $ head GRCh38_chr19.gtf
 $ head GRCh38_chr19.fa
@@ -158,7 +158,7 @@ The basic options to **generate genome indices** using STAR are as follows:
 
 
 ```bash
-cd ~/Day4/reference_test
+cd ~/Day3/reference_test
 STAR	--runThreadN 2 \
 	--runMode genomeGenerate \
 	--genomeDir . \
@@ -194,7 +194,7 @@ We can access the software by simply using the STAR command followed by the basi
 
 
 ```bash
-cd ~/Day4
+cd ~/Day3
 
 STAR	--runThreadN 2 \
 	--genomeDir STAR_chr2_genome/ \

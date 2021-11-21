@@ -1,10 +1,10 @@
-# Schedule for Day 4
+# Schedule for Day 3
 
 ## RNA-seq alignment and differential gene expression
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 10:00 - 10:30 | Day 3 Review |
+| 10:00 - 10:30 | [Day 2 Review](lessons/Day2_review.md) |
 | 10:30 - 11:00 | [VIM text editor](lessons/extra_vim.md) |
 | 11:00 - 11:15 | break |
 | 11:15 - 11:45 | [Introduction to RNA-seq](lessons/RNAseq_A.pdf) |

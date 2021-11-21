@@ -1,7 +1,7 @@
 ---
 title: Alignment with BWA
 author: Shahin Shahsavari
-date: March 2021
+date: November 2021
 duration: 120
 ---
 
@@ -44,7 +44,7 @@ We will be using the following softwares. These have been already installed on o
 
 1. [bwa](https://github.com/lh3/bwa)
 2. [samtools](https://github.com/samtools/samtools)
-3. [PICARD](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-)
+3. [PICARD](https://broadinstitute.github.io/picard/)
 4. [freebayes](https://github.com/ekg/freebayes)
 5. [bcftools](http://samtools.github.io/bcftools/bcftools.html)
 6. [IGV](https://software.broadinstitute.org/software/igv/download)
