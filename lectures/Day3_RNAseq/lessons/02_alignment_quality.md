@@ -19,6 +19,7 @@ Approximate time: 30 minutes
 After running our single FASTQ file through the STAR aligner, you should have noticed a number of output files in the `~/Day3/results/` directory. Let's turn this **sam** file into **bam**, then sort, and lastly index it.
 
 ```bash
+$ cd ~/Day3/results
 $ samtools view -b sample1_Aligned.out.sam  > sample1.bam
 $ samtools sort sample1.bam > sample1.sorted.bam
 $ samtools index sample1.sorted.bam
@@ -74,7 +75,7 @@ By default, `samtools view` excludes the header lines.`samtools view -h` writes 
 
 ```
 $ samtools view -H
-$ samtools view -h sample1.sorted.bam | less
+$ samtools view -h sample1.sorted.bam | head -n 20
 
 ``` 
 

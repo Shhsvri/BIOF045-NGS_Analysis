@@ -41,7 +41,14 @@ The following softwares are installed on the course server for bulk RNAseq:
 3. [samtools](https://github.com/samtools/samtools)
 4. [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
 
+Now, let's install STAR on our server environment using the documentation linked above
 
+```
+$ cd ~/Day3/software_installation
+$ git clone https://github.com/alexdobin/STAR.git
+$ cd STAR/source
+$ make STAR
+```
 
 ## Part1: Aligning raw RNAseq data using the `STAR` Aligner
 
@@ -135,7 +142,7 @@ $ head GRCh38_chr19.fa
 
 * count the number of lines in `GRCh38_chr19.fa`
 * confirm that you only have one chromosome in it
-* What is the size of the chromosome2 fasta file?
+* What is the size of the chromosome2 fasta file? `~/Day3/STAR_chr2_genome`
 * What is the size of the complete hg38 human reference? **hint:** use the Day2 reference at `~/Day2/genome`
 ---
 
