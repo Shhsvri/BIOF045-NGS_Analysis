@@ -1,8 +1,8 @@
 ---
 title: Differential gene expression
-author: Jonathan Vi Perrie
-date: 03/23/2021
-duration: ~2-3h 
+author: Shahin Shahsavari, Jonathan Vi Perrie
+date: 07/24/2021
+duration: 90 minutes 
 ---
 
 
@@ -17,6 +17,7 @@ library(ggplot2)
 library(colorspace)
 library(pheatmap)
 library(tidyverse)
+library(EnhancedVolcano)
 ```
 
 ### Count matrix
@@ -25,10 +26,10 @@ Let's read the count matrix
 ```R
 # Read the count matrix and the metadata
 > setwd("~/Day3/combined_counts/")
-
-> counts <- read.table("counts.tsv")
-> metadata <- read.table("metadata.tsv")
+> counts <- read.table("counts.tsv", sep = "\t", header = TRUE, row.names = 1)
+> metadata <- read.table("metadata.tsv", sep = "\t", header = TRUE, row.names = 1)
 ```
+*NOTE: rownames of your metadata must match the colnames of your counts matrix*
 
 Then look at the content of each dataframe
 
@@ -47,7 +48,7 @@ First, we look at the distribution of gene counts summed across all experiments.
 ```R
 > rowSums(counts) %>% log() %>% hist(breaks=100)
 > rowSums(counts) %>% quantile(probs=c(0.01,0.05,0.10,0.20))
-> filter(counts, rowSums(counts) >= 36)
+> counts_filtered <- filter(counts, rowSums(counts) >= 36)
 ```
 
 <img src="../img/hist.png" width="600">
@@ -55,7 +56,7 @@ First, we look at the distribution of gene counts summed across all experiments.
 Okay, now we load the data into DESeq2. The design of this experiment is pretty simply as we are just comparing two populations. 
 
 ```R
-> dds <- DESeqDataSetFromMatrix(countData = counts,
+> dds <- DESeqDataSetFromMatrix(countData = counts_filtered,
 				colData = metadata,
 				design= ~ treatment)
 ```
@@ -64,7 +65,8 @@ We can then run DESeq2 and order the results by adjusted p-value.
 
 ```R
 > dds <- DESeq(dds)
-> res <- results(dds)
+# Use FDR of 0.5
+> res <- results(dds, alpha = 0.05)
 > res_ordered <- res[order(res$padj),]
 ```
 
@@ -98,14 +100,16 @@ We will use the following methods for visualizing the data by experiment:
 
 
 ```R
-rld <- rlog(dds, blind=FALSE)
-plotPCA(rld, intgroup="treatment")
-pheatmap(cor(assay(rld),method="spearman"),display_numbers=TRUE,annotation_col=meta,
-         number_format='%.4f',cluster_rows=FALSE,cluster_cols=FALSE)
+> rld <- rlog(dds, blind=FALSE)
+> plotPCA(rld, intgroup="treatment")
+# create a heatmap of the top 20 most expressed genes
+> select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)[1:20]
+> pheatmap(assay(rld)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=metadata)
 ```
 
 <img src="../img/pca.png" width="600">
-<img src="../img/batch_cor.png" width="600">
 
 We likely want to see how some genes of interest are expressed between treatment and control. Below, we plot four genes
 in a 2x2 plot. 
@@ -124,18 +128,14 @@ on the y-axis.
 
 Here, we define some threshold for adjusted p-value and fold change where we want to color those points differently.
 
-Next, we get colors from the rainbow spectrum.
+The simplest way to create a volcano plot is by using the EnhancedVolcano package in R. However, you could also use other methods such as ggplot which allow for more customization.
 
-We load our data into ggplot except for genes that had no p-value computed (due to a failed adjustment).
-
-Finally, we plot data as a scatter `geom_point()` and add two vertical lines `geom_vline()` and a horizontal line `geom_hline()`
 
 ```R
-threshold <- as.numeric((res$padj<0.05) & (abs(res$log2FoldChange))>2) + 1 
-volc_colors <- rainbow_hcl(2)
-g<-ggplot(data.frame(res[!is.na(res$padj),]),aes(x=log2FoldChange,y=-log10(padj),colour=volc_colors[threshold[!is.na(res$padj)]]))
-g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline(yintercept = abs(log10(0.05)))+theme_bw()+labs(color="")
-
+EnhancedVolcano(res,
+		lab = rownames(res),
+		x = 'log2FoldChange',
+		y = 'pvalue')
 ```
 
 <img src="../img/volcano.png" width="600">
@@ -146,16 +146,42 @@ We previously plotted a heatmap showing correlations between batches, but we can
 in expression between experiments. By doing this, we can curate a set of genes that have similar expression patterns across 
 experiments and then we can look at what pathways are enriched by the genes. 
 
-We then find the top 20 most variable genes.
+We then find the top 20 most variable genes across all 6 samples.
+```
+> topVarGenes <- head(order(-rowVars(assay(rld))),20)
+> mat <- assay(rld[topVarGenes])
+> mat <- mat - rowMeans(mat)
+> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE)
+```
 
-topVarGenes <- head(order(-rowVars(assay(rld))),20)
-mat <- assay(rld)[ topVarGenes, ]
-mat <- mat - rowMeans(mat)
-pheatmap(mat,annotation_col=meta,cluster_rows=FALSE,cluster_cols=FALSE)
-
+Then we find the most differentially expressed genes across the two groups and generate our heatmap using those
+```
+## Create a heatmap of most differentially expressed genes
+> topDiffGenes <- rownames(res_ordered)[1:20]
+> mat <- assay(rld[topDiffGenes])
+> mat <- mat - rowMeans(mat)
+> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE)
+```
 <img src="../img/gene_expr_heatmap.png" width="600">
+
+Also, we could generate a correlation plot:
+```
+## Correlation plot
+> pheatmap(cor(assay(rld), method="spearman"),
+         annotation_col=metadata,
+         cluster_rows=FALSE,
+         cluster_cols=FALSE,
+         number_format='%.4f',
+         display_numbers=TRUE)
+
+```
+
+<img src="../img/batch_cor.png" width="600">
+
+For a more advanced tutorial for DESeq2, I recommend following [this tutorial](http://dputhier.github.io/jgb71e-polytech-bioinfo-app/practical/rna-seq_R/rnaseq_diff_Snf2.html)
 
 One way to find enriched pathways is by compiling a list of genes and then using a browser ontology to find important genes. e.g. querying the genes in GO and finding the resulting pathways with the PANTHER database. 
 
 <img src="../img/go_frontpage.png" width="600">
 <img src="../img/panther.png" width="600">
+

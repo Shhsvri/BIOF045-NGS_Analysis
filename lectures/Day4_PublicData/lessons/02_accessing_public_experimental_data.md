@@ -1,4 +1,4 @@
-Approximate time: 45 minutes
+Approximate time: 30 minutes
 
 ## Learning Objectives:
 

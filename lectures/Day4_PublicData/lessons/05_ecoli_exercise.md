@@ -1,5 +1,5 @@
 ---
-title: "Extras"
+title: "E Coli Experiment"
 author: "Shahin Shahsavari"
 date: "October, 2020"
 ---
@@ -9,7 +9,7 @@ date: "October, 2020"
 #### 1. Download the reference genome
 
 ```bash
-cd ~/Day5/ecoli_exercise
+cd ~/Day4/ecoli_exercise
 ls
 cd genome
 wget http://hypervolu.me/%7Eerik/genomes/E.coli_K12_MG1655.fa
@@ -21,14 +21,14 @@ wget http://hypervolu.me/%7Eerik/genomes/E.coli_K12_MG1655.fa
 #### 2. Download the SRR1770413 Ecoli data
 
 ```bash
-cd ~/Day5/ecoli_exercise/raw_data
+cd ~/Day4/ecoli_exercise/raw_data
 fastq-dump --split-files SRR1770413
 ```
 
 #### 3. Align your reads using bwa mem
 
 ```bash
-cd ~/Day5/ecoli_exercise
+cd ~/Day4/ecoli_exercise
 ```
 > Use `bwa` to align your raw data
 > Use `samtools` to compress, sort, and index your sam file

@@ -1,8 +1,8 @@
 # DGE Review
 
-![alt text](..//img/jq1_bet.png)
+<img src="../img/jq1_bet.png" width="800">
 
-Here, we will be reviewing the commands we did before, but we will be using a cleaner data set that looks at how BET inhibition affects cancer cells. 
+Here, we will be reviewing the commands we used yesterday, but we will be using a cleaner data set that looks at how BET inhibition affects cancer cells. 
 
 ## Data
 
@@ -17,9 +17,9 @@ library(tidyverse)
 ```
 ### Read in the data
 ```R
-setwd("~/Day5/combined_counts/")
-counts <- read.table("counts2.tsv",header=TRUE,sep="\t",row.names=1)
-metadata <- read.table("metadata2.csv",sep=",",header=TRUE,row.names=1)
+setwd("~/Day4/combined_counts/")
+counts <- read.table("counts.tsv",header=TRUE,sep="\t",row.names=1)
+metadata <- read.table("metadata.csv",sep=",",header=TRUE,row.names=1)
 ```
 ### Look at distribution
 ```R
