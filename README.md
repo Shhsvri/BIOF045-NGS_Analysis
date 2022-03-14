@@ -2,7 +2,7 @@
 
 | Audience | Computational skills required | Duration |
 :----------|:-------------|:----------|
-| Biologists | Basic R | 4-day workshop |
+| Biologists | Basic R | 5-day workshop |
 
 
 ### Description
@@ -11,7 +11,7 @@ This repository has teaching materials for a 5-day Introduction to Next Generati
 workshop focuses on teaching basic skills to use the command line interface, specifically `bash`, DNA sequencing,
 RNA sequencing and the use of publicly available datasets.
 
-- [Syllabus](Syllabus_Nov21.pdf)
+- [Syllabus](Syllabus_Mar22.pdf)
 
 
 ### Learning Objectives
@@ -28,8 +28,9 @@ RNA sequencing and the use of publicly available datasets.
 |:------------------------:|:----------:|
 | Day1 | [Introduction to Shell and Cloud Computing](lectures/Day1_IntroShell) |
 | Day2 | [DNA Sequencing and Variant Calling](lectures/Day2_DNAseq) |
-| Day3 | [RNA Sequencing, Transcriptomics and Shell Scripting](lectures/Day3_RNAseq) |
-| Day4 | [Accessing Public Data and Capstone Project](lectures/Day4_PublicData) |
+| Day3 | [RNA Sequencing, Transcriptomics and Shell Scripting 1](lectures/Day3_RNAseq) |
+| Day4 | [RNA Sequencing, Transcriptomics and Shell Scripting 2](lectures/Day4_RNAseq) |
+| Day5 | [Accessing Public Data and Capstone Project](lectures/Day5_PublicData) |
 
 
 ### Installation Requirements

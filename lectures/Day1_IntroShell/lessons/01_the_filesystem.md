@@ -1,7 +1,7 @@
 ---
 title: "The Shell"
 author: "Shahin Shahsavari"
-date: "November 2021"
+date: "March 2022"
 ---
 
 ## Learning Objectives
@@ -51,7 +51,7 @@ To further explore Linux, we are going to log into our teaching server that runs
 1. open the **X2Go Client**
 2. click on session -> New Session
 3. Enter the following:
-	* Host: 34.238.117.41
+	* Host: 54.234.225.44
 	* Login: USERNAME
 	* Session type: XFCE
 

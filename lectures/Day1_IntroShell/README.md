@@ -9,7 +9,7 @@
 |12:00 - 12:10 | Break |
 |12:10 - 13:00 | [Searching and Redirection](lessons/02_searching_files.md) |
 |13:00 - 14:00 | Lunch |
-|14:00 - 14:50 | [Intro to R and Rstudio](lessons/05_introR-R-and-RStudio.md) |
+|14:00 - 14:50 | [Intro to R and Rstudio](lessons/03_introR-R-and-RStudio.md) |
 |14:50 - 15:00 | Break |
-|15:00 - 16:00 | [Syntax and Data Structures in R](lessons/07_R_refresher.R) |
+|15:00 - 16:00 | [Syntax and Data Structures in R](lessons/04_R_refresher.R) |
 |16:00 - 17:00 | Office Hours |
