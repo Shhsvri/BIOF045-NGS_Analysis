@@ -38,6 +38,7 @@ $ echo "Hello World"
 First open a new file using `vim`:
 
 ```bash
+$ cd ~/Day3/scripting
 $ vim listing.sh
 ```
 
@@ -64,7 +65,7 @@ colleagues could read them. This helps make your code reproducible.
 Exit `vim` and save the file. Now let's run the new script we have created. To run a shell script you usually use the `bash` or `sh` command.
 
 ```bash
-$ bash listing.sh
+$ source listing.sh
 ```
 
 > Did it work like you expected?
@@ -103,13 +104,12 @@ Now you should see the number 25 returned to you. Did you notice that when we cr
 Variables can also store a string of character values. In the example below, we define a variable or a 'bucket' called `file`. We will put a filename `ptA.fastq` as the value inside the bucket.
 
 ```bash
-$ file=ptA_R1.fastq
+$ file=ptA.fastq
 ```
 
 Once you press return, you should be back at the command prompt. Let's check what's stored inside `file`, but first move into the `raw_fastq` directory::
 
 ```bash
-$ cd ~/Day2/raw_data
 $ echo $file
 ```
 
@@ -125,7 +125,7 @@ $ wc -l $file
 
 **Exercise**
 
-1. change the file variable and set it equal to `ptB_R1.fastq`
+1. change the file variable and set it equal to `ptB.fastq`
 2. reuse the file variable and print the number of lines in the fastq file
 ---
 
@@ -152,7 +152,7 @@ where the ***variable_name*** defines (or initializes) a variable that takes the
 #### What does this loop do? 
 
 ```bash
-cd ~/Day2/raw_data
+cd ~/Day3/scripting
 for x in *.fastq
  do
    echo $x
@@ -160,6 +160,67 @@ for x in *.fastq
  done
 ```
 
-We will use for loops and shell scripts to map our RNA seq samples tomorrow.
+We will use for loops and shell scripts to align our RNA seq samples tomorrow.
+
+For the DNA data, we could use the following shell script to iterate over both samples and generate the vcf files.
+
+```bash
+#!/bin/bash
+
+# BIOF045: 03/16/2022
+# This script for DNA alignment, sorting, and indexing
+
+## 0. set up the file structure change your directory
+
+cd ~/Day3/scripting
+genome=~/Day2/genome/hg38.fa
+
+
+for i in *.fastq
+ do
+	file=${i%.*}
+	## 1. BWA MEM alignment with 2 threads
+	
+	bwa mem -t 2 \
+		$genome \
+		$i > $file.sam
+	
+	
+	## 2. Convert sam to bam
+	
+	samtools view -b $file.sam > $file.bam
+	
+	
+	## 3. Sort your bam file using samtools
+	
+	samtools sort $file.bam > $file.sorted.bam
+	
+	
+	## 4. markduplicates with PICARD
+	
+	cd results
+	
+	PicardCommandLine MarkDuplicates \
+		I=$file.sorted.bam \
+		O=$file.markdup.sorted.bam \
+		M=$file_md_metrics.txt
+	
+	
+	## 5. Index the bam file
+	###	after this step you could view the bam file in IGV
+	
+	samtools index $file.markdup.sorted.bam
+	
+	
+	## 6. Generate the VCF file using bcftools
+	
+	bcftools mpileup -f $genome $file.markdup.sorted.bam | bcftools call -mv -Ov -o $file.vcf
+	
+	## 7. Remove the unneeded files that were generated during the alignment
+	
+	rm $file.sam $file.bam $file.sorted.bam
+ done
+
+```
 
 ---

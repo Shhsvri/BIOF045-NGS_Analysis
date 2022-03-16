@@ -99,22 +99,19 @@ In addition to shortcuts for navigation, vim also offers editing shortcuts such 
 
 Practice some of the editing shortcuts, then quit the document without saving any changes.
 
-*** 
+---
 
 **Exercise**
 
 We have covered some basic commands in vim, but practice is key for getting comfortable with the program. Let's
 practice what we just learned in a brief challenge.
 
-1. Navigate into your "~/Day1/R_data"
-2. Use `cat` to view the content of patients.tsv
-3. Use vim to open the file and then close without saving
-4. Open the file again and change *harvey*'s height from NA to 174 
-5. Save the file.
-6. Open the file again and add one more person to the end of your file
-	- We will read this file in R later
-
-***
+1. Navigate into your `~/Day3/text_editor`
+2. Use `cat` to view the content of `fixme.txt`
+3. Open the file using `vim` and follow the instructions.
+4. Save the file.
+5. Use `cat` to ensure your edits have been saved.
+---
 
 ### Overview of vim commands
 
@@ -159,4 +156,4 @@ practice what we just learned in a brief challenge.
 | <button>/pattern</button>     | to search for a pattern (*n/N* to move to next/previous match)    |
 | <button>:%s/search/replace/g</button>     | to search for a pattern and replace for all occurences     |	
 
-***
+---
