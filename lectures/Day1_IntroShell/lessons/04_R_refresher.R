@@ -108,6 +108,7 @@ square_it(21)
 ## We install them this way
 
 install.packages("PACKAGE_NAME")
+install.packages("readxl")
 
 library(tidyverse)
 
@@ -168,6 +169,10 @@ filter(metadata, genotype == "Wt")
 
 
 ## extract the rows where genotype is "Wt" and celltype is typeA
-Wt_typeA = filter(metadata, genotype == "Wt") %>% filter(celltype == "typeA")
+genotype == "Wt") %>% filter(celltype == "typeA")
+typeA_Wt = filter(metadata, genotype == "Wt" & celltype == "typeA")
 
-Wt_typeA = filter(metadata, genotype == "Wt" & celltype == "typeA")
+View(typeA_Wt)
+
+# write.table
+write.table(typeA_Wt, file = "metadata_typeA_Wt.csv", sep = ",")

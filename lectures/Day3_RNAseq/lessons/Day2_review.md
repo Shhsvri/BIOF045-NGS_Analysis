@@ -112,7 +112,7 @@ gedit DNAseq.sh
 ```bash
 #!/bin/bash
 
-# BIOF045: 07/14/2021
+# BIOF045: 03/16/2022
 # This script for DNA alignment, sorting, and indexing
 
 ## 0. set up the file structure change your directory
