@@ -1,7 +1,7 @@
 ---
 title: Introduction to Vim
 author: "Shahin Shahsavari"
-date: "November 2021"
+date: "March 2022"
 ---
 
 ## Learning Objectives

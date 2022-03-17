@@ -140,8 +140,6 @@ samtools sort results/ptB.bam > results/ptB.sorted.bam
 
 ## 4. markduplicates with PICARD
 
-cd results
-
 PicardCommandLine MarkDuplicates \
 	I=ptB.sorted.bam \
 	O=ptB.markdup.sorted.bam \

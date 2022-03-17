@@ -90,13 +90,13 @@ $ num=25
 *How do we know that we actually created the bash variable?* We can use the `echo` command to print to terminal:
 
 ```bash
-$ echo num
+$ echo $num
 ```
 
 What do you see in the terminal? The `echo` utility takes what arguments you provide and prints to terminal. In this case it interpreted `num` as a a character string and simply printed it back to us. This is because **when trying to retrieve the value stored in the variable, we explicitly use a `$` in front of it**:
 
 ```bash
-$ echo $num
+$ echo num
 ```
 
 Now you should see the number 25 returned to you. Did you notice that when we created the variable we just typed in the variable name? This is standard shell notation (syntax) for defining and using variables. When defining the variable (i.e. setting the value) you can just type it as is, but when **retrieving the value of a variable don't forget the `$`!** 
@@ -104,7 +104,7 @@ Now you should see the number 25 returned to you. Did you notice that when we cr
 Variables can also store a string of character values. In the example below, we define a variable or a 'bucket' called `file`. We will put a filename `ptA.fastq` as the value inside the bucket.
 
 ```bash
-$ file=ptA.fastq
+$ file="ptA.fastq"
 ```
 
 Once you press return, you should be back at the command prompt. Let's check what's stored inside `file`, but first move into the `raw_fastq` directory::
@@ -197,8 +197,6 @@ for i in *.fastq
 	
 	
 	## 4. markduplicates with PICARD
-	
-	cd results
 	
 	PicardCommandLine MarkDuplicates \
 		I=$file.sorted.bam \
