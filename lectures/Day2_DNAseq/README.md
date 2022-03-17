@@ -4,7 +4,7 @@
 
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 10:00 - 10:45 | [Day 1 Review](lessons/review.md) |
+| 10:00 - 10:45 | [Day 1 Review](lessons/Day1_review.md) |
 | 10:45 - 11:30 | Introduction to Next Generation Sequencing |
 | 11:30 - 11:45 | break |
 | 11:45 - 13:00 | [Alignment (BWA-mem)](lessons/01_alignment.md) |
