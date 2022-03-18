@@ -52,7 +52,7 @@ Also on this page is a listing of each run and the corresponding sample it came 
 **Copy the contents of this downloaded file to a new file on the cluster** using the following commands:
 
 ```bash
-$ cd ~/Day4/SRA
+$ cd ~/Day5/SRA
 ```
 
 During download, in addition to writing the fastq files, SRA-toolkit writes additional cache files, which are automatically directed to your home directory by default, even if you are working elsewhere. Because of this, we need to write a **short configuration file** to tell SRA-toolkit to **write its cache files to the scratch space**, instead of our home, to avoid running out of storage.

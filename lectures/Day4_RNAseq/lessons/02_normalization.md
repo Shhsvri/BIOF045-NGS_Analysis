@@ -37,7 +37,7 @@ Then look at the content of each dataframe
 # Min, Max, median (...). 
 # Here on the first 4 samples
 
-head(countTable[1:6,1:4])
+countTable[1:6,1:4]
 summary(countTable[1:6,1:4])
 ```
 
@@ -73,7 +73,7 @@ added a pseudo-count of 1 to avoid problems with the log transformation of zero 
 To get better insights into the distribution per sample, the boxplot offer a good perspective.
 
 ```R
-$ create a boxplot of the log2(conutsTable)
+# create a boxplot of the log2(conutsTable)
 boxplot(log2(countTable + epsilon), col=phenoTable$color, pch=".", 
         horizontal=TRUE, cex.axis=0.5,
         las=1, ylab="Samples", xlab="log2(counts +1)")

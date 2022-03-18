@@ -79,7 +79,7 @@ While navigating the GEO website is a perfectly fine way to download data from G
 We will now use the secure shell (`ssh`) command using the 'Terminal' program for Macs or 'Power Shell' for Windows (Use PuTTY if you don't have the latest updates). In the console from these programs, type:
 
 ```bash
-$ ssh username@3.236.171.249
+$ ssh username@54.234.225.44
 ```
 
 You will be prompted to enter your password.

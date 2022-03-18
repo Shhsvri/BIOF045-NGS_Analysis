@@ -1,8 +1,8 @@
 ---
-title: Day2 Review
+title: Day3 Review
 author: Shahin Shahsavari
-date: November 2021
-duration: 30 minutes
+date: March 2022
+duration: 60 minutes
 ---
 
 ## RNAseq Alignment Review
@@ -134,7 +134,7 @@ $ paste genes.txt sample1.txt sample2.txt > counts.tsv
 or you could use redirection as follows:
 
 ```bash
-$ paste <(cut -f 1,2 sample1ReadsPerGene.out.tab) <(cut -f 1 sample2ReadsPerGene.out.tab)
+$ paste <(cut -f 1,2 sample1ReadsPerGene.out.tab) <(cut -f 1 sample2ReadsPerGene.out.tab) > counts.tsv
 ```
 
 

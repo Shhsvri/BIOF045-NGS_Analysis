@@ -2,11 +2,15 @@
 title: Differential gene expression
 author: Shahin Shahsavari, Jonathan Vi Perrie
 date: 07/24/2021
-duration: 90 minutes 
+duration: 120 minutes 
 ---
 
 
-### Analysis of RNA-seq in R
+### Analysis of RNA-seq in R using DESeq2
+
+For RNAseq data normalization and analysis, we will be using the
+[DESeq2](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)
+library.
 
 ### Read in the combined count matrix
 
@@ -46,6 +50,7 @@ We can improve DESeq2's statistical power by filtering reads that have a low cou
 
 First, we look at the distribution of gene counts summed across all experiments. 
 ```R
+# filter out the genes that have low total count across all samples
 > rowSums(counts) %>% log() %>% hist(breaks=100)
 > rowSums(counts) %>% quantile(probs=c(0.01,0.05,0.10,0.20))
 > counts_filtered <- filter(counts, rowSums(counts) >= 36)
@@ -56,6 +61,7 @@ First, we look at the distribution of gene counts summed across all experiments.
 Okay, now we load the data into DESeq2. The design of this experiment is pretty simply as we are just comparing two populations. 
 
 ```R
+# Generate the dds object (DESeq uses this format)
 > dds <- DESeqDataSetFromMatrix(countData = counts_filtered,
 				colData = metadata,
 				design= ~ treatment)
@@ -64,10 +70,12 @@ Okay, now we load the data into DESeq2. The design of this experiment is pretty 
 We can then run DESeq2 and order the results by adjusted p-value. 
 
 ```R
+# Run differential expression analysis
 > dds <- DESeq(dds)
-# Use FDR of 0.5
+# Use FDR of 0.05
 > res <- results(dds, alpha = 0.05)
 > res_ordered <- res[order(res$padj),]
+# Let's view the top 20 most differentially expressed genes
 ```
 
 Output, the DESeq2 data structure has 6 columns with each row corresponding to a gene (ENTREZID)
@@ -79,34 +87,27 @@ Output, the DESeq2 data structure has 6 columns with each row corresponding to a
 6. padj: Behnjamini-Hochberg p-value = p-value rank / # of tests * FDR and find largest p-value smaller than critical value
 
 ```R
-> head(res_ordered)
+> head(res_ordered, n=6)
 log2 fold change (MLE): treatment HDMSCs vs ASMSCs 
 Wald test p-value: treatment HDMSCs vs ASMSCs 
 DataFrame with 6 rows and 6 columns
                baseMean log2FoldChange     lfcSE      stat      pvalue   padj
               <numeric>      <numeric> <numeric> <numeric>   <numeric>   <numeric>
-TINAGL1        365.4526      -1.212556  0.146521  -8.27564 1.27770e-16 1.95514e-12
-LSP1           832.6578       1.552957  0.209827   7.40112 1.35039e-13 1.03318e-09
-TNC          11605.3246       1.642639  0.271256   6.05568 1.39829e-09 7.13220e-06
-FZD7          1041.6149      -0.693511  0.121739  -5.69672 1.22133e-08 4.67218e-05
-SLC24A3        158.1114      -2.411408  0.459737  -5.24519 1.56118e-07 4.77784e-04
-LOC101928589    11.1834       6.921775  1.360641   5.08714 3.63498e-07 9.27040e-04
-
+TINAGL1        365.5798      -1.212309  0.144442  -8.39306 4.73631e-17 6.43665e-13
+LSP1           832.9958       1.553207  0.210053   7.39437 1.42085e-13 9.65466e-10
+TNC          11609.6847       1.642778  0.272421   6.03029 1.63662e-09 7.41388e-06
+FZD7          1041.9838      -0.693306  0.119186  -5.81700 5.99134e-09 2.03556e-05
+SLC24A3        158.1467      -2.411077  0.467300  -5.15959 2.47487e-07 6.72670e-04
+LOC101928589    11.1888       6.922034  1.367017   5.06360 4.11405e-07 9.31833e-04
 ```
 
-We will use the following methods for visualizing the data by experiment:
-1. Correlation plots show us the correlation between batches.
-2. PCA is short for principle component analysis. It is used to reduce the dimensions of our matrix.
+We will use the following methods for generating a PCA plot. PCA is short for
+principle component analysis. It is used to reduce the dimensions of our matrix.
 
 
 ```R
 > rld <- rlog(dds, blind=FALSE)
 > plotPCA(rld, intgroup="treatment")
-# create a heatmap of the top 20 most expressed genes
-> select <- order(rowMeans(counts(dds,normalized=TRUE)),
-                decreasing=TRUE)[1:20]
-> pheatmap(assay(rld)[select,], cluster_rows=FALSE, show_rownames=FALSE,
-         cluster_cols=FALSE, annotation_col=metadata)
 ```
 
 <img src="../img/pca.png" width="600">
@@ -140,18 +141,28 @@ EnhancedVolcano(res,
 
 <img src="../img/volcano.png" width="600">
 
-### Pathway enrichment 
+### Heatmaps and Pathway enrichment 
 
 We previously plotted a heatmap showing correlations between batches, but we can also use a heatmap to show the difference
 in expression between experiments. By doing this, we can curate a set of genes that have similar expression patterns across 
 experiments and then we can look at what pathways are enriched by the genes. 
+
+We will generate a heatmap of the top 20 most expressed genes (NOT differentially expresesd)
+```R
+# create a heatmap of the top 20 most expressed genes
+> select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)[1:20]
+> pheatmap(assay(rld)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=metadata)
+```
 
 We then find the top 20 most variable genes across all 6 samples.
 ```
 > topVarGenes <- head(order(-rowVars(assay(rld))),20)
 > mat <- assay(rld[topVarGenes])
 > mat <- mat - rowMeans(mat)
-> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE)
+> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE, show_rownames=FALSE,
+	cluster_cols=FALSE)
 ```
 
 Then we find the most differentially expressed genes across the two groups and generate our heatmap using those
@@ -160,7 +171,8 @@ Then we find the most differentially expressed genes across the two groups and g
 > topDiffGenes <- rownames(res_ordered)[1:20]
 > mat <- assay(rld[topDiffGenes])
 > mat <- mat - rowMeans(mat)
-> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE)
+> pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE, show_rownames=FALSE,
+	cluster_cols=FALSE)
 ```
 <img src="../img/gene_expr_heatmap.png" width="600">
 

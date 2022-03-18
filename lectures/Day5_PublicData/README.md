@@ -1,9 +1,11 @@
 # Workshop Schedule
 
+## Accessing Public Datasets
+
 | Time            |   Topic  |
 |:------------------------:|:----------:|
-| 10:00 - 10:15 | [RNAseq Review](../Day3_RNAseq/lessons/01_RNAseq_alignment.md)
-| 10:15 - 11:15 | [DGE in R](../Day3_RNAseq/lessons/03_dge.md) |
+| 10:00 - 10:30 | [Day4 Review](lessons/01_DGE_review.md)
+| 10:15 - 11:15 | [DESeq2 Normalization](../Day4_RNAseq/lessons/02_normalization.md) |
 | 11:15 - 11:30 | break |
 | 11:30 - 11:45 | [Accessing Public Data](lessons/02_accessing_public_experimental_data.md) |
 | 11:45 - 12:00 | [Downloading Raw Sequencing Data from SRA](lessons/03_downloading_from_SRA.md) |

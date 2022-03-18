@@ -17,20 +17,24 @@ library(tidyverse)
 ```
 ### Read in the data
 ```R
-setwd("~/Day4/combined_counts/")
-counts <- read.table("counts.tsv",header=TRUE,sep="\t",row.names=1)
-metadata <- read.table("metadata.csv",sep=",",header=TRUE,row.names=1)
+setwd("~/Day4/combined_counts2/")
+counts <- read.table("counts2.tsv",header=TRUE,sep="\t",row.names=1)
+metadata <- read.table("metadata2.tsv",sep="\t",header=TRUE,row.names=1)
+View(metadata)
+View(counts)
+# Change column names of counts to match rownames of metadata
+colnames(counts) = rownames(metadata)
 ```
 ### Look at distribution
 ```R
 hist(log(rowSums(counts)),breaks=100)
 quantile(rowSums(counts),probs=c(0.01,0.05,0.10,0.50))
-counts_filtered <- counts[rowSums(counts)>=10,]
+counts_filtered <- counts[rowSums(counts)>=11,]
 ```
 
 ### Load data in DESeq2 with appropriate design 
 ```R
-> dds <- DESeqDataSetFromMatrix(countData = counts,
+> dds <- DESeqDataSetFromMatrix(countData = counts_filtered,
 				colData = metadata,
 				design= ~ treatment)
 ```
@@ -60,27 +64,38 @@ plotCounts(dds,gene="Apc_37324",intgroup="treatment",main="Apc")
 plotCounts(dds,gene="Brd4_35665",intgroup="treatment",main="BRD4")
 plotCounts(dds,gene="Myc_33094",intgroup="treatment",main="MYC")
 plotCounts(dds,gene="Pms2_14724",intgroup="treatment",main="PMS2")
-par(mfrow=c(1,1))
 ```
 
 ### Volcano plot 
 ```R
-volcano_plot_colors <- rainbow_hcl(2)
-names(volcano_plot_colors)<-c("hi","bi")
-threshold <- as.numeric((res$padj<0.05) & (abs(res$log2FoldChange))>2) + 1 
-
-g<-ggplot(data.frame(res[!is.na(res$padj),]),
-          aes(x=log2FoldChange,y=-log10(padj),colour=volcano_plot_colors[threshold[!is.na(res$padj)]]))
-
-g<-g+geom_point()+geom_vline(xintercept = -2)+geom_vline(xintercept = 2)+geom_hline(yintercept = abs(log10(0.05)))+theme_classic()
-g+labs(color=c("Significance"))+scale_color_manual(labels = c("sig", "not sig"), values = c("#E495A5","#39BEB1"))
+EnhancedVolcano(res,
+                lab = rownames(res),
+                x = 'log2FoldChange',
+                y = 'padj')
 ```
 
-### Most variable genes
+### Heatmap of top 20 most variable genes
 ```R
 topVarGenes <- head(order(-rowVars(assay(rld))),20)
 mat <- assay(rld)[ topVarGenes, ]
 mat <- mat - rowMeans(mat)
-rownames(mat)<-sapply(rownames(mat),findGene)
-pheatmap(mat,annotation_col=design,cluster_rows=FALSE,cluster_cols=FALSE)
+pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE, show_rownames=FALSE)
+```
+
+### Heatmap of top 20 most differentially expressed genes
+```R
+topDiffGenes <- head(order(assay(rld)),20)
+mat <- assay(rld)[ topDiffGenes, ]
+mat <- mat - rowMeans(mat)
+pheatmap(mat,annotation_col=metadata,cluster_rows=FALSE,cluster_cols=FALSE, show_rownames=FALSE)
+```
+
+### correlation plot
+```R
+pheatmap(cor(assay(rld), method="spearman"),
+         annotation_col=metadata,
+         cluster_rows=FALSE,
+         cluster_cols=FALSE,
+         number_format='%.4f',
+         display_numbers=TRUE)
 ```
