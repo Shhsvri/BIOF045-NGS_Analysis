@@ -26,7 +26,7 @@ library(gplots)
 
 ```R
 # Read the counts matrix and its associated metadata file
-setwd("~/Day4/DESeq2_normalization")
+setwd("~/Day5/DESeq2_normalization")
 countTable <- read.table("yeast_counts.tsv", header=TRUE, row.names=1)
 phenoTable <- read.table("yeast_metadata.tsv", header=TRUE, row.names=1)
 ```
@@ -85,6 +85,7 @@ Another way to get an intuition of the value distributions is to use the plotDen
 # create a plotDensity of the log2(countsTable)
 plotDensity(log2(countTable + epsilon), lty=1, col=phenoTable$color, lwd=2)
 grid()
+strainColor <- c("WT"="green","Snf2"="orange")
 legend("topright", legend=names(strainColor), col=strainColor, lwd=2)
 ```
 
@@ -137,6 +138,8 @@ head(resultDESeq2)
 
 ### Volcano Plot
 ```R
+# Volcano Plot using plot
+par(mfrow=c(1,1))
 alpha <- 0.01 # Threshold on the p-value
 
 # Compute significance, with a maximum of 320 for the p-values set to 0 due to limitation of computation precision
